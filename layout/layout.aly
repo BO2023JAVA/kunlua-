@@ -1,0 +1,40 @@
+{
+  LinearLayout;
+  layout_height="-1";
+  layout_width="-1";
+  orientation="vertical",
+  {
+    CardView;--卡片视图
+    layout_height="87dp";
+    layout_width="-1";
+    cardBackgroundColor='#FF313131',--卡片背景色
+    {
+      TextView,--文本框控件
+      layout_marginTop="40dp",--布局顶距
+      layout_marginLeft='4%w',--布局左距
+      id="title1";
+      text="第一个APP";
+      textColor="#ffffff";
+      textSize="24sp";
+    };
+  };
+  {
+    CardView;--卡片视图
+    layout_height="-1";
+    layout_width="-1";
+    {
+      LinearLayout;
+      layout_height="-1";
+      layout_width="-1";
+      orientation="vertical",
+      gravity="center",
+      {
+        TextView,--文本框控件
+        id="text1";
+        text="开始你的创作吧!";
+        textSize="24sp";
+      };
+    };
+  };
+};
+

@@ -1,0 +1,23 @@
+{
+  LinearLayout;
+  layout_height="wrap_content";
+  gravity="left|center";
+  paddingTop="10dp";
+  paddingBottom="10dp";
+  paddingLeft="4dp";
+  paddingRight="4dp";
+  layout_width="fill";
+  orientation="vertical";
+  {
+    TextView;
+    textSize="14sp";
+    text="";
+    id="item_title";
+  };
+  {
+    TextView;
+    textSize="10sp";
+    text="";
+    id="item_data";
+  };
+};

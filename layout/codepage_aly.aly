@@ -1,0 +1,707 @@
+{
+  DrawerLayout;
+  layout_width="match_parent";
+  layout_height="match_parent";
+  drawerElevation="4dp";
+  scrimColor="#00000000";
+  id="chlMain";
+  {
+    LinearLayout;
+    layout_width="match_parent";
+    id="mainContainer";
+    layout_height="match_parent";
+    orientation="vertical";
+    {
+      LinearLayout;
+      layout_width="match_parent";
+      layout_height="87dp";
+      backgroundColor="#FF313131";
+      id="头部功能区";
+      orientation="horizontal";
+      {
+        CardView;
+        layout_width="wrap_content";
+        layout_height="wrap_content";
+        backgroundColor="#00000000";
+        elevation="0dp";
+        id="cehua1";
+        {
+          ImageView;
+          src="res/img/cehua1.png";
+          layout_marginLeft="15dp";
+          layout_height="25dp";
+          ColorFilter="#ffffff";
+          layout_marginTop="50dp";
+          layout_width="25dp";
+        };
+      };
+      {
+        CardView;
+        layout_width="wrap_content";
+        layout_height="wrap_content";
+        backgroundColor="#00000000";
+        layout_weight="1";
+        CardBackgroundColor="#00000000";
+        elevation="0dp";
+        {
+          MarText;
+          layout_width="-2";
+          layout_height="-2";
+          layout_marginLeft="4%w";
+          layout_marginRight="4%w";
+          layout_marginTop="45dp";
+          textColor="#FFFFFF";
+          textSize="24sp";
+          id="title_text";
+          ellipsize="marquee";
+          singleLine=true;
+        };
+
+      };
+      --[=[   {
+        CardView;
+        layout_width="wrap_content";
+        layout_height="wrap_content";
+        backgroundColor="#00000000";
+        elevation="0dp";
+        id="buju";
+        {
+          ImageView;
+          src="res/img/buju.png";
+          layout_height="25dp";
+          ColorFilter="#ffffff";
+          layout_width="25dp";
+          layout_marginTop="50dp";
+          layout_marginRight="15dp";
+        };
+      };  ]=]
+      {
+        CardView;
+        layout_width="wrap_content";
+        layout_height="wrap_content";
+        backgroundColor="#00000000";
+        elevation="0dp";
+        id="yunxing";
+        {
+          ImageView;
+          src="res/img/yunxing.png";
+          layout_height="25dp";
+          ColorFilter="#ffffff";
+          layout_width="25dp";
+          layout_marginTop="50dp";
+          layout_marginRight="15dp";
+        };
+      };
+      {
+        CardView;
+        layout_width="wrap_content";
+        layout_height="wrap_content";
+        backgroundColor="#00000000";
+        elevation="0dp";
+        id="chexiao";
+        {
+          ImageView;
+          src="res/img/chexiao.png";
+          layout_height="25dp";
+          ColorFilter="#ffffff";
+          layout_width="25dp";
+          layout_marginTop="50dp";
+          layout_marginRight="15dp";
+        };
+      };
+      {
+        CardView;
+        layout_width="wrap_content";
+        layout_height="wrap_content";
+        backgroundColor="#00000000";
+        elevation="0dp";
+        id="chongzuo";
+        {
+          ImageView;
+          src="res/img/chongzuo.png";
+          layout_height="25dp";
+          ColorFilter="#ffffff";
+          layout_width="25dp";
+          layout_marginTop="50dp";
+          layout_marginRight="15dp";
+        };
+      };
+    };
+    {
+      CardView;
+      layout_width="-1";
+      layout_height="-2";
+      backgroundColor="#00000000";
+      elevation="0dp";
+      radius="0dp";
+      id="open_file";
+      {
+        HorizontalListView;
+        id="title_file_list";
+        layout_width="-1";
+        layout_height="-2";
+        horizontalScrollBarEnabled=false;
+      };
+    };
+    {
+      LinearLayout;
+      id="code编辑区",
+      layout_weight=1,
+      layout_height="0dp",
+      background="#00000000",
+      {
+        LuaEditor;
+        layout_width="match_parent",
+        id="codeEdit",
+      };
+    },
+    {
+      LinearLayout;
+      layout_width="-1";
+      layout_height="-2";
+      background="#00000000";
+      id="底部功能区";
+      orientation='vertical',
+      -- 复制粘贴全选剪切
+      {
+        LinearLayout,
+        layout_width="-1";
+        layout_height="-2";
+        orientation='horizontal',
+        layout_marginLeft='2%w',--布局左距
+        layout_marginRight='2%w',--布局右距
+        backgroundColor="#00000000",
+        {
+          MaterialCardView;
+          layout_width='-2';
+          layout_height='-2';
+          cardBackgroundColor="#00000000";
+        --  layout_margin='11dp';
+          --       background="#00000000";
+          cardElevation='0dp';
+          strokeWidth="1dp", --边框宽度
+          strokeColor="#ffffff",
+          --  clickable=true;--点击效果
+          radius='5dp';
+          {
+            MaterialCardView;
+            layout_width='-2';
+            layout_height='-2';
+            cardBackgroundColor='0x00000000';
+            layout_margin='0dp';
+            cardElevation='0dp';
+            strokeWidth="0dp", --边框宽度
+            strokeColor="#ffffff",
+            -- clickable=true;--点击效果
+            layout_gravity='center',
+            {
+              LinearLayout;
+              layout_width="-2";
+              layout_height="-2";
+              orientation='horizontal',
+              gravity = "center";
+              backgroundColor='#00000000';
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                onClick = function()
+                  codeEdit.format()
+                end,
+                {
+                  ImageView;
+                  src='res/img/code1.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id="格式",
+                  text = "格式";
+                },
+              },
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                id = "代码按钮",
+                {
+                  ImageView;
+                  src='res/img/code2.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id="代码",
+                  text = "代码";
+                },
+              },
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                id = "索引按钮",
+                {
+                  ImageView;
+                  src='res/img/search1.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id="索引",
+                  text = "索引";
+
+                },
+              },
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                onClick = function()
+                  if 复制粘贴.visibility==0 then
+                    复制粘贴.visibility=8
+                   elseif 复制粘贴.visibility==8 then
+                    复制粘贴.visibility=0
+                  end
+                end,
+                {
+                  ImageView;
+                  src='res/img/gongneng1.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id = "功能";
+                  text = "功能";
+
+                },
+              },
+            },
+          },
+        },
+        {
+          MaterialCardView;
+          layout_width='-2';
+          layout_height='-2';
+       --   layout_margin='11dp';
+          cardBackgroundColor='#00000000';
+          cardElevation='0dp';
+          strokeWidth="0dp", --边框宽度
+          strokeColor="#ffffff",
+          clickable=true;--点击效果
+          radius='5dp';
+          id='复制粘贴',--控件ID
+          visibility=0,--不可视4--隐藏8--显示0
+          {
+            MaterialCardView;
+            layout_width='-2';
+            layout_height='-2';
+            cardBackgroundColor='0x00000000';
+            layout_margin='0dp';
+            cardElevation='0dp';
+            strokeWidth="1dp", --边框宽度
+            strokeColor="#ffffff",
+            clickable=true;--点击效果
+            radius='5dp';
+            {
+              LinearLayout;
+              layout_width="-2";
+              layout_height="-2";
+              orientation='horizontal',
+              backgroundColor='#00000000',
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                backgroundColor='0x00000000';
+                onClick = function()
+                  codeEdit.selectAll()
+                end,
+                {
+                  ImageView;
+                  src='res/img/all1.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                  background="0x00000000";
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id = "全选";
+                  text = "全选";
+                  backgroundColor='#00000000',
+
+                },
+              },
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                onClick = function()
+                  codeEdit.cut()
+                  Toast.makeText(activity,"已剪切",Toast.LENGTH_SHORT).show()
+                end,
+                {
+                  ImageView;
+                  src='res/img/copy3.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id = "剪切";
+                  text = "剪切";
+
+                },
+              },
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                onClick = function()
+                  codeEdit.copy()
+                  Toast.makeText(activity,"已复制",Toast.LENGTH_SHORT).show()
+                end,
+                {
+                  ImageView;
+                  src='res/img/copy1.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id = "复制";
+                  text = "复制";
+
+                },
+              },
+              {
+                LinearLayout,
+                layout_width="-2";
+                layout_height="-2";
+                orientation='vertical',
+                layout_margin = "5dp",
+                onClick = function()
+                  codeEdit.paste()
+                end,
+                {
+                  ImageView;
+                  src='res/img/copy2.png',
+                  layout_width="19dp";
+                  layout_height="19dp";
+                  ColorFilter = "#ffffff";
+                  layout_gravity='center',
+                },
+                {
+                  TextView;
+                  layout_width="-2";
+                  layout_height="-2";
+                  textSize = "12sp",
+                  id = "粘贴";
+                  text = "粘贴";
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        LinearLayout;
+        orientation="horizontal";
+        {
+          CardView;
+          layout_width="-1";
+          layout_height="72dp";
+          id="gongneng";
+          layout_weight="1";
+          radius="0dp";
+          elevation='0dp',--阴影层次
+          {
+            GridView;
+            layout_marginLeft='4%w',
+            layout_height="-1";
+            layout_width="-1";
+            verticalScrollBarEnabled=false; --隐藏滚动条
+            --   horizontalSpacing = "0dp"; -- 水平间距
+            verticalSpacing = "5dp"; -- 垂直间距
+            numColumns=8;
+            id="char_list";
+          };
+        };
+        {
+          CardView;
+          layout_width="wrap_content";
+          layout_height="72dp";
+          id="menu";
+          cardBackgroundColor="#00000000";
+          radius="0dp";
+          elevation='0dp',--阴影层次
+          {
+            ImageView;
+            layout_margin='10dp',--布局边距
+            src="res/drawable/icon.png";
+            layout_gravity="center";
+            ColorFilter="#ffffff";
+          };
+        };
+      };
+    };
+  };
+  {
+    LinearLayout;
+    Orientation="vertical";
+    layout_gravity="start";
+    layout_height="match_parent";
+    layout_marginBottom="72dp";
+    layout_marginTop="87dp";
+    layout_width="62%w";
+    {
+      LinearLayout;
+      Orientation="horizontal";
+      layout_height="50dp";
+      id="chl_top";
+      layout_width="match_parent";
+      background="#FF313131";
+      {
+        LinearLayout;
+        Orientation="horizontal";
+        layout_height="-1";
+        layout_width="-1";
+        gravity="center|right";
+        {
+          Switch;
+          text="调试";
+          layout_marginRight="4%w";
+          textColor="#FFFFFF";
+          textSize="16sp";
+          id='调试',--控件ID
+        };
+        {
+          ImageView;
+          layout_width="30dp";
+          layout_height="30dp";
+          layout_marginRight="4%w";
+          id="dabao";
+          ColorFilter="#EEEEEE";
+          src="res/img/APK17.png";
+        };
+        {
+          ImageView;
+          layout_width="30dp";
+          layout_height="30dp";
+          layout_marginRight="4%w";
+          id="beifen";
+          ColorFilter="#EEEEEE";
+          src="res/img/beifen35.png";
+        };
+        {
+          ImageView;
+          layout_width="30dp";
+          layout_height="30dp";
+          layout_marginRight="4%w";
+          id="add_file";
+          ColorFilter="#EEEEEE";
+          src="res/img/file-add10.png";
+        };
+      };
+    };
+    {
+      LinearLayout;
+      layout_width="-1";
+      layout_height="-1";
+      orientation='vertical',
+      {
+        CardView;
+        layout_width="-1";
+        layout_height="-1";
+        radius="0dp";
+        background='#FF3B3B3B',
+        {
+          ImageView;
+          layout_width="-1";
+          scaleType="centerCrop";
+          layout_height="-1";
+          --     src="res/img/bg1.jpg";
+        };
+        {
+          LinearLayout;
+          layout_height="-1";
+          layout_width="match_parent";
+          {
+            ListView;
+            layout_width="-1";
+            layout_height="-2";
+            DividerHeight=0;
+            id="chl_lbx_list";
+            verticalScrollBarEnabled=false;
+          };
+        };
+      };
+    };
+  };
+  {
+    LinearLayout;
+    Orientation="vertical";
+    layout_gravity="end";
+    layout_height="-2";
+    background="#FFFFFF";
+    layout_marginTop="87dp";
+    layout_width="62%w";
+    {
+      LinearLayout;
+      Orientation="vertical";
+      layout_height="wrap_content";
+      id="chl_top_right";
+      Gravity="center";
+      layout_width="match_parent";
+      {
+        CardView;
+        layout_width="match_parent";
+        radius="0dp";
+        layout_height="50dp";
+        CardBackgroundColor="#FF313131";
+        {
+          TextView;
+          layout_width="wrap_content";
+          layout_marginLeft="4%w";
+          layout_height="wrap_content";
+          textColor="#FFFFFF";
+          text="代码块";
+          id = "代码块";
+          layout_gravity="center|left";
+          textSize="16sp";
+        };
+      };
+    };
+    {
+      LinearLayout;
+      Orientation="vertical";
+      layout_height="wrap_content";
+      Gravity="center";
+      layout_width="match_parent";
+      {
+        CardView;
+        layout_width="match_parent";
+        radius="0dp";
+        layout_height="-2";
+        CardBackgroundColor="#FF313131";
+        {
+          GridView;
+          layout_width="-1";
+          layout_height="-1";
+          layout_marginLeft='2%w',--布局左距
+          verticalScrollBarEnabled=false; --隐藏滚动条
+          --   horizontalSpacing = "5dp"; -- 水平间距
+          --   verticalSpacing = "5dp"; -- 垂直间距
+          numColumns=4;
+          id="chl_lbx_title_right";
+        };
+      },
+    },
+
+    {
+      LinearLayout;
+      layout_height="0dp";
+      layout_weight=1;
+      layout_width="62%w";
+      {
+        CardView;
+        radius='0dp',--圆角半径
+        layout_width="-1";
+        layout_height="-1";
+        {
+          ImageView;
+          layout_width="-1";
+          scaleType="centerCrop";
+          layout_height="-1";
+          id="right_img";
+          --   src='res/img/beijingtu.jpg',--视图路径
+        };
+        {
+          ListView;
+          layout_width="-1";
+          layout_height="-1";
+          DividerHeight=0;
+          id="chl_lbx_list_right";
+          verticalScrollBarEnabled=false;
+        };
+      };
+    };
+    {
+      LinearLayout;
+      layout_width="-1";
+      id="右侧滑栏底部隐藏区";
+      layout_height="72dp";
+      {
+        CardView;
+        layout_width="-1";
+        radius="0dp";
+        layout_height="-1";
+        CardBackgroundColor="#FF313131";
+        {
+          LinearLayout;
+          layout_width="-1";
+          layout_height="-1";
+          gravity="center";
+          {
+            ImageView;
+            src="res/drawable/icon.png";
+            colorFilter='#ffffff',--图片颜色
+            layout_margin='15dp',--布局边距
+          };
+        };
+      };
+    };
+  };
+};
