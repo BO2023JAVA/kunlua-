@@ -1,0 +1,19 @@
+appname="Kunlua+"
+appver="1.0.4"
+appcode="10"
+appsdk="28"
+path_pattern=""
+packagename="com.kunbao.kunluap"
+theme="Theme_Material_NoActionBar_TranslucentDecor"
+app_key=""
+app_channel=""
+developer=""
+description=""
+debugmode=false
+user_permission={
+  "INTERNET",
+  "MANAGE_EXTERNAL_STORAGE",
+  "READ_EXTERNAL_STORAGE",
+  "REQUEST_INSTALL_PACKAGES",
+  "WRITE_EXTERNAL_STORAGE"
+}

@@ -1,0 +1,11 @@
+{
+  LinearLayout,
+  orientation="vertical",
+  layout_width="match",
+  layout_height="match",
+  gravity="center",
+  {
+    TextView,
+    text="Hello OpenLuaX+",
+  },
+}
