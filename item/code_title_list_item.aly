@@ -1,0 +1,32 @@
+{
+  LinearLayout,--线性布局
+  layout_width='-1',
+  layout_height='-2',
+  {
+    MaterialCardView;--卡片控件
+    id="title_list_card",--控件ID
+    layout_width='-1';--卡片宽度
+    layout_height='-1';--卡片高度
+    cardBackgroundColor='#00000000';--卡片颜色
+    layout_margin='0dp';--卡片边距
+    cardElevation='0dp';--卡片阴影
+    strokeWidth="0dp", --边框宽度
+    strokeColor="#ffffff", --边框颜色
+    radius='5dp';--卡片圆角
+    {
+      LinearLayout;
+      layout_width='-1',
+      layout_height='-1',
+      gravity='center',
+      {
+        TextView;
+        id='title_list_text',
+        layout_width="-1";
+        layout_height="-1";
+        layout_margin="5dp";
+        gravity='center',
+        singleLine=true;
+      };
+    };
+  };
+};

@@ -1,0 +1,35 @@
+{
+  LinearLayout;
+  layout_width='-1',
+  layout_height='-1',
+  {
+    CardView;
+    layout_height="50dp";
+    layout_width="match_parent";
+    background='#FF3B3B3B',
+    elevation='0dp',--阴影层次
+    id="chl_file_list_card",
+    {
+      LinearLayout;
+      layout_width='-1',
+      layout_height='-1',
+      {
+        ImageView;
+        id="img_icon";
+        layout_height="24dp";
+        layout_width="24dp";
+        layout_marginLeft='4%w',--布局左距
+        layout_gravity='center',
+      };
+      {
+        TextView,--文本框控件
+        id='chl_file_list_text',--控件ID
+        layout_height="-1";
+        layout_width="-1";
+        layout_marginLeft='4%w',--布局左距
+        gravity='center|left',
+        textSize="16sp";
+      };
+    };
+  };
+};

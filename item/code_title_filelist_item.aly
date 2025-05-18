@@ -1,0 +1,57 @@
+{
+  LinearLayout,--线性布局
+  layout_width='-1',
+  layout_height='-1',
+  {
+    MaterialCardView;--卡片控件
+    layout_width='-1';--卡片宽度
+    layout_height='-1';--卡片高度
+    cardBackgroundColor='#00000000';--卡片颜色
+    layout_margin='1dp';--卡片边距
+    cardElevation='0dp';--卡片阴影
+    strokeWidth="0dp", --边框宽度
+    strokeColor="#ffffff", --边框颜色
+    clickable=true;--点击效果
+    radius='5dp';--卡片圆角
+    id="title_file_list_card",--控件ID
+    {
+      LinearLayout;
+      layout_width='-1',
+      layout_height='-1',
+      gravity='center',
+      layout_margin="5dp";
+      {
+        MaterialCardView;--卡片控件
+        layout_width='30dp';--卡片宽度
+        layout_height='30dp';--卡片高度
+        cardBackgroundColor='#00000000';--卡片颜色
+        layout_margin='0dp';--卡片边距
+        cardElevation='0dp';--卡片阴影
+        strokeWidth="0dp", --边框宽度
+        strokeColor="#ffffff", --边框颜色
+        clickable=true;--点击效果
+        radius='5dp';--卡片圆角
+        {
+          ImageView;--图片控件
+          layout_width='-2';--图片宽度
+          layout_height='-2';--图片高度
+          src='res/img/lua3.png';--图片路径
+          --id='Image';--设置控件ID
+
+          --ColorFilter='';--图片着色
+          ColorFilter="#ffffffff";--设置图片着色
+          layout_margin="5dp";
+        },
+      },
+      {
+        MarText;
+        id='title_file_list_text',
+        layout_width="-1";
+        layout_height="-1";
+        -- ellipsize="marquee";
+        singleLine=true;
+        gravity='center',
+      };
+    };
+  };
+};

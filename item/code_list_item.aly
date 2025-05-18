@@ -1,0 +1,78 @@
+{
+  LinearLayout;
+  layout_width="-1";
+  layout_height="-1";
+  {
+    CardView;
+    radius="0dp";
+    layout_width="-1";
+    Elevation="0dp";
+    layout_height="-2";
+    cardBackgroundColor='#FF3B3B3B',
+    {
+      LinearLayout;
+      orientation="horizontal";
+      layout_width="match_parent";
+      layout_height="match_parent";
+       --[=[   {
+        ImageView;
+        layout_margin="5dp";
+        layout_width="-2";
+        src="res/img/bg-code8.png";
+        id="code_biaoge_img";
+        layout_height="-1";
+        ColorFilter="#ffffff"--设置图片着色
+      };  ]=]  
+      {
+        LinearLayout;
+        orientation="vertical";
+        layout_width="match_parent";
+        layout_height="match_parent";
+        {
+          LinearLayout;
+          orientation="horizontal";
+          layout_width="-1";
+          layout_height="-2";
+          {
+            MarText;
+            layout_margin="10dp";
+            textColor="#ffffff";
+            layout_height="-2";
+            singleLine=true;
+            ellipsize="marquee";
+            layout_width="-2";
+            text="正在开发...";
+            id="code_biaoge_title";
+            textSize="24sp";
+          };
+          --[=[    {
+            TextView;
+            layout_margin="10dp";
+            textColor="#000000";
+            layout_height="-2";
+            layout_width="-2";
+            text="[v1.0]";
+            id="code_biaoge_v";
+            textSize="18sp";
+          };  ]=]
+        };
+          --[=[  {
+          LinearLayout;
+          orientation="vertical";
+          layout_width="match_parent";
+          layout_height="match_parent";
+          {
+            TextView;
+            layout_margin="5dp";
+            textColor="#ffffff";
+            layout_height="wrap_content";
+            layout_width="wrap_content";
+            text="正在开发...";
+            id="code_biaoge_xx";
+            textSize="18sp";
+          };
+        };  ]=]  
+      };
+    };
+  };
+};
