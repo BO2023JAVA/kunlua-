@@ -1,0 +1,7608 @@
+
+《《PageView动画教程》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  {
+    PageView;--滑动窗体
+    layout_weight='1';--剩余属性
+    id='滑动窗体';--绑定ID
+  };
+};
+
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+
+--这里将用适配器为Pageview添加布局
+adp = ArrayPageAdapter()--设置适配器
+滑动窗体.setAdapter(adp)--绑定适配器
+--新建一个布局，将其添加至Pageview
+卡片 = {
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity='center';
+  {
+    CardView;--卡片控件
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='0';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='0xff7e5cf8';--卡片背景颜色
+  };
+};
+adp.add(loadlayout(卡片))--利用适配器将布局添加至Pageview
+adp.add(loadlayout(卡片))
+--Pageview动画需要导入此包
+import'android.widget.PageView$PageTransformer'
+
+默认参数 = 0.75--设置默认参数，后面计算动画参数
+--Pageview官方动画函数
+滑动窗体.setPageTransformer(true,PageTransformer{--获取到Pageview的位置
+  transformPage = function(view,position)
+    pageWidth = view.getWidth()
+    if position<-1 then
+      view.setAlpha(0)--设置透明度
+    elseif position<=0 then
+      view.setAlpha(1)
+      view.setTranslationX(0)--设置偏移量(X轴平移)
+      view.setScaleX(1)--设置X轴缩放
+      view.setScaleY(1)--设置Y轴缩放
+
+    elseif position<=1 then
+      view.setAlpha(1-position)
+      view.setTranslationX(pageWidth*-position)
+      动画参数 = 默认参数+(1-默认参数)*(1-Math.abs(position))--动态计算动画参数
+      view.setScaleX(动画参数)
+      view.setScaleY(动画参数)
+
+    else
+      view.setAlpha(0)
+    end
+  end
+})
+--这个为谷歌官方开源的动画函数，类似的还有很多很多
+--开源链接：https://github.com/ToxicBakery/ViewPagerTransforms】】
+
+
+《《布局动画控制器》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  {
+    ListView;--列表视图
+    id='list';--绑定id
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    --dividerHeight='';--设置分隔线宽度,0表示无分隔线
+    background='';--布局背景颜色(或者图片路径)
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--使用适配器为list添加列表
+数据={}
+--添加项目数组
+for i=1,10 do
+  table.insert(数据,tostring(i))
+end
+--创建适配器
+array_adp=ArrayAdapter(activity,android.R.layout.simple_list_item_1,String(数据))
+--设置适配器
+list.setAdapter(array_adp)
+
+--LayoutAnimationController可以控制一组控件按照规定显示 
+
+--导入类
+import "android.view.animation.AnimationUtils"
+import "android.view.animation.LayoutAnimationController"
+
+
+--创建一个Animation对象
+animation = AnimationUtils.loadAnimation(activity,android.R.anim.slide_in_left)
+
+--得到对象
+lac = LayoutAnimationController(animation)
+
+--设置控件显示的顺序
+lac.setOrder(LayoutAnimationController.ORDER_NORMAL)
+--LayoutAnimationController.ORDER_NORMAL 顺序显示
+--LayoutAnimationController.ORDER_REVERSE 反显示
+--LayoutAnimationController.ORDER_RANDOM 随机显示
+
+--设置控件显示间隔时间
+lac.setDelay(1)--这里单位是秒
+
+--设置组件应用
+list.setLayoutAnimation(lac)】】
+
+
+《《揭露动画教程》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--绑定ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='0';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--揭露动画一定要设置延时，并在延时事件里启动
+task(100,function()
+  --设置揭露动画，对于参数为(ID,动画圆心X轴，动画圆心Y轴,动画开始时半径,动画结束时半径)
+  揭露动画 = ViewAnimationUtils.createCircularReveal(卡片,0,0,300,0)
+  揭露动画.setDuration(5000)--设置动画时间
+  揭露动画.start()--开始动画
+end)】】
+
+
+《《窗口动画》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置窗口动画
+--对应参数为（进入时动画，离开时动画）
+activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out)--淡入淡出
+
+--[[
+！！部分窗口动画无法正常使用
+android.R.anim.accelerate_decelerate_interpolator
+android.R.anim.accelerate_interpolator
+android.R.anim.anticipate_interpolator
+android.R.anim.anticipate_overshoot_interpolator
+android.R.anim.bounce_interpolator
+android.R.anim.cycle_interpolator
+android.R.anim.decelerate_interpolatoandroid.R.anim.r
+android.R.anim.fade_in
+android.R.anim.fade_out
+android.R.anim.linear_interpolator
+android.R.anim.overshoot_interpolator
+android.R.anim.slide_in_left
+android.R.anim.slide_out_right
+]]】】
+
+
+《《仿盒子背景水波纹动画》》
+【【
+import "android.view.animation.Animation"
+import 'android.animation.AnimatorSet'
+import 'android.graphics.Paint'
+import 'android.animation.ObjectAnimator'
+import 'android.view.animation.AccelerateInterpolator'
+import 'android.graphics.Color'
+bd = LuaDrawable(function(canvas,paint,draw)
+  paint.setColor(Color.WHITE)
+  paint.setStyle(Paint.Style.STROKE)
+  paint.setStrokeWidth(5)
+  canvas.drawCircle(draw.getBounds().centerX(),draw.getBounds().centerY(),draw.getBounds().height()/2-50,paint)
+end)
+
+SorrowClover=
+{
+  FrameLayout;--帧布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#F17F42';--布局背景颜色(或图片路径)
+  {
+    LinearLayout;--线性布局
+    id='anime1';
+    layout_width='400';--布局宽度
+    layout_height='400';--布局高度
+    BackgroundDrawable=bd;--布局背景颜色(或图片路径)
+  };
+  {
+    LinearLayout;--线性布局
+    id='anime2';
+    layout_width='400';--布局宽度
+    layout_height='400';--布局高度
+    BackgroundDrawable=bd;--布局背景颜色(或图片路径)
+    layout_gravity='center';
+  };
+  {
+    LinearLayout;--线性布局
+    id='anime3';
+    layout_width='400';--布局宽度
+    layout_height='400';--布局高度
+    BackgroundDrawable=bd;--布局背景颜色(或图片路径)
+    layout_gravity='bottom|right';
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+
+animatorSet = AnimatorSet()--设置组合动画
+--对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+scaleX1 = ObjectAnimator.ofFloat(anime1, "scaleX", {0, 1})
+scaleY1 = ObjectAnimator.ofFloat(anime1, "scaleY", {0, 1})
+scaleX1.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleX1.setRepeatMode(Animation.RESTART)--设置动画循环模式
+scaleX1.setDuration(2000)--动画时间
+scaleY1.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleY1.setRepeatMode(Animation.RESTART)--设置动画循环模式
+scaleY1.setDuration(2000)--动画时间
+scaleX2 = ObjectAnimator.ofFloat(anime2, "scaleX", {0, 1})
+scaleY2 = ObjectAnimator.ofFloat(anime2, "scaleY", {0, 1})
+scaleX2.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleX2.setRepeatMode(Animation.RESTART)--设置动画循环模式
+scaleX2.setDuration(3000)--动画时间
+scaleY2.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleY2.setRepeatMode(Animation.RESTART)--设置动画循环模式
+scaleY2.setDuration(3000)--动画时间
+scaleX3 = ObjectAnimator.ofFloat(anime3, "scaleX", {0, 1})
+scaleY3 = ObjectAnimator.ofFloat(anime3, "scaleY", {0, 1})
+scaleX3.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleX3.setRepeatMode(Animation.RESTART)--设置动画循环模式
+scaleX3.setDuration(2500)--动画时间
+scaleY3.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleY3.setRepeatMode(Animation.RESTART)--设置动画循环模式
+scaleY3.setDuration(2500)--动画时间
+animatorSet.setInterpolator(AccelerateInterpolator());--动画插值器
+animatorSet.playTogether({scaleX1,scaleY1,scaleX2,scaleY2,scaleX3,scaleY3})--动画同时开始
+animatorSet.start();--动画开始】】
+
+
+《《动画圆形进度条实战》》
+【【
+import 'android.view.animation.RotateAnimation'
+import 'android.view.animation.Animation'
+import 'android.view.animation.AccelerateDecelerateInterpolator'
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  gravity="center";
+  {
+    FrameLayout;--帧布局
+    layout_width='100dp';--布局宽度
+    layout_height='100dp';--布局高度
+    {
+      CardView;--卡片控件
+      id="cd1";
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      Elevation='0';--阴影属性
+      radius='50dp';--卡片圆角
+      CardBackgroundColor='#00ffffff';--卡片背景颜色
+      {
+        CardView;--卡片控件
+        layout_gravity='top|center';--子控件在父布局中的对齐方式
+        CardElevation='0';--卡片阴影
+        layout_width='10dp';--卡片宽度
+        layout_height='10dp';--卡片高度
+        radius='5dp';--卡片圆角
+        CardBackgroundColor='#FF7268E9';--卡片背景颜色
+      };
+    };
+    {
+      CardView;--卡片控件
+      id="cd2";
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      Elevation='0';--阴影属性
+      radius='50dp';--卡片圆角
+      CardBackgroundColor='#00ffffff';--卡片背景颜色
+      {
+        CardView;--卡片控件
+        layout_gravity='top|center';--子控件在父布局中的对齐方式
+        CardElevation='0';--卡片阴影
+        layout_width='10dp';--卡片宽度
+        layout_height='10dp';--卡片高度
+        radius='5dp';--卡片圆角
+        CardBackgroundColor='#FF7268E9';--卡片背景颜色
+      };
+    };
+    {
+      CardView;--卡片控件
+      id="cd3";
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      Elevation='0';--阴影属性
+      radius='50dp';--卡片圆角
+      CardBackgroundColor='#00ffffff';--卡片背景颜色
+      {
+        CardView;--卡片控件
+        layout_gravity='top|center';--子控件在父布局中的对齐方式
+        CardElevation='0';--卡片阴影
+        layout_width='10dp';--卡片宽度
+        layout_height='10dp';--卡片高度
+        radius='5dp';--卡片圆角
+        CardBackgroundColor='#FF7268E9';--卡片背景颜色
+      };
+    };
+    {
+      CardView;--卡片控件
+      id="cd4";
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      Elevation='0';--阴影属性
+      radius='50dp';--卡片圆角
+      CardBackgroundColor='#00ffffff';--卡片背景颜色
+      {
+        CardView;--卡片控件
+        layout_gravity='top|center';--子控件在父布局中的对齐方式
+        CardElevation='0';--卡片阴影
+        layout_width='10dp';--卡片宽度
+        layout_height='10dp';--卡片高度
+        radius='5dp';--卡片圆角
+        CardBackgroundColor='#FF7268E9';--卡片背景颜色
+      };
+    };
+    {
+      CardView;--卡片控件
+      id="cd5";
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      Elevation='0';--阴影属性
+      radius='50dp';--卡片圆角
+      CardBackgroundColor='#00ffffff';--卡片背景颜色
+      {
+        CardView;--卡片控件
+        layout_gravity='top|center';--子控件在父布局中的对齐方式
+        CardElevation='0';--卡片阴影
+        layout_width='10dp';--卡片宽度
+        layout_height='10dp';--卡片高度
+        radius='5dp';--卡片圆角
+        CardBackgroundColor='#FF7268E9';--卡片背景颜色
+      };
+    };
+    {
+      CardView;--卡片控件
+      id="cd6";
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      Elevation='0';--阴影属性
+      radius='50dp';--卡片圆角
+      CardBackgroundColor='#00ffffff';--卡片背景颜色
+      {
+        CardView;--卡片控件
+        layout_gravity='top|center';--子控件在父布局中的对齐方式
+        CardElevation='0';--卡片阴影
+        layout_width='10dp';--卡片宽度
+        layout_height='10dp';--卡片高度
+        radius='5dp';--卡片圆角
+        CardBackgroundColor='#FF7268E9';--卡片背景颜色
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+
+function 动画(控件,时间)
+  旋转动画=RotateAnimation(0, 360,
+  Animation.RELATIVE_TO_SELF, 0.5,
+  Animation.RELATIVE_TO_SELF, 0.5)
+  旋转动画.setDuration(时间)--设置动画时间
+  旋转动画.setInterpolator(AccelerateDecelerateInterpolator())
+  旋转动画.setFillAfter(true)--设置动画结束后停留位置
+  旋转动画.setRepeatCount(-1)--设置无限循环
+  --绑定动画
+  控件.startAnimation(旋转动画)
+end
+task(15,function()
+  动画(cd1,1500)
+  task(15,function()
+    动画(cd2,1500)
+    task(15,function()
+      动画(cd3,1500)
+      task(15,function()
+        动画(cd4,1500)
+        task(15,function()
+          动画(cd5,1500)
+          task(15,function()
+            动画(cd6,1500)
+            return true
+          end)
+          return true
+        end)
+        return true
+      end)
+      return true
+    end)
+    return true
+  end)
+  return true
+end)】】
+
+
+《《卡片跟随重影动画实战》》
+【【
+--创建布局，为教程提供良好的可视化
+import "android.view.animation.DecelerateInterpolator"
+import "android.animation.AnimatorSet"
+import "android.animation.ObjectAnimator"
+shamrock=
+{
+  --关于帧布局，也就是后创建的布局会直接堆叠在前面创建的布局之上
+  FrameLayout;--帧布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='';--布局背景颜色(或者图片路径)
+    gravity='center';--设置居中
+    {
+      CardView;--卡片控件
+      id='背景卡片';--绑定ID
+      layout_margin='0';--卡片边距
+      layout_gravity='center';--重力属性
+      Elevation='0';--阴影属性
+      layout_width='100';--卡片宽度
+      layout_height='100';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#8c7e5cf8';--卡片背景颜色
+    };
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='';--布局背景颜色(或者图片路径)
+    gravity='center';
+    {
+      CardView;--卡片控件
+      id='卡片';--绑定ID
+      layout_margin='0';--卡片边距
+      layout_gravity='center';--重力属性
+      Elevation='0';--阴影属性
+      layout_width='100';--卡片宽度
+      layout_height='100';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+--封装动画函数，避免后面重复的动画代码
+function 动画(view,x,y)
+  --导入组合动画包
+  import "android.animation.AnimatorSet"
+  --设置属性动画
+  animatorSet = AnimatorSet()--设置组合动画
+  --对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+  scaleX = ObjectAnimator.ofFloat(view, "X", {view.getX(), x})
+  scaleY = ObjectAnimator.ofFloat(view, "Y", {view.getY(), y})
+  animatorSet.setDuration(1000)--动画时间
+  animatorSet.setInterpolator(DecelerateInterpolator());--动画插值器
+  animatorSet.play(scaleX).with(scaleY)--两个动画同时开始
+  animatorSet.start();--动画开始
+end
+--监听屏幕触摸事件
+function onTouchEvent(e)
+  --获取到触摸的坐标
+  X轴 = e.X
+  Y轴 = e.Y
+  --执行动画函数
+  动画(卡片,X轴,Y轴)
+  --延迟执行动画函数，实现重影效果
+  task(20,function()
+    动画(背景卡片,X轴,Y轴)
+  end)
+end
+print("随意触摸屏幕查看效果")】】
+
+
+《《等待窗口动画实战》》
+【【
+--创建一个布局，教程提供良好的可视化
+import "android.view.animation.AlphaAnimation"
+import "android.view.animation.Animation"
+import "android.view.animation.RotateAnimation"
+import "android.widget.PopupWindow"
+dingyi=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='0';--阴影属性
+    layout_width='150';--卡片宽度
+    layout_height='150';--卡片高度
+    radius='75';--卡片圆角
+    CardBackgroundColor='#ff1e8ae8';--卡片背景颜色
+    {
+      RippleLayout,--水波纹布局
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      RippleColor='#ffffff';--水波纹颜色
+      RippleLineColor='#ffffff';--水波纹线条颜色
+      circle=true;--长按圆圈
+      {
+        TextView;--文本控件
+        id='按钮';--绑定ID
+        layout_width='fill';--文本宽度
+        layout_height='fill';--文本高度
+        Gravity='center';--重力属性
+        textColor='#ffffff';--文本颜色
+        text='点击弹窗';--显示的文本
+        textSize='12sp';--文本大小
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(dingyi))--将布局添加至窗口
+--设置按钮点击弹出弹窗
+按钮.onClick=function()
+  --设置弹出式窗口布局
+  popbj={
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='80%w';--布局宽度
+    layout_height='30%h';--布局高度
+    background='#00ffffff';--布局背景颜色(或者图片路径)
+    gravity='center';--设置居中
+    {
+      CardView;--卡片控件
+      layout_margin='10';--卡片边距
+      layout_gravity='center';--重力属性
+      Elevation='10';--阴影属性
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#ffffff';--卡片背景颜色
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_height='fill';--布局高度
+        background='';--布局背景颜色(或者图片路径)
+        gravity='center';--设置居中
+        {
+          LinearLayout;--线性布局
+          Orientation='vertical';--布局方向
+          layout_width='55';--布局宽度
+          layout_height='55';--布局高度
+          background='';--布局背景颜色(或者图片路径)
+          gravity='center';--设置居中
+          {
+            CardView;--卡片控件
+            layout_margin='0';--卡片边距
+            layout_gravity='center';--重力属性
+            Elevation='0';--阴影属性
+            layout_width='50';--卡片宽度
+            layout_height='17.5';--卡片高度
+            radius='0';--卡片圆角
+            CardBackgroundColor='#ff1e8ae8';--卡片背景颜色
+          };
+          {
+            CardView;--卡片控件
+            layout_margin='0';--卡片边距
+            layout_gravity='center';--重力属性
+            Elevation='0';--阴影属性
+            layout_width='25';--卡片宽度
+            layout_height='8.25';--卡片高度
+            radius='0';--卡片圆角
+            CardBackgroundColor='#ff1e8ae8';--卡片背景颜色
+          };
+        };
+        {
+          LinearLayout;--线性布局
+          Orientation='vertical';--布局方向
+          layout_width='105';--布局宽度
+          layout_height='105';--布局高度
+          background='';--布局背景颜色(或者图片路径)
+          gravity='center';--设置居中
+          {
+            CardView;--卡片控件
+            layout_margin='0';--卡片边距
+            layout_gravity='center';--重力属性
+            Elevation='0';--阴影属性
+            layout_width='100';--卡片宽度
+            layout_height='100';--卡片高度
+            radius='50';--卡片圆角
+            CardBackgroundColor='#ff1e8ae8';--卡片背景颜色
+            {
+              CardView;--卡片控件
+              layout_margin='0';--卡片边距
+              layout_gravity='center';--重力属性
+              Elevation='0';--阴影属性
+              layout_width='90';--卡片宽度
+              layout_height='90';--卡片高度
+              radius='45';--卡片圆角
+              CardBackgroundColor='#ffffff';--卡片背景颜色
+              {
+                CardView;--卡片控件
+                layout_margin='0';--卡片边距
+                layout_gravity='center';--重力属性
+                Elevation='0';--阴影属性
+                layout_width='70';--卡片宽度
+                layout_height='70';--卡片高度
+                radius='35';--卡片圆角
+                CardBackgroundColor='#ffffff';--卡片背景颜色
+                {
+                  CardView;--卡片控件
+                  id='指针';--绑定ID
+                  layout_margin='0';--卡片边距
+                  layout_gravity='top|center';--重力属性
+                  Elevation='0';--阴影属性
+                  layout_width='5';--卡片宽度
+                  layout_height='35';--卡片高度
+                  radius='1';--卡片圆角
+                  CardBackgroundColor='#ff1e8ae8';--卡片背景颜色
+                };
+              };
+            };
+          };
+        };
+        {
+          LinearLayout;--线性布局
+          Orientation='vertical';--布局方向
+          layout_width='fill';--布局宽度
+          layout_height='100';--布局高度
+          background='';--布局背景颜色(或者图片路径)
+          gravity='center';--设置居中
+          {
+            TextView;--文本控件
+            id='等待文字';--绑定ID
+            layout_width='wrap';--文本宽度
+            layout_height='wrap';--文本高度
+            Gravity='center';--重力属性
+            textColor='#ff1e8ae8';--文本颜色
+            text='loading';--显示的文本
+            textSize='28sp';--文本大小
+          };
+        };
+      };
+    };
+  };
+
+
+  pop=PopupWindow(activity)--创建PopupWindow弹出式窗口
+  pop.setContentView(loadlayout(popbj))--设置布局
+  pop.setWidth(activity.Width*0.8)--设置宽度
+  pop.getBackground().setAlpha(0)--将pop自带的背景透明
+  pop.setHeight(activity.Height*0.3)--设置高度
+  pop.setFocusable(true)--设置可获得焦点
+  pop.setTouchable(true)--设置可触摸
+  --设置点击外部区域是否可以消失
+  pop.setOutsideTouchable(false)
+  --居中显示
+  pop.showAtLocation(view,Gravity.CENTER,0,0)
+
+  --设置动画的属性
+  旋转动画=RotateAnimation(0,360 ,Animation.RELATIVE_TO_SELF, 1,Animation.RELATIVE_TO_SELF, 1)
+  旋转动画.setDuration(800)--设置动画时间
+  旋转动画.setFillAfter(true)--设置动画结束后停留位置
+  旋转动画.setRepeatCount(-1)--设置无限循环
+  旋转动画.setRepeatMode(Animation.RESTART)--设置循环模式
+  --绑定动画
+  指针.startAnimation(旋转动画)
+
+  --设置动画属性
+  透明动画=AlphaAnimation(1,0)
+  透明动画.setDuration(800)--设置动画时间
+  透明动画.setFillAfter(true)--设置动画后停留位置
+  透明动画.setRepeatCount(-1)--设置无限循环
+  透明动画.setRepeatMode(Animation.REVERSE)--设置循环模式
+  --绑定动画
+  等待文字.startAnimation(透明动画)
+
+end】】
+
+
+《《简单启动动画实战》》
+【【
+--创建布局，提供良好的示例
+import "android.animation.AnimatorSet"
+import "android.view.animation.DecelerateInterpolator"
+import "android.animation.ObjectAnimator"
+import "android.view.animation.OvershootInterpolator"
+import "android.view.animation.Animation"
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity="center";--设置居中
+  {
+    LinearLayout;--线性布局
+    id="卡片1";--绑定id
+    Orientation='vertical';--布局方向
+    layout_width='200';--布局宽度
+    layout_height='200';--布局高度
+    background='';--布局背景颜色(或者图片路径)
+    Gravity="center";--设置居中
+    {
+      CardView;--卡片控件
+      layout_margin='0';--卡片边距
+      layout_gravity='center';--重力属性
+      Elevation='10';--阴影属性
+      layout_width='100';--卡片宽度
+      layout_height='100';--卡片高度
+      radius='50';--卡片圆角
+      CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    };
+  };
+  {
+    LinearLayout;--线性布局
+    id="卡片2";--绑定id
+    Orientation='vertical';--布局方向
+    layout_width='200';--布局宽度
+    layout_height='500';--布局高度
+    background='';--布局背景颜色(或者图片路径)
+    Gravity="center";--设置居中
+    {
+      CardView;--卡片控件
+      layout_margin='0';--卡片边距
+      layout_gravity='center';--重力属性
+      Elevation='10';--阴影属性
+      layout_width='100';--卡片宽度
+      layout_height='400';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+
+平移动画1 = ObjectAnimator.ofFloat(卡片1, "X",{-200, activity.Width/2-100})--设置属性动画
+平移动画1.setInterpolator(OvershootInterpolator())--设置插值器
+平移动画1.setDuration(1300)--设置动画时间
+平移动画1.start()--开始动画
+
+--设置属性动画
+animatorSet = AnimatorSet()--设置组合动画
+平移动画2 = ObjectAnimator.ofFloat(卡片2, "X", {-200, activity.Width/2-100})
+旋转动画 = ObjectAnimator.ofFloat(卡片2, "rotation", {0, 15})
+animatorSet.setDuration(400)--动画时间
+animatorSet.setInterpolator(DecelerateInterpolator());--动画插值器
+旋转动画.setRepeatCount(1)--设置动画重复次数
+旋转动画.setRepeatMode(Animation.REVERSE)--设置动画循环模式
+animatorSet.play(平移动画2).before(旋转动画)--先执行平移动画2，再执行旋转动画
+animatorSet.start();--动画开始】】
+
+
+《《简单躲避球动画实战》》
+【【
+--导入组合动画类
+import "android.view.animation.DecelerateInterpolator"
+import "android.view.animation.Animation"
+import "android.animation.ObjectAnimator"
+import "android.animation.AnimatorSet"
+--创建布局
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity="center";--设置居中
+  {
+    LinearLayout;--线性布局
+    id="按钮布局";--绑定id
+    Orientation='vertical';--布局方向
+    layout_width='400';--布局宽度
+    layout_height='200';--布局高度
+    background='';--布局背景颜色(或者图片路径)
+    Gravity="center";--设置居中
+    {
+      CardView;--卡片控件
+      id="按钮";--绑定id
+      layout_margin='0';--卡片边距
+      layout_gravity='center';--重力属性
+      Elevation='0';--阴影属性
+      layout_width='100';--卡片宽度
+      layout_height='100';--卡片高度
+      radius='50';--卡片圆角
+      CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    };
+    {
+      TextView;--文本控件
+      id="显示文字";--绑定id
+      layout_width='wrap';--文本宽度
+      layout_height='wrap';--文本高度
+      Gravity='center';--重力属性
+      textColor='#000000';--文本颜色
+      text='来点我呀';--显示的文本
+      textSize='16sp';--文本大小
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+显示文字列表={"点不到我吧~","来抓我呀~","略略略~","你好笨哦~","来呀来呀~"}--创建一个显示文字的表
+
+按钮.onClick=function()--按钮点击事件
+
+  x轴=math.random(0,activity.Width-400)--获取x轴随机数
+  y轴=math.random(0,tointeger(activity.Height*0.8))--获取y轴随机数
+  显示文字键=math.random(1,4)--获取显示文字随机数
+
+  --设置属性动画
+  animatorSet = AnimatorSet()--设置组合动画
+  --对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+  scaleX = ObjectAnimator.ofFloat(按钮布局, "X", {按钮布局.getX(), x轴})
+  scaleY = ObjectAnimator.ofFloat(按钮布局, "Y", {按钮布局.getY(), y轴})
+  animatorSet.setDuration(1000)--动画时间
+  animatorSet.setInterpolator(DecelerateInterpolator());--动画插值器
+  animatorSet.play(scaleX).with(scaleY)--两个动画同时开始
+  --animatorSet.play(scaleX).before(scaleY)--先执行scaleX，再执行scaleY
+  animatorSet.start();--动画开始
+  显示文字.Text=显示文字列表[显示文字键]--随机显示文字
+
+end】】
+
+
+《《细胞球动画实战》》
+【【
+--创建布局
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity="center";--设置居中
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='80%w';--布局宽度
+    layout_height='80%h';--布局高度
+    background='#ff7e5cf8';--布局背景颜色(或者图片路径)
+    Gravity="center";--设置居中
+    {
+      LinearLayout;--线性布局
+      id="框";--绑定id
+      layout_margin="3";--设置边距
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      background='#ffffff';--布局背景颜色(或者图片路径)
+      gravity="center";--设置居中
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+
+function 添加圆(cardid)--封装添加函数
+  大小=math.random(50,150)--随机大小
+  圆={--定义布局表
+    CardView;--卡片控件
+    id=cardid;--绑定id
+    Elevation='0';--阴影属性
+    layout_width=大小;--卡片宽度
+    layout_height=大小;--卡片高度
+    radius=大小/2;--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+  框.addView(loadlayout(圆))--添加布局至主布局
+end
+
+function 动画(view,x,y)--封装动画函数
+  --导入组合动画包
+  import "android.view.animation.DecelerateInterpolator"
+  import "android.view.animation.Animation"
+  import "android.animation.ObjectAnimator"
+  import "android.animation.AnimatorSet"
+  --设置属性动画
+  animatorSet = AnimatorSet()--设置组合动画
+  --对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+  scaleX = ObjectAnimator.ofFloat(view, "X", {view.getX(), x})
+  scaleY = ObjectAnimator.ofFloat(view, "Y", {view.getY(), y})
+  animatorSet.setDuration(1000)--动画时间
+  animatorSet.setInterpolator(DecelerateInterpolator());--动画插值器
+  animatorSet.play(scaleX).with(scaleY)--两个动画同时开始
+  animatorSet.start();--动画开始
+end
+
+function 随意坐标(cardid)--封装随意坐标函数
+  x轴=math.random(tointeger(activity.Width*0.1+1.5),tointeger(activity.Width*0.9-1.5-200))--随机x轴
+  y轴=math.random(tointeger(activity.Height*0.1+1.5),tointeger(activity.Height*0.9-1.5-200))--随机y轴
+  动画(cardid,x轴,y轴)--调用动画函数
+end
+
+for i=1,20 do--循环添加圆
+  添加圆("圆"..i)
+end
+
+--Ticker定时器
+ti=Ticker()
+ti.Period=500--间隔
+ti.onTick=function()--定时器函数
+  随意坐标(圆1)
+  task(100,function()
+    随意坐标(圆2)
+    随意坐标(圆3)
+    随意坐标(圆4)
+  end)
+  随意坐标(圆5)
+  随意坐标(圆6)
+  随意坐标(圆7)
+  task(100,function()
+    随意坐标(圆8)
+    随意坐标(圆9)
+    随意坐标(圆10)
+  end)
+  随意坐标(圆11)
+  task(100,function()
+    随意坐标(圆12)
+    随意坐标(圆13)
+    随意坐标(圆14)
+  end)
+  随意坐标(圆15)
+  随意坐标(圆16)
+  随意坐标(圆17)
+  task(100,function()
+    随意坐标(圆18)
+    随意坐标(圆19)
+    随意坐标(圆20)
+  end)
+end
+--启动Ticker定时器
+ti.start()
+
+function onStop()--活动停止监听
+  ti.stop()--停止定时器
+end】】
+
+
+《《动画插值器》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置属性动画
+--对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+
+import "android.view.animation.DecelerateInterpolator"
+import "android.view.animation.Animation"
+import "android.animation.ObjectAnimator"
+
+平移动画 = ObjectAnimator.ofFloat(卡片, "X",{0, activity.Width})
+平移动画.setInterpolator(DecelerateInterpolator())--动画插值器,具体取值看下方
+平移动画.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+平移动画.setRepeatMode(Animation.REVERSE)--设置动画循环模式
+平移动画.setDuration(1500)--动画时间
+平移动画.start()--动画开始
+
+--[[
+Interpolatort通常在动画中使用，主要来改变动画变化率。
+
+AccelerateDecelerateInterpolator()开始与结束的地方速率改变比较慢，在中间的时候加速
+
+AccelerateInterpolator()开始的地方速率改变比较慢，然后开始加速
+
+AnticipateInterpolator（）开始的时候向后然后向前甩
+
+AnticipateOvershootInterpolator（）开始的时候向后然后向前甩一定值后返回最后的值
+
+BounceInterpolator（）动画结束的时候弹起
+
+CycleInterpolator（）循环播放特定的次数，速率改变沿着正弦曲线
+
+DecelerateInterpolator（）在开始的地方快然后慢，实例经常使用它
+
+LinearInterpolator（）以常量速率改变
+
+OvershootInterpolator（）向前甩一定值后再回到原来位置
+]]】】
+
+
+《《属性动画概述》》
+【【
+一，背景：
+为了解决补间动画的缺陷，在 Android 3.0（API 11）开始，系统提供了一种全新的动画模式：属性动画（Property Animation）
+
+二，简介：
+作用对象：任意 Java 对象
+不再局限于 视图View对象
+实现的动画效果：可自定义各种动画效果
+不再局限于4种基本变换：平移、旋转、缩放 & 透明度
+
+三，特点：
+作用对象进行了扩展：不只是View对象，甚至没对象也可以
+动画效果：不只是4种基本变换，还有其他动画效果
+
+四，工作原理：
+在一定时间间隔内，通过不断对值进行改变，并不断将该值赋给对象的属性，从而实现该对象在该属性上的动画效果
+可以是任意对象的任意属性
+
+五，共有属性：
+Duration --属性为动画持续时间 时间以毫秒为单位
+repeatCount--动画的重复次数 
+repeatMode --定义重复的行为 可取值:(Animation.RESTART从头开始)(Animation.REVERSE从结束开始)】】
+
+
+《《平移动画》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+
+
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置属性动画
+--对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+
+import "android.view.animation.DecelerateInterpolator"
+import "android.view.animation.Animation"
+import "android.animation.ObjectAnimator"
+平移动画 = ObjectAnimator.ofFloat(卡片, "Y",{卡片.getY(), activity.Height})
+平移动画.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+平移动画.setRepeatMode(Animation.REVERSE)--循环模式
+平移动画.setInterpolator(DecelerateInterpolator())--设置插值器
+平移动画.setDuration(1500)--设置动画时间
+平移动画.start()--开始动画】】
+
+
+《《旋转动画》》
+【【
+import "android.view.animation.Animation"
+import "android.animation.ObjectAnimator"
+import "android.view.animation.RotateAnimation"
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置属性动画
+--对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+旋转动画 = ObjectAnimator .ofFloat(卡片, "rotationX", {0, 180})
+旋转动画.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+旋转动画.setRepeatMode(Animation.REVERSE)--循环模式
+旋转动画.setDuration(2000)--动画时间
+旋转动画.start()--动画开始】】
+
+
+
+《《组合动画》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+--组合动画需要导入此包
+
+import "android.animation.ObjectAnimator"
+import "android.animation.AnimatorSet"
+import "android.view.animation.Animation"
+import "android.view.animation.DecelerateInterpolator"
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置属性动画
+animatorSet = AnimatorSet()--设置组合动画
+--对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+scaleX = ObjectAnimator.ofFloat(卡片, "scaleX", {1, 0})
+scaleY = ObjectAnimator.ofFloat(卡片, "scaleY", {1, 0})
+--组合动画的循环需要挨个设置
+scaleX.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleX.setRepeatMode(Animation.REVERSE)--设置动画循环模式
+scaleY.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+scaleY.setRepeatMode(Animation.REVERSE)--设置动画循环模式
+animatorSet.setDuration(2000)--动画时间
+animatorSet.setInterpolator(DecelerateInterpolator());--动画插值器
+animatorSet.playTogether({scaleX,scaleY})--两个动画同时开始
+--animatorSet.playSequentially({scaleX,scaleY})--先执行scaleX，再执行scaleY
+animatorSet.start();--动画开始】】
+
+
+《《缩放动画》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+import "android.view.animation.DecelerateInterpolator"
+import "android.animation.ObjectAnimator"
+import "android.view.animation.Animation"
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置属性动画
+--对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+缩放动画 = ObjectAnimator.ofFloat(卡片, "scaleX", {1, 0})
+缩放动画.setRepeatCount(-1)--设置动画重复次数，这里-1代表无
+缩放动画.setRepeatMode(Animation.REVERSE)--设置循环模式
+缩放动画.setDuration(2000)--设置动画时间
+缩放动画.setInterpolator(DecelerateInterpolator());--设置动画插值器
+缩放动画.start();--开始动画】】
+
+
+《《背景颜色动画》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+--背景颜色动画需要导入此包
+import "android.view.animation.DecelerateInterpolator"
+import "android.animation.ObjectAnimator"
+import "android.view.animation.Animation"
+import "android.animation.ArgbEvaluator"
+import "android.graphics.Color"
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置属性动画
+--对应参数分别是（id，需要改变的属性，{此处可以是多个值，分别表示每次的颜色}）
+背景动画 = ObjectAnimator.ofInt(卡片,"backgroundColor",{Color.RED, Color.BLUE, Color.GRAY})
+背景动画.setInterpolator(DecelerateInterpolator())--动画插值器
+背景动画.setDuration(1500)--动画时间
+背景动画.setRepeatCount(-1)--动画循环
+背景动画.setRepeatMode(Animation.REVERSE)--循环模式
+背景动画.setEvaluator(ArgbEvaluator())
+--[[
+ArgbEvaluator：这种评估者可以用来执行类型之间的插值整数值代表ARGB颜色。
+FloatEvaluator：这种评估者可以用来执行浮点值之间的插值。
+IntEvaluator：这种评估者可以用来执行类型int值之间的插值。
+RectEvaluator：这种评估者可以用来执行类型之间的插值矩形值。
+
+由于本例是改变View的backgroundColor属性的背景颜色所以此处使用ArgbEvaluator
+]]
+背景动画.start()--动画开始】】
+
+
+《《透明动画》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+
+
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置属性动画
+--第一个参数为id,第二个参数为 动画改变的类型,第三,第四个参数依次是开始透明度和结束透明度,注意用table表的形式（大括号括起来）。
+import "android.view.animation.DecelerateInterpolator"
+import "android.animation.ObjectAnimator"
+import "android.view.animation.Animation"
+透明动画 = ObjectAnimator.ofFloat(卡片, "alpha", {0, 1})
+透明动画.setDuration(2000)--设置动画时间
+透明动画.setInterpolator(DecelerateInterpolator())--设置动画插值器，减速
+透明动画.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+透明动画.setRepeatMode(Animation.REVERSE)--设置动画循环模式。
+透明动画.start()--启动动画。】】
+
+
+《《平移动画教程》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+--设置动画的属性
+import "android.view.animation.TranslateAnimation"
+平移动画=TranslateAnimation(0, 0, 55, 0)
+平移动画.setDuration(800)--设置动画时间
+平移动画.setFillAfter(true)--设置动画后停留位置
+平移动画.setRepeatCount(-1)--设置无限循环
+--绑定动画
+卡片.startAnimation(平移动画)
+
+--[[
+平移动画属性详解：
+TranslateAnimation(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta)
+float fromXDelta 动画开始的点离当前View X坐标上的差值 
+float toXDelta 动画结束的点离当前View X坐标上的差值 
+float fromYDelta 动画开始的点离当前View Y坐标上的差值 
+float toYDelta 动画结束的点离当前View Y坐标上的差值 
+]]】】
+
+
+《《旋转动画教程》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+import "android.view.animation.Animation"
+import "android.view.animation.RotateAnimation"
+--设置动画的属性
+旋转动画=RotateAnimation(180, 0,
+Animation.RELATIVE_TO_SELF, 0.5,
+Animation.RELATIVE_TO_SELF, 0.5)
+旋转动画.setDuration(440)--设置动画时间
+旋转动画.setFillAfter(true)--设置动画结束后停留位置
+旋转动画.setRepeatCount(-1)--设置无限循环
+--绑定动画
+卡片.startAnimation(旋转动画)
+
+--[[
+旋转动画属性详解：
+RotateAnimation(float fromDegrees, float toDegrees, int pivotXType, float pivotXValue, int pivotYType, float pivotYValue) 
+float fromDegrees：旋转的开始角度.
+float toDegrees：旋转的结束角度.
+int pivotXType：X轴的伸缩模式，可以取值为ABSOLUTE、RELATIVE_TO_SELF、RELATIVE_TO_PARENT.
+float pivotXValue：X坐标的伸缩值
+int pivotYType：Y轴的伸缩模式，可以取值为ABSOLUTE、RELATIVE_TO_SELF、RELATIVE_TO_PARENT.
+float pivotYValue：Y坐标的伸缩值.
+]]】】
+
+
+《《缩放动画教程》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+
+import "android.view.animation.ScaleAnimation"
+import "android.view.animation.Animation"
+
+--设置动画的属性
+缩放动画=ScaleAnimation(0,1,0,1,Animation.RELATIVE_TO_SELF,0.5,Animation.RELATIVE_TO_SELF,0.5)
+缩放动画.setDuration(800)--设置动画时间
+缩放动画.setFillAfter(true)--设置动画后停留位置
+缩放动画.setRepeatCount(-1)--设置无限循环
+--绑定动画
+卡片.startAnimation(缩放动画)
+
+--[[
+缩放动画属性详解：
+ScaleAnimation(float fromX, float toX, float fromY, float toY,int pivotXType, float pivotXValue, int pivotYType, float pivotYValue) 
+float fromX 动画起始时 X坐标上的伸缩尺寸 
+float toX 动画结束时 X坐标上的伸缩尺寸 
+float fromY 动画起始时Y坐标上的伸缩尺寸 
+float toY 动画结束时Y坐标上的伸缩尺寸 
+int pivotXType 动画在X轴相对于物件位置类型 
+float pivotXValue 动画相对于物件的X坐标的开始位置 
+int pivotYType 动画在Y轴相对于物件位置类型 
+float pivotYValue 动画相对于物件的Y坐标的开始位置 
+pivotXType有三种默认值：
+
+AnimAtion.RELATIVE_TO_PARENT 相对于父控件
+
+AnimAtion.RELATIVE_TO_SELF 相对于符自己
+
+AnimAtion.RELATIVE_TO_ABSOLUTE 绝对坐标
+]]】】
+
+
+《《补间动画概述》》
+【【
+一，作用对象：
+视图控件（View）
+如TextView、Button等等
+不可作用于View组件的属性，如：颜色、背景、长度等等
+
+二，原理：
+通过确定开始的视图样式 & 结束的视图样式、中间动画变化过程由系统补全来确定一个动画
+结束的视图样式：平移、缩放、旋转 & 透明度样式
+即补间动画的动画效果就是：平移、缩放、旋转 & 透明度动画
+
+三，分类：
+根据不同的动画效果，补间动画分为4种动画：
+平移动画（Translate）
+缩放动画（scale）
+旋转动画（rotate）
+透明度动画（alpha）
+
+四，共有属性：
+Duration --属性为动画持续时间 时间以毫秒为单位
+fillAfter --当设置为true,该动画转化在动画结束后被应用
+fillBefore --当设置为true,该动画转化在动画开始前被应用
+repeatCount--动画的重复次数 
+repeatMode --定义重复的行为 可取值:(Animation.RESTART从头开始)(Animation.REVERSE从结束开始)
+startOffset --动画之间的时间间隔，从上次动画停多少时间开始执行下个动画
+id.startAnimation(Animation)--设置控件开始应用这个动画
+
+五，动画监听：
+import "android.view.animation.Animation$AnimationListener"
+动画.setAnimationListener(AnimationListener{
+  onAnimationStart=function()
+    print"动画开始"
+  end,
+  onAnimationEnd=function()
+    print"动画结束"
+  end,
+  onAnimationRepeat=function()
+    print"动画重复"
+  end})】】
+
+
+《《透明动画教程》》
+【【
+--为了方便学习理解，我会用中文变量进行命名，但真正的项目中不推荐用中文哦
+--首先创建一个布局进行动画测试
+shamrock=--创建一个布局表并将其赋给变量shamrock
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    CardView;--卡片控件
+    id='卡片';--设置ID
+    layout_margin='0';--卡片边距
+    layout_gravity='center';--重力属性
+    Elevation='1';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='10';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局表添加至窗口
+import "android.view.animation.AlphaAnimation"
+--设置动画的属性
+透明动画=AlphaAnimation(0,1)
+透明动画.setDuration(800)--设置动画时间
+透明动画.setFillAfter(true)--设置动画后停留位置
+透明动画.setRepeatCount(-1)--设置无限循环
+--绑定动画
+卡片.startAnimation(透明动画)
+
+--[[
+透明动画属性详解：
+AlphaAnimation(float fromStart,float fromEnd)
+float fromStart 动画起始透明值
+float fromEnd 动画结束透明值 
+]]】】
+
+《《DOM查找网页分类实战》》
+【【
+--导入jsoup库
+import'org.jsoup.*'
+--定义链接
+url = 'http://dh.hfybbs.vip/cn/index.html'
+--这里使用Http方法先获取到网页源码再解析。
+--因为jsoup自带的connect方法是同步加载，会影响程序加载速度
+Http.get(url,function(code,content)
+  if code==200 then--判断网站状态
+    doc = Jsoup.parse(content)--使用jsoup解析网页
+    classification = doc.getElementsByClass('text-gray')--查找到所有class为text-gray的网页元素
+    classification = luajava.astable(classification)--将其转换成table表
+    for k,v in pairs(classification) do--循环打印输出
+      print(v.text())
+    end
+  else
+    print('无法访问')
+  end
+end)】】
+
+
+《《jsoup概述》》
+【【
+此篇教程必须最新版盒子才能正常运行！
+jsoup概述：
+jsoup是java里的一个普遍使用的html解析器，其的逻辑简单，语法容易，且功能强大。
+(此篇教程我不会再用中文变量，中文太别扭。。。。。。)
+
+但androlua中并没有自带这个模块，我们需要将其导入
+dex库下载链接：http://47.107.34.109:8000/d/c8f7ecb09db940de9725/
+使用方法：工程目录下创建libs目录，将jsoup开头的dex文件放入,在程序开头加入 import'org.jsoup.*'即可
+
+jsoup API：
+从String解析文档
+html = "<html><head><title>First parse</title></head>"
++ "<body><p>Parsed HTML into a doc.</p></body></html>"
+doc = Jsoup.parse(html)
+
+解析一个网页碎片
+html = "<div><p>Lorem ipsum.</p>"
+doc = Jsoup.parseBodyFragment(html)
+body = doc.body()
+
+从URL加载文档
+doc = Jsoup.connect("http://example.com/").get()
+title = doc.title()
+
+高级url请求
+doc = Jsoup.connect("http://example.com")
+.data("query", "Java")
+.userAgent("Mozilla")
+.cookie("auth", "token")
+.timeout(3000)
+.post()
+
+从文件加载文档
+input = new File("/tmp/input.html")
+doc = Jsoup.parse(input, "UTF-8", "http://example.com/")
+
+使用DOM方法导航文档
+寻找元素
+getElementById(String id)
+getElementsByTag(String tag)
+getElementsByClass(String className)
+getElementsByAttribute(String key) （及相关方法）
+元素的兄弟姐妹：siblingElements()，firstElementSibling()，lastElementSibling()，nextElementSibling()，previousElementSibling()
+图：parent()，children()，child(int index)
+元素数据
+attr(String key)获取和attr(String key, String value)设置属性
+attributes() 获得所有属性
+id()，className()和classNames()
+text()获取和text(String value)设置文本内容
+html()获取和html(String value)设置内部HTML内容
+outerHtml() 获取外部HTML值
+data()获取数据内容（例如script和style标签）
+tag() 和 tagName()
+处理HTML和文本
+append(String html)， prepend(String html)
+appendText(String text)， prependText(String text)
+appendElement(String tagName)， prependElement(String tagName)
+html(String value)
+
+使用selector-syntax查找元素
+选择器概述
+tagname：按标签查找元素，例如 a
+ns|tag：在命名空间中按标记fb|name查找<fb:name>元素，例如查找元素
+#id：按ID查找元素，例如 #logo
+.class：按类名查找元素，例如 .masthead
+[attribute]：具有属性的元素，例如 [href]
+[^attr]：具有属性名称前缀的[^data-]元素，例如查找具有HTML5数据集属性的元素
+[attr=value]：具有属性值的元素，例如[width=500]（也是可引用的[data-name='launch sequence']）
+[attr^=value]，[attr$=value]，[attr*=value]：用与启动属性，以结束，或包含所述的值，例如元素[href*=/path/]
+[attr~=regex]：具有与正则表达式匹配的属性值的元素; 例如img[src~=(?i)\.(png|jpe?g)]
+*：所有元素，例如 *
+选择器组合
+el#id：具有ID的元素，例如 div#logo
+el.class：带有类的元素，例如 div.masthead
+el[attr]：具有属性的元素，例如 a[href]
+任何组合，例如 a[href].highlight
+ancestor child：从祖先下降的子元素，例如在类“body”的块下的任何位置.body p查找p元素
+parent > child：直接从父级下降的子元素，例如div.content > p查找p元素; 并body > *找到body标签的直接子节点
+siblingA + siblingB：找到兄弟B元素之后紧接着兄弟A，例如 div.head + div
+siblingA ~ siblingX：找到兄弟A前面的兄弟X元素，例如 h1 ~ p
+el, el, el：对多个选择器进行分组，找到与任何选择器匹配的唯一元素; 例如div.masthead, div.logo
+伪选择器
+:lt(n)：找到其兄弟索引（即它在DOM树中相对于其父节点的位置）小于的元素n; 例如td:lt(3)
+:gt(n)：查找兄弟索引大于的元素n; 例如div p:gt(2)
+:eq(n)：查找兄弟索引等于的元素n; 例如form input:eq(1)
+:has(selector)：查找包含与选择器匹配的元素的元素; 例如div:has(p)
+:not(selector)：查找与选择器不匹配的元素; 例如div:not(.logo)
+:contains(text)：查找包含给定文本的元素。搜索不区分大小写; 例如p:contains(jsoup)
+:containsOwn(text)：查找直接包含给定文本的元素
+:matches(regex)：查找文本与指定正则表达式匹配的元素; 例如div:matches((?i)login)
+:matchesOwn(regex)：查找自己的文本与指定正则表达式匹配的元素
+注意，上面的索引伪选择器是基于0的，即第一个元素是索引0，第二个元素是1
+
+从元素中提取属性，文本和HTML
+要获取属性的值，请使用该Node.attr(String key)方法
+对于元素（及其组合子元素）上的文本，请使用 Element.text()
+对于HTML，使用Element.html()或Node.outerHtml()
+上述方法是元素数据访问方法的核心。还有其他人：
+Element.id()
+Element.tagName()
+Element.className() 和 Element.hasClass(String className)
+所有这些访问器方法都有相应的setter方法来更改数据。
+
+设置属性值
+使用属性setter方法Element.attr(String key, String value)，和Elements.attr(String key, String value)。
+如果需要修改class元素的属性，请使用Element.addClass(String className)和Element.removeClass(String className)方法。
+
+设置元素的HTML
+div = doc.select("div").first()
+div.html("<p>lorem ipsum</p>")
+div.prepend("<p>First</p>")
+div.append("<p>Last</p>")
+
+Element span = doc.select("span").first()
+span.wrap("<li><a href='http://example.com/'></a></li>")
+
+设置元素的文本内容
+Element div = doc.select("div").first()
+div.text("five > four")
+div.prepend("First ")
+div.append(" Last")】】
+
+
+《《jsoup爬取网页标题实战》》
+【【
+--导入jsoup库
+import'org.jsoup.*'
+--定义链接
+url = 'http://dh.hfybbs.vip'
+--这里使用Http方法先获取到网页源码再解析。
+--因为jsoup自带的connect方法是同步加载，会影响程序加载速度
+Http.get(url,function(code,content)
+  if code==200 then--判断网站状态
+    doc = Jsoup.parse(content)--使用jsoup解析网页
+    print(doc.title())--使用jsoup方法获取到网页标题
+  else
+    print('无法访问')
+  end
+end)】】
+
+
+《《String基础概述》》
+【【
+爬虫，这是一个大学问，厉害的爬虫可以用同一个网站的相同数据，
+做出更突出的效果，可以将杂乱无章的数据，处理成系统的，分类好的数据来进行复用。
+当然，这些都是厉害的，工程量十分大的，而我们只需要简单的处理页面数据就可以了。
+首先熟悉下Lua的字符串操作
+字符串由一对双引号或单引号来表示。
+
+string1 = "this is string1"
+string2 = 'this is string2'
+
+在对一个数字字符串上进行算术操作时，Lua 会尝试将这个数字字符串转成一个数字，字符串连接使用的是 ..如：
+
+print("a" .. 'b')
+--输出(ab)
+print(157 .. 428)
+--输出(157428)
+
+使用 # 来计算字符串的长度，放在字符串前面，如下实例：
+
+len = "www.androlua.com"
+print(#len)
+--输出(16)
+
+字符串的截取操作：
+strings="左中右"
+
+--取字符串左边
+左=strings:match("(.+)中")
+
+
+--取字符串中间
+中=strings:match("左(.-)右")
+
+
+--取字符串右边
+右=strings:match("中(.+)")
+
+--替换
+string.gsub(原字符串,替换的字符串,替换成的字符串)
+
+--匹配子串位置
+起始位置,结束位置=string.find(字符串,子串)
+
+
+--按位置捕获字符串
+string.sub(字符串,子串起始位置,子串结束位置)
+
+需要一提得是，Lua中使用\来进行转义，例如：
+\n 换行(LF) ，将当前位置移到下一行开头
+\r 回车(CR) ，将当前位置移到本行开头
+\t 水平制表(HT) （跳到下一个TAB位置）
+\\ 代表一个反斜线字符\
+\' 代表一个单引号（撇号）字符
+\" 代表一个双引号字符
+\0 空字符(NULL)
+
+Lua中字符串操作api：
+string.upper(argument) 字符串全部转为大写字母。
+string.lower(argument) 字符串全部转为小写字母。
+string.gsub(mainString,findString,replaceString,num) 在字符串中替换,mainString为要替换的字符串， findString 为被替换的字符，replaceString 要替换的字符，num 替换次数（可以忽略，则全部替换）
+string.find (str, substr, [init, [end]]) 在一个指定的目标字符串中搜索指定的内容(第三个参数为索引),返回其具体位置。不存在则返回 nil。
+string.reverse(arg) 字符串反转
+string.format(...) 返回一个类似printf的格式化字符串
+string.char(arg) 和 string.byte(arg[,int]) char 将整型数字转成字符并连接， byte 转换字符为整数值(可以指定某个字符，默认第一个字符)。
+string.len(arg) 计算字符串长度。
+string.rep(string, n) 返回字符串string的n个拷贝
+.. 链接两个字符串
+string.gmatch(str, pattern) 回一个迭代器函数，每一次调用这个函数，返回一个在字符串 str 找到的下一个符合 pattern 描述的子串。如果参数 pattern 描述的字符串没有找到，迭代函数返回nil。
+string.match(str, pattern, init) string.match()只寻找源字串str中的第一个配对. 参数init可选, 指定搜寻过程的起点, 默认为1。 
+在成功配对时, 函数将返回配对表达式中的所有捕获结果; 如果没有设置捕获标记, 则返回整个配对字符串. 当没有成功的配对时, 返回nil。
+
+其中string.format()有以下转义码：
+%c - 接受一个数字, 并将其转化为ASCII码表中对应的字符
+%d, %i - 接受一个数字并将其转化为有符号的整数格式
+%o - 接受一个数字并将其转化为八进制数格式
+%u - 接受一个数字并将其转化为无符号整数格式
+%x - 接受一个数字并将其转化为十六进制数格式, 使用小写字母
+%X - 接受一个数字并将其转化为十六进制数格式, 使用大写字母
+%e - 接受一个数字并将其转化为科学记数法格式, 使用小写字母e
+%E - 接受一个数字并将其转化为科学记数法格式, 使用大写字母E
+%f - 接受一个数字并将其转化为浮点数格式
+%g(%G) - 接受一个数字并将其转化为%e(%E, 对应%G)及%f中较短的一种格式
+%q - 接受一个字符串并将其转化为可安全被Lua编译器读入的格式
+%s - 接受一个字符串并按照给定的参数格式化该字符串
+
+Lua的匹配模式：
+.(点): 与任何字符配对
+%a: 与任何字母配对
+%c: 与任何控制符配对(例如\n)
+%d: 与任何数字配对
+%l: 与任何小写字母配对
+%p: 与任何标点(punctuation)配对
+%s: 与空白字符配对
+%u: 与任何大写字母配对
+%w: 与任何字母/数字配对
+%x: 与任何十六进制数配对
+%z: 与任何代表0的字符配对
+%x(此处x是非字母非数字字符): 与字符x配对. 主要用来处理表达式中有功能的字符(^$()%.[]*+-?)的配对问题, 例如%%与%配对
+[数个字符类]: 与任何[]中包含的字符类配对. 例如[%w_]与任何字母/数字, 或下划线符号(_)配对
+[^数个字符类]: 与任何不包含在[]中的字符类配对. 例如[^%s]与任何非空白字符配对
+单个字符类匹配该类别中任意单个字符；
+单个字符类跟一个 '*'， 将匹配零或多个该类的字符。 这个条目总是匹配尽可能长的串；
+单个字符类跟一个 '+'， 将匹配一或更多个该类的字符。 这个条目总是匹配尽可能长的串；
+单个字符类跟一个 '-'， 将匹配零或更多个该类的字符。 和 '*' 不同， 这个条目总是匹配尽可能短的串；
+单个字符类跟一个 '?'， 将匹配零或一个该类的字符。 只要有可能，它会匹配一个；
+%n， 这里的 n 可以从 1 到 9； 这个条目匹配一个等于 n 号捕获物（后面有描述）的子串。
+%bxy， 这里的 x 和 y 是两个明确的字符； 这个条目匹配以 x 开始 y 结束， 且其中 x 和 y 保持 平衡 的字符串。 意思是，如果从左到右读这个字符串，对每次读到一个 x 就 +1 ，读到一个 y 就 -1， 最终结束处的那个 y 是第一个记数到 0 的 y。 举个例子，条目 %b() 可以匹配到括号平衡的表达式。
+%f[set]， 指 边境模式； 这个条目会匹配到一个位于 set 内某个字符之前的一个空串， 且这个位置的前一个字符不属于 set 。 集合 set 的含义如前面所述。 匹配出的那个空串之开始和结束点的计算就看成该处有个字符 '\0' 一样。
+
+常用正则(Lua中需要将\换成%)：
+非负整数：^\d+$
+正整数：^[0-9]*[1-9][0-9]*$
+非正整数：^((-\d+)|(0+))$
+负整数：^-[0-9]*[1-9][0-9]*$
+整数：^-?\d+$
+非负浮点数：^\d+(\.\d+)?$
+正浮点数 : ^((0-9)+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)$
+非正浮点数：^((-\d+\.\d+)?)|(0+(\.0+)?))$
+负浮点数：^(-((正浮点数正则式)))$
+英文字符串：^[A-Za-z]+$
+英文大写串：^[A-Z]+$
+英文小写串：^[a-z]+$
+英文字符数字串：^[A-Za-z0-9]+$
+英数字加下划线串：^\w+$
+E-mail地址：^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$
+URL：^[a-zA-Z]+://(\w+(-\w+)*)(\.(\w+(-\w+)*))*(\?\s*)?$ 
+或：^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$
+邮政编码：^[1-9]\d{5}$
+中文：^[\u0391-\uFFE5]+$
+电话号码：^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}(\-\d{1,4})?$
+手机号码：^((\(\d{2,3}\))|(\d{3}\-))?13\d{9}$
+双字节字符(包括汉字在内)：^\x00-\xff
+匹配首尾空格：(^\s*)|(\s*$)（像vbscript那样的trim函数）
+匹配HTML标记：<(.*)>.*<\/\1>|<(.*) \/>
+匹配空行：\n[\s| ]*\r
+提取信息中的网络链接：(h|H)(r|R)(e|E)(f|F) *= *('|")?(\w|\\|\/|\.)+('|"| *|>)?
+提取信息中的邮件地址：\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*
+提取信息中的图片链接：(s|S)(r|R)(c|C) *= *('|")?(\w|\\|\/|\.)+('|"| *|>)?
+提取信息中的IP地址：(\d+)\.(\d+)\.(\d+)\.(\d+)
+提取信息中的中国手机号码：(86)*0*13\d{9}
+提取信息中的中国固定电话号码：(\(\d{3,4}\)|\d{3,4}-|\s)?\d{8}
+提取信息中的中国电话号码（包括移动和固定电话）：(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}
+提取信息中的中国邮政编码：[1-9]{1}(\d+){5}
+提取信息中的浮点数（即小数）：(-?\d*)\.?\d+
+提取信息中的任何数字 ：(-?\d*)(\.\d+)? 
+IP：(\d+)\.(\d+)\.(\d+)\.(\d+)
+电话区号：/^0\d{2,3}$/
+腾讯QQ号：^[1-9]*[1-9][0-9]*$
+帐号(字母开头，允许5-16字节，允许字母数字下划线)：^[a-zA-Z][a-zA-Z0-9_]{4,15}$
+中文、英文、数字及下划线：^[\u4e00-\u9fa5_a-zA-Z0-9]+$
+匹配中文字符的正则表达式： [\u4e00-\u9fa5]
+匹配双字节字符(包括汉字在内)：[^\x00-\xff]
+匹配空行的正则表达式：\n[\s| ]*\r
+匹配HTML标记的正则表达式：/<(.*)>.*<\/\1>|<(.*) \/>/
+sql语句：^(select|drop|delete|create|update|insert).*$
+匹配首尾空格的正则表达式：(^\s*)|(\s*$)
+匹配Email地址的正则表达式：\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*】】
+
+
+《《抓取aj ax数据实战》》
+【【
+--首先创建一个布局，为教程提供良好的可视化
+--导入cjson包
+import'cjson'
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    ScrollView;--纵向滚动
+    layout_width='fill';--宽
+    layout_height='fill';--高
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      background='';--布局背景颜色(或者图片路径)
+      gravity='center';--设置居中
+      {
+        TextView;--文本控件
+        id='文本';--绑定ID
+        layout_margin='5%w';--布局外边距
+        layout_width='wrap';--文本宽度
+        layout_height='wrap';--文本高度
+        Gravity='center';--重力属性
+        textColor='#000000';--文本颜色
+        text='爬取内容中';--显示的文本
+        textSize='18sp';--文本大小
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+--设置需要爬取的网站，可以随意更换
+--这个链接是百度热搜的接口
+url = 'https://www.anyknew.com/api/v1/sites/baidu'
+
+--使用Http访问该网站，获取网页源码
+Http.get(url,nil,'utf8',nil,function(状态码,网页源码)
+  --判断返回状态码，确定网站的正常运行
+  if 状态码 ==200 then
+    --使用cjson库将获取到的json数据table化
+    数据 = cjson.decode(网页源码)
+    --取出需要的数据
+    数据列表 = 数据.data.site.subs[1].items
+    --定义一个空文本用于显示数据
+    标题 = ''
+    --遍历爬取到的数据
+    for k,v in pairs(数据列表) do
+      --将数据逐个取出，累加进字符串进行显示
+      标题 =标题.. string.format('标题%d：%s',k,v.title)..'\n'
+    end
+    --设置文本显示，显示爬取效果
+    文本.setText(标题)
+  else
+    文本.setText('获取内容失败')
+  end
+end)】】
+
+
+《《爬取Fusion Club论坛实战》》
+【【
+--创建一个布局，为教程提供良好的可视化
+--做一个爬虫，前期的分析网页工作需要做好
+--明确目标，明白只需要哪些数据，以及如何处理数据
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    ScrollView;--纵向滚动
+    layout_width='fill';--宽
+    layout_height='fill';--高
+    {
+      TextView;--文本控件
+      id='显示文本';--绑定ID
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--重力属性
+      textColor='#000000';--文本颜色
+      text='爬取中...';--显示的文本
+      textSize='16sp';--文本大小
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+
+url="https://yum5.cn"--论坛网址
+--HTTP请求网页源码
+Http.get(url,nil,'utf8',nil,function(状态码,网页源码)
+  --判断网站的访问情况
+  if 状态码 == 200 then
+    --获取到帖子标题数据
+    帖子标题迭代器 = 网页源码:gmatch('<a href="thread.-htm">(.-)</a>')
+    --创建帖子标题表
+    帖子标题 = {}
+    --遍历帖子标题数据，将数据存入表
+    for i in 帖子标题迭代器 do
+      table.insert(帖子标题,i)
+    end
+    --获取帖子链接数据
+    帖子链接迭代器 = 网页源码:gmatch('<a href="(thread.-htm)">.-</a>')
+    --创建帖子链接表
+    帖子链接 = {}
+    --遍历帖子链接数据，将其存入表
+    for i in 帖子链接迭代器 do
+      table.insert(帖子链接,i)
+    end
+    --定义一个空字符串，后面将数据展示到布局
+    爬取内容 = ''
+    --遍历所有数据
+    for i=1,#帖子标题 do
+      --累加字符串，使显示效果良好
+      爬取内容 = 爬取内容..string.format('帖子标题：%s\n帖子链接：https://yum5.cn/%s\n',帖子标题[i],帖子链接[i])
+    end
+    --将数据显示
+    显示文本.setText(爬取内容)
+  else
+    显示文本.setText('网站无法访问')
+  end
+end)】】
+
+
+《《爬取ip与地理位置实战》》
+【【
+--创建布局，显示爬取效果
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity="center";--设置居中
+  {
+    TextView;--文本控件
+    id="显示文本";--绑定id
+    layout_width='wrap';--文本宽度
+    layout_height='wrap';--文本高度
+    Gravity='center';--重力属性
+    textColor='#000000';--文本颜色
+    text='正在查询中';--显示的文本
+    textSize='16sp';--文本大小
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+url="https://ip.cn/"--设置爬取链接
+--设置爬取请求头
+header={
+  ["User-Agent"]= "Mozilla/5.0 (Linux; U; Android 2.3.7; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+}
+--请求网页源码
+Http.get(url,nil,"utf8",header,function(状态码,网页源码)
+  --判断网站状态
+  if 状态码==200 then
+    --根据网页，分析出筛选规则
+    ip地址=网页源码:match('您现在的 IP：<code>(.-)</code>')
+    地理位置=网页源码:match('所在地理位置：<code>(.-)</code>')
+    --设置文本进行显示
+    文本=string.format("您现在的 IP：%s\n您所在地理位置：%s",ip地址,地理位置)
+    显示文本.setText(文本)
+  else
+    显示文本.setText("网站无法访问")
+  end
+end)】】
+
+
+《《爬取必应壁纸实战》》
+【【
+--创建布局，用于显示爬取的图片
+--由于考虑到学习成本的问题，所以我没有用适配器写图片展示
+--用了较简单的循环添加布局
+--提示:图片爬虫显示较吃性能，所以本教程可能导致程序闪退。
+--由于网站和循环布局原因，所以爬取会比较慢，请耐心等待。
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    ScrollView;--纵向滚动
+    layout_width='fill';--宽
+    layout_height='fill';--高
+    {
+      LinearLayout;--线性布局
+      id="壁纸";--绑定ID
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      background='';--布局背景颜色(或者图片路径)
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+--创建等待窗口提示
+dialog3 = ProgressDialog.show(this, "提示", "正在爬取中",false, false)
+--将等待窗口美化(设置圆角)
+import "android.graphics.drawable.GradientDrawable"
+local radiu=25
+dialog3.getWindow().setBackgroundDrawable(GradientDrawable().setCornerRadii({radiu,radiu,radiu,radiu,radiu,radiu,radiu,radiu}).setColor(0xffffffff))
+--定义爬取链接
+url="https://bing.ioliu.cn/"
+--Http请求源码
+Http.get(url,nil,"utf8",nil,function(状态码,网页源码)
+  --等待窗口隐藏
+  dialog3.hide()
+  --判断状态码，确认网站可访问
+  if 状态码==200 then
+    --筛选图片链接数据
+    图片链接迭代器=网页源码:gmatch('src="(https://h1.ioliu.cn/bing/.-jpg)"')
+    --创建图片链接表，用于存储抓取到的图片链接
+    图片链接={}
+    --迭代抓取到的图片链接
+    for i in 图片链接迭代器 do
+      --将图片链接存入表中
+      table.insert(图片链接,i)
+    end
+    --遍历图片链接表
+    for k,v in pairs(图片链接) do
+      --创建布局，用于显示每一张图片
+      单张壁纸={
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_height='50%w';--布局高度
+        background='';--布局背景颜色(或者图片路径)
+        Gravity="center";
+        {
+          CardView;--卡片控件
+          layout_margin='10';--卡片边距
+          layout_gravity='center';--重力属性
+          Elevation='0';--阴影属性
+          layout_width='fill';--卡片宽度
+          layout_height='fill';--卡片高度
+          radius='20';--卡片圆角
+          CardBackgroundColor='';--卡片背景颜色
+          {
+            ImageView;--图片控件
+            id="图片";
+            src="";--图片路径
+            layout_width='fill';--图片宽度
+            layout_height='fill';--图片高度
+            layout_gravity='center';--重力属性
+          };
+        };
+      };
+      --将布局添加至主布局
+      壁纸.addView(loadlayout(单张壁纸))
+      --设置在线图片显示
+      图片.setImageBitmap(LuaBitmap.getHttpBitmap(v))
+    end
+  else
+    print("无法访问")
+  end
+end)】】
+
+
+《《爬取网页分类实战》》
+【【
+--首先创建一个布局，为教程提供良好的可视化
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    TextView;--文本控件
+    id='文本';--绑定ID
+    layout_margin='5%w';--布局外边距
+    layout_width='wrap';--文本宽度
+    layout_height='wrap';--文本高度
+    Gravity='center';--重力属性
+    textColor='#000000';--文本颜色
+    text='爬取内容中';--显示的文本
+    textSize='18sp';--文本大小
+  };
+};
+activity.setContentView(loadlayout(shamrock))
+--设置需要爬取的网站，可以随意更换
+url = 'http://dh.hfybbs.vip/cn/index.html'
+
+--使用Http访问该网站，获取网页源码
+Http.get(url,nil,'utf8',nil,function(状态码,网页源码)
+  --判断返回状态码，确定网站的正常运行
+  if 状态码 ==200 then
+    --分析网页源码，使用gmatch筛选出所有符合条件的内容，gamtch返回的是迭代器
+    网页框架 = 网页源码:gmatch('<ul.->(.-)</ul>')
+    --定义一个空表，用来存储获取的网页数据
+    网页框架表 = {}
+    --将gmatch函数返回的迭代器进行遍历，取出数据，然后存进网页框架表表
+    for i in 网页框架 do
+      --判断是否可以筛选需要爬取的内容，可以才存放进网页框架表
+      if i:match('<span.->(.-)</span>') then
+        table.insert(网页框架表,i:match('<span.->(.-)</span>'))
+      end
+    end
+    --定义一个空字符串，用于显示效果
+    显示文本 = ''
+    --遍历表，将爬取到的数据取出
+    for k,v in pairs(网页框架表) do
+      --累加文本，将表内数据形成可视化
+      显示文本=显示文本..'\n'..string.format('分类%d：%s',k,v)
+    end
+    --设置文本显示，显示爬取效果
+    文本.setText(显示文本)
+  else
+    文本.setText('获取内容失败')
+  end
+end)】】
+
+
+《《翻页爬取论坛实战》》
+【【
+--创建布局，用于显示爬取效果
+--翻页爬取的思路是：
+--获取网页的翻页所有链接，然后循环请求爬取
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    ScrollView;--纵向滚动
+    layout_width='fill';--宽
+    layout_height='fill';--高
+    {
+      TextView;--文本控件
+      id='显示文本';--绑定ID
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--重力属性
+      textColor='#000000';--文本颜色
+      text='正在爬取中';--显示的文本
+      textSize='16sp';--文本大小
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口
+--定义爬取翻页链接的网址
+url = 'https://yum5.cn'
+--请求链接
+Http.get(url,nil,'utf8',nil,function(状态码,网页源码)
+  --判断网站状态
+  if 状态码 == 200 then
+    --获取所有页数链接
+    页数迭代器 = 网页源码:gmatch('<a href="index.-htm" class="page.-">(.-)</a>')
+    --新建表，存放爬取数据
+    页数={}
+    --迭代页数迭代器，将数据存入表
+    for i in 页数迭代器 do
+      --这里筛选数字，因为部分数据是杂乱的
+      if i:find('%d') then
+        table.insert(页数,i:match('(%d.*)'))
+      end
+    end
+    --获取到页数
+    末尾页数 = tointeger(页数[#页数])
+    --新建表，存放帖子标题
+    帖子标题 = {}
+    --循环页数
+    for i=1,末尾页数 do
+      --将页数拼接进链接
+      url = 'https://yum5.cn/index-'..i..'.htm'
+      --请求网页
+      Http.get(url,nil,'utf8',nil,function(状态码,网页源码)
+        --判断网站状态
+        if 状态码 == 200 then
+          --显示当前爬取页数
+          table.insert(帖子标题,'第'..i..'页:\n\n')
+          --爬取帖子标题信息
+          帖子标题迭代器 = 网页源码:gmatch('<a href="thread.-htm">(.-)</a>')
+          --迭代帖子标题迭代器，将数据存入表
+          for v in 帖子标题迭代器 do
+            table.insert(帖子标题,v)
+          end
+          --定义空文本，用于显示数据
+          文本=''
+          --遍历表，取出数据
+          for k,v in pairs(帖子标题) do
+            --将数据文本累加
+            文本=文本..k..'：'..v..'\n'
+          end
+          --展示数据
+          显示文本.setText(文本)
+        else
+          显示文本.setText('无法访问')
+        end
+      end)
+    end
+  else
+    显示文本.setText('无法访问')
+  end
+end)】】
+
+
+《《获取网页标题实战》》
+【【
+--首先创建一个布局，为教程提供良好的可视化
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity='center';--设置居中
+  {
+    TextView;--文本控件
+    id='文本';--绑定ID
+    layout_margin='5%w';--布局外边距
+    layout_width='wrap';--文本宽度
+    layout_height='wrap';--文本高度
+    Gravity='center';--重力属性
+    textColor='#000000';--文本颜色
+    text='查询网站标题中';--显示的文本
+    textSize='18sp';--文本大小
+  };
+};
+activity.setContentView(loadlayout(shamrock))
+--设置需要爬取的网站，可以随意更换
+url = 'http://dh.hfybbs.vip'
+
+--使用Http访问该网站，获取网页源码
+Http.get(url,nil,'utf8',nil,function(状态码,网页源码)
+  --判断返回状态码，确定网站的正常运行
+  if 状态码 ==200 then
+    --分析网页结构，发现标题在title标签内，所以进行截取
+    title = 网页源码:match('<title>(.-)</title>')
+    --将截取到的标题设置至文本显示
+    文本.setText(title)
+  else
+    文本.setText('该网站无法访问')
+  end
+end)】】
+
+
+《《讯飞远程更新实战》》
+【【
+--[[
+很多同学似乎还不会远程更新，其实所谓讯飞远程更新也就是爬虫的
+一种运用方式，结合前面所学和查看下面的链接的网页结构
+你就能写出属于你的远程更新。
+]]
+SorrowClover=--随便写的一个布局，没有任何意义。
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+};
+activity.setContentView(loadlayout(SorrowClover))--显示布局
+--定义一个你的讯飞远程链接
+--可以复制到浏览器看看网页结构
+url="http://www.iyuji.cn/iyuji/s/akc1ZDNSKyt5RW9nUlA3MW5CNzJ1UT09/1562658886677508"
+--使用http获取网页源码
+Http.get(url,nil,"utf8",nil,function(code,content)
+  --判断网页状态 
+  if code==200 then
+    --获取当前应用包名
+    包名=activity.getPackageName()
+    --利用包名获取到当前版本号
+    当前版本=tonumber(activity.getPackageManager().getPackageInfo(包名, 0).versionName)
+    --获取远程更新版本号
+    更新版本=tonumber(content:match("【版本】(.-)【版本】"))
+    --比较版本号
+    if 更新版本 > 当前版本 then
+      --制作对话框，显示更新提示
+      更新说明=content:match("【更新说明】(.-)【更新说明】")
+      更新链接=content:match("【更新链接】(.-)【更新链接】")
+      AlertDialog.Builder(this)
+      .setTitle("你有新版本更新")
+      .setMessage(更新说明)
+      .setPositiveButton("更新",{onClick=function(v)
+          import "android.content.Intent"
+          import "android.net.Uri"
+          url=更新链接
+          viewIntent = Intent("android.intent.action.VIEW",Uri.parse(url))
+          activity.startActivity(viewIntent)
+        end})
+      .setNegativeButton("取消",nil)
+      .show()
+      --判断正版软件
+    elseif 更新版本 < 当前版本 then
+      更新链接=content:match("【更新链接】(.-)【更新链接】")
+      AlertDialog.Builder(this)
+      .setTitle("非正版警告")
+      .setMessage("你的软件版本远远高于正式版，被人非法修改，属于盗版行为，请支持正版！")
+      .setPositiveButton("下载正版",{onClick=function(v)
+          import "android.content.Intent"
+          import "android.net.Uri"
+          url=更新链接
+          viewIntent = Intent("android.intent.action.VIEW",Uri.parse(url))
+          activity.startActivity(viewIntent)
+        end})
+      .setNegativeButton("取消",nil)
+      .show()
+    else
+      print("已是最新版本")
+    end
+  else
+    print("检测更新失败")
+  end
+end)】】
+
+
+
+《《仿UI参考任务卡布局》》
+【【
+--仿UI参考任务卡布局
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ff03a9f4';--布局背景颜色(或图片路径)
+  {
+    Toolbar;
+    Title="任务";
+    TitleTextColor="#ffffff";
+  };
+  {
+    GridView;--网格控件
+    id="grid";
+    layout_width='fill';--网格宽度
+    layout_height='fill';--网格高度
+    Gravity='center';--对齐方式
+    NumColumns='2';--列数
+    --ColumnWidth='';--每一列的宽度
+    --StretchMode='';--缩放
+    HorizontalSpacing='16';--两列直接的边距
+    VerticalSpacing='16';--两行之间的间距
+    VerticalScrollBarEnabled=false;--隐藏竖向滑条
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+
+item={
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='250dp';--布局高度
+  gravity="center";
+  {
+    CardView;--卡片控件
+    layout_margin='16';--卡片边距
+    CardElevation='2';--卡片阴影
+    layout_width='fill';--卡片宽度
+    layout_height='fill';--卡片高度
+    radius='16';--卡片圆角
+    CardBackgroundColor='#ffffff';--卡片背景颜色
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      Gravity="center";
+      {
+        CardView;--卡片控件
+        id="card";
+        CardElevation='0';--卡片阴影
+        layout_width='50dp';--卡片宽度
+        layout_height='50dp';--卡片高度
+        radius='25dp';--卡片圆角
+        CardBackgroundColor='#ffff1744';--卡片背景颜色
+        alpha="0.5";
+      };
+      {
+        TextView;--文本控件
+        id="text";
+        padding='16';--布局内边距
+        layout_width='wrap';--文本宽度
+        layout_height='wrap';--文本高度
+        textColor='#000000';--文本颜色
+        text='学习';--显示的文本
+        textSize='20sp';--文本大小
+      };
+    };
+  };
+};
+--创建项目数组
+data={}
+color_table={0xffff1744,0xff651fff,0xff00b0ff,0xff00e5ff,0xff00e676,0xffffea00,0xffffc400,0xffff3d00}
+text_table={"学习","工作","健身","购物","唱歌","电影","料理","待开发"}
+--创建适配器
+adp=LuaAdapter(activity,data,item)
+--添加数据
+for n=1,8 do
+  table.insert(data,{
+    card={
+      CardBackgroundColor=color_table[n],
+    },
+    text={
+      Text=text_table[n]
+    },
+  })
+end
+--设置适配器
+grid.Adapter=adp
+
+grid.onItemClick=function(l,v,p,i)
+  print(text_table[i])
+  return true
+end】】
+
+
+《《仿UI参考登陆注册布局》》
+【【
+--仿UI参考登陆注册布局
+import 'android.graphics.RectF'
+import 'android.graphics.Paint'
+import 'android.graphics.drawable.shapes.RoundRectShape'
+import 'android.graphics.drawable.ShapeDrawable'
+rrs1=ShapeDrawable(RoundRectShape({75,75,75,75,75,75,75,75},nil,nil))
+rrs1.getPaint().setColor(0xff000000)
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高
+  BackgroundDrawable=LuaDrawable(function(canvas,paint,draw)
+    canvas.drawColor(0xffffffff)
+    paint.setColor(0xff77AF9C)
+    canvas.drawCircle(200,-75,600,paint)
+    paint.setColor(0xff566270)
+    canvas.drawCircle(800,-10,600,paint)
+  end);
+  Gravity="center";
+  {
+    RippleLayout,--水波纹布局
+    layout_width='wrap';--布局宽度
+    layout_height='wrap';--布局高度
+    RippleColor='#ffffff';--水波纹颜色
+    Circle=true;--长按圆圈
+    {
+      Button;--按钮控件
+      text='注册';--显示的文本
+      textSize='16sp';--文本大小
+      textColor='#ffffff';--文本颜色
+      layout_width='60%w';--按钮宽度
+      layout_height='150';--按钮高度
+      BackgroundDrawable=rrs1;
+    };
+  };
+  {
+    RippleLayout,--水波纹布局
+    layout_marginTop='32dp';--布局外边顶距
+    layout_width='wrap';--布局宽度
+    layout_height='wrap';--布局高度
+    RippleColor='#ffffff';--水波纹颜色
+    Circle=true;--长按圆圈
+    {
+      Button;--按钮控件
+      text='登陆';--显示的文本
+      textSize='16sp';--文本大小
+      textColor='#000000';--文本颜色
+      layout_width='60%w';--按钮宽度
+      layout_height='150';--按钮高度
+      BackgroundDrawable=LuaDrawable(function(canvas,paint,draw)
+        paint.setColor(0xff000000)
+        paint.setStyle(Paint.Style.STROKE)
+        paint.setStrokeWidth(8)
+        canvas.drawRoundRect(RectF(draw.getBounds()),75,75,paint)
+      end);
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))】】
+
+
+《《仿花瓣网书籍app界面实战》》
+【【
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#000000';--布局背景颜色(或图片路径)
+  {
+    LinearLayout;--线性布局
+    Orientation='horizontal';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='200dp';--布局高度
+    {
+      CardView;--卡片控件
+      layout_marginLeft='10%w';--卡片边距
+      layout_gravity='left|center';--子控件在父布局中的对齐方式
+      CardElevation='3';--卡片阴影
+      layout_width='30%w';--卡片宽度
+      layout_height='130dp';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#EE7785';--卡片背景颜色
+      {
+        ImageView;--图片控件
+        src='drawable/usertxs.png';--图片路径
+        layout_width='fill';--图片宽度
+        layout_height='fill';--图片高度
+        layout_gravity='center';--对齐方式
+        scaleType='fitXY';--图片缩放类型
+      };
+    };
+    {
+      LinearLayout;--线性布局
+      layout_marginLeft='5%w',
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      gravity='left|center',
+      {
+        TextView;--文本控件
+        layout_width='wrap';--文本宽度
+        layout_height='wrap';--文本高度
+        textColor='#ffffff';--文本颜色
+        text='小何你吃嘛';--显示的文本
+        textSize='20sp';--文本大小
+      };
+      {
+        TextView;--文本控件
+        layout_marginTop="5%w",
+        layout_width='wrap';--文本宽度
+        layout_height='wrap';--文本高度
+        textColor='#ffffff';--文本颜色
+        text='一个超级懒的人';--显示的文本
+        textSize='12sp';--文本大小
+      };
+    };
+  };
+  {
+    FrameLayout;--帧布局
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      {
+        CardView;--卡片控件
+        layout_width='fill';--卡片宽度
+        layout_height='fill';--卡片高度
+        radius='100';--卡片圆角
+        CardBackgroundColor='#6AAFE6';--卡片背景颜色
+        {
+          LinearLayout;--线性布局
+          Orientation='vertical';--布局方向
+          layout_width='fill';--布局宽度
+          layout_height='fill';--布局高度
+          {
+            LinearLayout;--线性布局
+            Orientation='vertical';--布局方向
+            layout_width='fill';--布局宽度
+            layout_height='100dp';--布局高度
+            {
+              TextView;--文本控件
+              layout_width='fill';--文本宽度
+              paddingLeft='10%w';--布局内边左距
+              layout_height='fill';--文本高度
+              Gravity='left|center';--对齐方式
+              textColor='#ffffff';--文本颜色
+              text='Reading';--显示的文本
+              textSize='30sp';--文本大小
+            };
+          };
+        };
+      };
+    };
+    {
+      LinearLayout;--线性布局
+      layout_marginTop='100dp';--布局外边顶距
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      {
+        CardView;--卡片控件
+        layout_width='fill';--卡片宽度
+        layout_height='fill';--卡片高度
+        radius='130';--卡片圆角
+        CardBackgroundColor='#ffffff';--卡片背景颜色
+        {
+          LinearLayout;--线性布局
+          Orientation='vertical';--布局方向
+          layout_width='fill';--布局宽度
+          layout_height='fill';--布局高度
+          {
+            LinearLayout;--线性布局
+            Orientation='vertical';--布局方向
+            layout_width='fill';--布局宽度
+            layout_height='100dp';--布局高度
+            {
+              TextView;--文本控件
+              layout_width='fill';--文本宽度
+              paddingLeft='10%w';--布局内边左距
+              layout_height='fill';--文本高度
+              Gravity='left|center';--对齐方式
+              textColor='#000000';--文本颜色
+              text='All Books';--显示的文本
+              textSize='30sp';--文本大小
+            };
+          };
+          {
+            ScrollView;--竖向滚动
+            layout_width='90%w';--布局宽度
+            layout_gravity='center';--子控件在父控件中的对齐方式
+            layout_height='fill';--布局高度
+            VerticalScrollBarEnabled=false;--隐藏竖向滑条
+            {
+              LinearLayout;--线性布局
+              Orientation='vertical';--布局方向
+              layout_width='fill';--布局宽度
+              layout_height='fill';--布局高度
+              {
+                LinearLayout;--线性布局
+                Orientation='horizontal';--布局方向
+                layout_width='fill';--布局宽度
+                layout_height='250dp';--布局高度
+                {
+                  LinearLayout;--线性布局
+                  Orientation='vertical';--布局方向
+                  layout_weight="1",
+                  layout_height='fill';--布局高度
+                  {
+                    CardView;--卡片控件
+                    layout_gravity='center';--子控件在父布局中的对齐方式
+                    CardElevation='3';--卡片阴影
+                    layout_width='28%w';--卡片宽度
+                    layout_height='180dp';--卡片高度
+                    radius='20';--卡片圆角
+                    CardBackgroundColor='#30A9DE';--卡片背景颜色
+                  };
+                  {
+                    TextView;--文本控件
+                    layout_width='fill';--文本宽度
+                    layout_height='fill';--文本高度
+                    Gravity='center';--对齐方式
+                    textColor='#6E7783';--文本颜色
+                    text='Book';--显示的文本
+                    textSize='20sp';--文本大小
+                  };
+                };
+                {
+                  LinearLayout;--线性布局
+                  Orientation='vertical';--布局方向
+                  layout_weight="1",
+                  layout_height='fill';--布局高度
+                  {
+                    CardView;--卡片控件
+                    layout_gravity='center';--子控件在父布局中的对齐方式
+                    CardElevation='3';--卡片阴影
+                    layout_width='28%w';--卡片宽度
+                    layout_height='180dp';--卡片高度
+                    radius='20';--卡片圆角
+                    CardBackgroundColor='#30A9DE';--卡片背景颜色
+                  };
+                  {
+                    TextView;--文本控件
+                    layout_width='fill';--文本宽度
+                    layout_height='fill';--文本高度
+                    Gravity='center';--对齐方式
+                    textColor='#6E7783';--文本颜色
+                    text='Book';--显示的文本
+                    textSize='20sp';--文本大小
+                  };
+                };
+                {
+                  LinearLayout;--线性布局
+                  Orientation='vertical';--布局方向
+                  layout_weight="1",
+                  layout_height='fill';--布局高度
+                  {
+                    CardView;--卡片控件
+                    layout_gravity='center';--子控件在父布局中的对齐方式
+                    CardElevation='3';--卡片阴影
+                    layout_width='28%w';--卡片宽度
+                    layout_height='180dp';--卡片高度
+                    radius='20';--卡片圆角
+                    CardBackgroundColor='#30A9DE';--卡片背景颜色
+                  };
+                  {
+                    TextView;--文本控件
+                    layout_width='fill';--文本宽度
+                    layout_height='fill';--文本高度
+                    Gravity='center';--对齐方式
+                    textColor='#6E7783';--文本颜色
+                    text='Book';--显示的文本
+                    textSize='20sp';--文本大小
+                  };
+                };
+              };
+              {
+                LinearLayout;--线性布局
+                Orientation='horizontal';--布局方向
+                layout_width='fill';--布局宽度
+                layout_height='250dp';--布局高度
+                {
+                  LinearLayout;--线性布局
+                  Orientation='vertical';--布局方向
+                  layout_weight="1",
+                  layout_height='fill';--布局高度
+                  {
+                    CardView;--卡片控件
+                    layout_gravity='center';--子控件在父布局中的对齐方式
+                    CardElevation='3';--卡片阴影
+                    layout_width='28%w';--卡片宽度
+                    layout_height='180dp';--卡片高度
+                    radius='20';--卡片圆角
+                    CardBackgroundColor='#30A9DE';--卡片背景颜色
+                  };
+                  {
+                    TextView;--文本控件
+                    layout_width='fill';--文本宽度
+                    layout_height='fill';--文本高度
+                    Gravity='center';--对齐方式
+                    textColor='#6E7783';--文本颜色
+                    text='Book';--显示的文本
+                    textSize='20sp';--文本大小
+                  };
+                };
+                {
+                  LinearLayout;--线性布局
+                  Orientation='vertical';--布局方向
+                  layout_weight="1",
+                  layout_height='fill';--布局高度
+                  {
+                    CardView;--卡片控件
+                    layout_gravity='center';--子控件在父布局中的对齐方式
+                    CardElevation='3';--卡片阴影
+                    layout_width='28%w';--卡片宽度
+                    layout_height='180dp';--卡片高度
+                    radius='20';--卡片圆角
+                    CardBackgroundColor='#30A9DE';--卡片背景颜色
+                  };
+                  {
+                    TextView;--文本控件
+                    layout_width='fill';--文本宽度
+                    layout_height='fill';--文本高度
+                    Gravity='center';--对齐方式
+                    textColor='#6E7783';--文本颜色
+                    text='Book';--显示的文本
+                    textSize='20sp';--文本大小
+                  };
+                };
+                {
+                  LinearLayout;--线性布局
+                  Orientation='vertical';--布局方向
+                  layout_weight="1",
+                  layout_height='fill';--布局高度
+                  {
+                    CardView;--卡片控件
+                    layout_gravity='center';--子控件在父布局中的对齐方式
+                    CardElevation='3';--卡片阴影
+                    layout_width='28%w';--卡片宽度
+                    layout_height='180dp';--卡片高度
+                    radius='20';--卡片圆角
+                    CardBackgroundColor='#30A9DE';--卡片背景颜色
+                  };
+                  {
+                    TextView;--文本控件
+                    layout_width='fill';--文本宽度
+                    layout_height='fill';--文本高度
+                    Gravity='center';--对齐方式
+                    textColor='#6E7783';--文本颜色
+                    text='Book';--显示的文本
+                    textSize='20sp';--文本大小
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))】】
+
+
+《《卡片式登陆界面实战》》
+【【
+--创建布局
+shamrock=
+--布局框架
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    --登录总界面
+    CardView;--卡片控件
+    layout_margin="5%w";--设置边距
+    layout_gravity='center';--重力属性
+    Elevation='5';--阴影属性
+    layout_width='fill';--卡片宽度
+    layout_height='fill';--卡片高度
+    radius='30';--卡片圆角
+    CardBackgroundColor='#ffffff';--卡片背景颜色
+    {
+      --登陆总布局
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      {
+        --上半部分布局
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_weight='6';--布局权重
+        background='#FF4FB3AE';--布局背景颜色(或者图片路径)
+        Gravity="center";--设置居中
+        {
+          TextView;--文本控件
+          layout_width='wrap';--文本宽度
+          layout_height='wrap';--文本高度
+          Gravity='center';--重力属性
+          textColor='#ffffff';--文本颜色
+          text='Welcome';--显示的文本
+          textSize='50sp';--文本大小
+          padding="5%w";--设置内边距
+        };
+        {
+          TextView;--文本控件
+          layout_width='wrap';--文本宽度
+          layout_height='wrap';--文本高度
+          Gravity='center';--重力属性
+          textColor='#FFDCF0EF';--文本颜色
+          text='这是一个登陆布局实战';--显示的文本
+          textSize='26sp';--文本大小
+          padding="5%w";--设置内边距
+        };
+        {
+          CardView;--卡片控件
+          layout_marginTop="5%w";
+          layout_gravity='center';--重力属性
+          Elevation='5';--阴影属性
+          layout_width='50%w';--卡片宽度
+          layout_height='8%w';--卡片高度
+          radius='30';--卡片圆角
+          CardBackgroundColor='#FF7CCCC8';--卡片背景颜色
+          {
+            TextView;--文本控件
+            layout_width='fill';--文本宽度
+            layout_height='fill';--文本高度
+            Gravity='center';--重力属性
+            textColor='#FFFEFFFF';--文本颜色
+            text='About App →';--显示的文本
+            textSize='16sp';--文本大小
+          };
+        };
+      };
+      {
+        --下半部分布局
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_weight='4';--布局权重
+        background='#ffffff';--布局背景颜色(或者图片路径)
+        Gravity="center";--设置居中
+        {
+          CardView;--卡片控件
+          layout_margin='5%w';--卡片边距
+          layout_gravity='center';--重力属性
+          Elevation='0';--阴影属性
+          layout_width='fill';--卡片宽度
+          layout_height='18%w';--卡片高度
+          radius='20';--卡片圆角
+          CardBackgroundColor='#FF55B9B4';--卡片背景颜色
+          {
+            TextView;--文本控件
+            layout_width='fill';--文本宽度
+            layout_height='fill';--文本高度
+            Gravity='center';--重力属性
+            textColor='#ffffff';--文本颜色
+            text='登陆';--显示的文本
+            textSize='22sp';--文本大小
+          };
+        };
+        {
+          LinearLayout;--线性布局
+          Orientation='horizontal';--布局方向
+          layout_width='fill';--布局宽度
+          layout_height='wrap';--布局高度
+          background='';--布局背景颜色(或者图片路径)
+          {
+            CardView;--卡片控件
+            layout_margin='5%w';--卡片边距
+            Elevation='0';--阴影属性
+            layout_weight='1';--卡片权重
+            layout_height='18%w';--卡片高度
+            radius='20';--卡片圆角
+            CardBackgroundColor='#FFD0D0D0';--卡片背景颜色
+            {
+              CardView;--卡片控件
+              layout_margin='3';--卡片边距
+              layout_gravity='center';--重力属性
+              Elevation='0';--阴影属性
+              layout_width='fill';--卡片宽度
+              layout_height='fill';--卡片高度
+              radius='20';--卡片圆角
+              CardBackgroundColor='#ffffff';--卡片背景颜色
+              {
+                TextView;--文本控件
+                layout_width='fill';--文本宽度
+                layout_height='fill';--文本高度
+                Gravity='center';--重力属性
+                textColor='#FF5F5F5F';--文本颜色
+                text='注册';--显示的文本
+                textSize='22sp';--文本大小
+              };
+            };
+          };
+          {
+            CardView;--卡片控件
+            layout_margin='5%w';--卡片边距
+            layout_marginLeft="0";
+            Elevation='0';--阴影属性
+            layout_weight='1';--卡片权重
+            layout_height='18%w';--卡片高度
+            radius='20';--卡片圆角
+            CardBackgroundColor='#FFD0D0D0';--卡片背景颜色
+            {
+              CardView;--卡片控件
+              layout_margin='3';--卡片边距
+              layout_gravity='center';--重力属性
+              Elevation='0';--阴影属性
+              layout_width='fill';--卡片宽度
+              layout_height='fill';--卡片高度
+              radius='20';--卡片圆角
+              CardBackgroundColor='#ffffff';--卡片背景颜色
+              {
+                TextView;--文本控件
+                layout_width='fill';--文本宽度
+                layout_height='fill';--文本高度
+                Gravity='center';--重力属性
+                textColor='#FF5F5F5F';--文本颜色
+                text='协议';--显示的文本
+                textSize='22sp';--文本大小
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加窗口】】
+
+
+《《帧布局艺术背景实战》》
+【【
+SorrowClover=
+{
+  FrameLayout;--帧布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#A593E0';--布局背景颜色(或图片路径)
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    {
+      CardView;--卡片控件
+      layout_marginTop='50dp';--布局外边顶距
+      layout_marginLeft='-200dp';--布局外边左距
+      layout_gravity='center';--子控件在父布局中的对齐方式
+      CardElevation='8dp';--卡片阴影
+      layout_width='300dp';--卡片宽度
+      layout_height='400dp';--卡片高度
+      radius='12dp';--卡片圆角
+      CardBackgroundColor='#ffffff';--卡片背景颜色
+      Rotation="-45";
+    };
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    {
+      CardView;--卡片控件
+      layout_marginTop='40dp';--布局外边顶距
+      layout_gravity='center';--子控件在父布局中的对齐方式
+      CardElevation='8dp';--卡片阴影
+      layout_width='300dp';--卡片宽度
+      layout_height='1000dp';--卡片高度
+      radius='12dp';--卡片圆角
+      CardBackgroundColor='#8CD790';--卡片背景颜色
+      Rotation="45";
+    };
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    padding='16dp';--布局内边距
+    {
+      TextClock;--时间文本
+      layout_width='wrap';--文本宽度
+      layout_height='wrap';--文本高度
+      textColor='#000000';--文本颜色
+      textSize='32sp';--文本大小
+    };
+    {
+      TextView;--文本控件
+      layout_width='wrap';--文本宽度
+      layout_height='wrap';--文本高度
+      Gravity='left';--对齐方式
+      textColor='#000000';--文本颜色
+      text=[==[这是一个帧布局
+瞎拼凑的背景]==];--显示的文本
+      textSize='48sp';--文本大小
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))】】
+
+
+《《波浪球简易分类布局实战》》
+【【
+import'com.yuxuan.widget.*'
+
+SorrowClover=
+--布局请写在这里
+--设置窗口视图
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  {
+    CardView;--卡片控件
+    CardElevation='6';--卡片阴影
+    layout_width='fill';--卡片宽度
+    layout_height='300dp';--卡片高度
+    CardBackgroundColor='#ffffff';--卡片背景颜色
+    {
+      WaveView;
+      layout_height="150dp",
+      layout_width="fill",
+      id="wave",
+    };
+    {
+      LinearLayout;--线性布局
+      Orientation='horizontal';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      Gravity="bottom";
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_weight='1';--权重值
+        layout_height='150dp';--布局高度
+        Gravity="center";
+        {
+          CardView;--卡片控件
+          layout_gravity='center';--子控件在父布局中的对齐方式
+          CardElevation='0';--卡片阴影
+          layout_width='60dp';--卡片宽度
+          layout_height='60dp';--卡片高度
+          radius='30dp';--卡片圆角
+          CardBackgroundColor='#FFDDA767';--卡片背景颜色
+        };
+      };
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_weight='1';--权重值
+        layout_height='150dp';--布局高度
+        Gravity="center";
+        {
+          CardView;--卡片控件
+          layout_gravity='center';--子控件在父布局中的对齐方式
+          CardElevation='0';--卡片阴影
+          layout_width='60dp';--卡片宽度
+          layout_height='60dp';--卡片高度
+          radius='30dp';--卡片圆角
+          CardBackgroundColor='#FFDDA767';--卡片背景颜色
+        };
+      };
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_weight='1';--权重值
+        layout_height='150dp';--布局高度
+        Gravity="center";
+        {
+          CardView;--卡片控件
+          layout_gravity='center';--子控件在父布局中的对齐方式
+          CardElevation='0';--卡片阴影
+          layout_width='60dp';--卡片宽度
+          layout_height='60dp';--卡片高度
+          radius='30dp';--卡片圆角
+          CardBackgroundColor='#FFDDA767';--卡片背景颜色
+        };
+      };
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_weight='1';--权重值
+        layout_height='150dp';--布局高度
+        Gravity="center";
+        {
+          CardView;--卡片控件
+          layout_gravity='center';--子控件在父布局中的对齐方式
+          CardElevation='0';--卡片阴影
+          layout_width='60dp';--卡片宽度
+          layout_height='60dp';--卡片高度
+          radius='30dp';--卡片圆角
+          CardBackgroundColor='#FFDDA767';--卡片背景颜色
+        };
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+wave.setStartColor(0xffffffff)
+wave.setCloseColor(0xFFDDA767)
+wave.setWaveHeight(50)
+wave.setVelocity(3)】】
+
+
+《《简单帧布局背景实战》》
+【【
+
+import "android.view.animation.Animation"
+import "android.animation.ObjectAnimator"
+SorrowClover=
+{
+  FrameLayout;--帧布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    {
+      LinearLayout;--线性布局
+      layout_width=activity.Width*2;--布局宽度
+      layout_weight='1';--权重值
+      background='#F17F42';--布局背景颜色(或图片路径)
+      RotationY="30";
+    };
+    {
+      LinearLayout;--线性布局
+      layout_width=activity.Width*2;--布局宽度
+      layout_weight='1';--权重值
+      background='#DE6449';--布局背景颜色(或图片路径)
+      RotationY="30";
+    };
+    {
+      LinearLayout;--线性布局
+      layout_width=activity.Width*2;--布局宽度
+      layout_weight='1';--权重值
+      background='#333333';--布局背景颜色(或图片路径)
+      RotationY="30";
+    };
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    {
+      LinearLayout;--线性布局
+      Orientation='horizontal';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='50dp';--布局高度
+      gravity="left|center";
+      paddingLeft='16dp';--布局内边左距
+      {
+        TextView;--文本控件
+        layout_width='wrap';--文本宽度
+        layout_height='wrap';--文本高度
+        textColor='#ffffff';--文本颜色
+        text='Welcome';--显示的文本
+        textSize='32sp';--文本大小
+      };
+    };
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      gravity="center";
+      {
+        TextView;--文本控件
+        layout_width='wrap';--文本宽度
+        layout_height='wrap';--文本高度
+        textColor='#ffffff';--文本颜色
+        text='这是一个帧布局背景实战';--显示的文本
+        textSize='32sp';--文本大小
+      };
+    };
+  };
+  {
+    CardView;--卡片控件
+    id="floatbutton";
+    layout_margin='16dp';--卡片边距
+    layout_gravity='bottom|right';--子控件在父布局中的对齐方式
+    CardElevation='0';--卡片阴影
+    layout_width='60dp';--卡片宽度
+    layout_height='60dp';--卡片高度
+    radius='30dp';--卡片圆角
+    CardBackgroundColor='#F17F42';--卡片背景颜色
+    {
+      TextView;--文本控件
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--对齐方式
+      textColor='#ffffff';--文本颜色
+      text='onClick';--显示的文本
+      textSize='18sp';--文本大小
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+
+--设置属性动画
+--对应参数分别是（id，需要改变的属性，{动画开始时需要改变的属性的值，动画结束时需要改变的属性的值}）
+旋转动画 = ObjectAnimator .ofFloat(floatbutton, "rotationY", {0, 180})
+旋转动画.setRepeatCount(-1)--设置动画重复次数，这里-1代表无限
+旋转动画.setRepeatMode(Animation.REVERSE)--循环模式
+旋转动画.setDuration(2000)--动画时间
+旋转动画.start()--动画开始】】
+
+
+《《AbsoluteLayout绝对布局教程》》
+【【
+--[[
+绝对布局即通过坐标定义组件的位置
+常用属性：
+layout_width	组件宽度 
+layout_height	组件高度 
+layout_x	设置组件的X坐标 
+layout_y	设置组件的Y坐标
+]]
+--创建示例布局
+shamrock=
+{
+  AbsoluteLayout;--绝对布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    layout_x='0';--定义x坐标
+    layout_y='0';--定义y坐标
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    layout_x='80%w';--定义x坐标
+    layout_y='0';--定义y坐标
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    layout_x='0';--定义x坐标
+    layout_y='80%h';--定义y坐标
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    layout_x='80%w';--定义x坐标
+    layout_y='80%h';--定义y坐标
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口】】
+
+
+《《DrawerLayout官方侧滑菜单教程》》
+【【
+--[[
+侧滑布局即可创建侧滑栏的布局
+使用注意事项：
+1.主内容视图一定要是DrawerLayout的第一个子视图
+2.主内容视图宽度和高度需要fill
+3.必须显示指定侧滑视图的layout_gravity属性,layout_gravity = "start"时，从左向右滑出菜单,layout_gravity = "end"时，从右向左滑出菜单 
+它没什么属性可说，也就是一父项里面包含三个子项，第一个就是主布局，依次为左侧滑，右侧滑。
+]]
+
+--创建示例布局
+shamrock=
+{
+  DrawerLayout;--侧滑布局
+  {
+    --主布局
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='#ffffff';--布局背景颜色(或者图片路径)
+    Gravity='center';--设置居中
+    {
+      TextView;--文本控件
+      layout_width='wrap';--文本宽度
+      layout_height='wrap';--文本高度
+      Gravity='center';--重力属性
+      textColor='#000000';--文本颜色
+      text='左右滑试试看';--显示的文本
+      textSize='26sp';--文本大小
+    };
+  };
+  {
+    --左侧滑栏布局
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_gravity='start';--重力属性
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='#ffffff';--布局背景颜色(或者图片路径)
+    gravity='center';--设置居中
+    {
+      TextView;--文本控件
+      layout_width='wrap';--文本宽度
+      layout_height='wrap';--文本高度
+      Gravity='center';--重力属性
+      textColor='#000000';--文本颜色
+      text='我是左侧滑';--显示的文本
+      textSize='16sp';--文本大小
+    };
+  };
+  {
+    --右侧滑栏布局
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_gravity='end';--重力属性
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='#ffffff';--布局背景颜色(或者图片路径)
+    gravity='center';--设置居中
+    {
+      TextView;--文本控件
+      layout_width='wrap';--文本宽度
+      layout_height='wrap';--文本高度
+      Gravity='center';--重力属性
+      textColor='#000000';--文本颜色
+      text='我是右侧滑';--显示的文本
+      textSize='16sp';--文本大小
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口】】
+
+
+《《EditText输入框教程》》
+【【
+--[[
+输入框即可进行输入的组件
+常用属性：
+hint	默认提示文本
+textColorHint	默认提示文本颜色
+selectAllOnFocus	设置为true则获得焦点后自动全选文本
+minLines	最小行数
+maxLines	最大行数
+textScaleX	水平间隔
+textScaleY	垂直间隔
+padding	组件内文字和组件边框的距离
+CursorVisible	设置为false则光标不显示
+getSelectionStart()	获得光标前的位置
+getSelectionEnd()	获得光标后的位置
+background	设置为#00000000则隐藏下划线
+
+inputType:
+限制输入类型，可选值如下
+文本类型：
+none
+text
+textCapCharacters
+textCapWords
+textCapSentences
+textAutoCorrect
+textAutoComplete
+textMultiLine
+textImeMultiLine
+textNoSuggestions
+textUri
+textEmailAddress
+textEmailSubject
+textShortMessage
+textLongMessage
+textPersonName
+textPostalAddress
+textPassword
+textVisiblePassword
+textWebEditText
+textFilter
+textPhonetic
+数值类型：
+number
+numberSigned
+numberDecimal
+phone
+datetime
+date
+time
+]]
+
+--创建示例布局
+shamrock=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  gravity='center';--设置居中
+  {
+    EditText;--编辑框控件
+    id='编辑';--绑定ID
+    singleLine=true;--设置单行输入
+    layout_width='80%w';--编辑框宽度
+    layout_height='100';--编辑框高度
+    textSize='16sp';--文本大小
+    textColor='#000000';--输入文本的颜色
+    Hint='提示文本';--设置编辑框为空时的提示文本
+    HintTextColor='#757575';--设置编辑框内容为空的时候显示的文本颜色
+  };
+  {
+    Button;--按钮控件
+    text='获取坐标位置';--显示的文本
+    textSize='16sp';--文字大小
+    textColor='#000000';--文本颜色
+    backgroundColor='#ffffff';--按钮背景颜色
+    layout_width='80%w';--按钮宽度
+    layout_height='100';--按钮高度
+    onClick=function(v)--设置点击事件
+      print(编辑.getSelectionStart())
+    end
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口】】
+
+
+《《FrameLayout帧布局教程》》
+【【
+--[[
+帧布局即每个组件都堆叠在前一个组件之上
+常用属性：
+foreground	设置改帧布局容器的前景图像
+foregroundGravity	设置前景图像显示的位置
+]]
+--创建简单示例
+shamrock=
+{
+  FrameLayout;--帧布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='500';--卡片宽度
+    layout_height='500';--卡片高度
+    radius='0';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='400';--卡片宽度
+    layout_height='400';--卡片高度
+    radius='0';--卡片圆角
+    CardBackgroundColor='#ff7ebef8';--卡片背景颜色
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='300';--卡片宽度
+    layout_height='300';--卡片高度
+    radius='0';--卡片圆角
+    CardBackgroundColor='#ff265cf8';--卡片背景颜色
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='200';--卡片宽度
+    layout_height='200';--卡片高度
+    radius='0';--卡片圆角
+    CardBackgroundColor='#ffce5cf8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口】】
+
+
+《《ImageView图像视图教程》》
+【【
+--[[
+图像视图即用来展示图片的视图
+常用属性：
+src	图片路径
+
+scaleType:
+设置缩放类型
+fitXY	对图像的横向与纵向进行独立缩放,使得该图片完全适应ImageView,但是图片的横纵比可能会发生改变
+fitStart	保持纵横比缩放图片,知道较长的边与Image的编程相等,缩放完成后将图片放在ImageView的左上角
+fitCenter	同上,缩放后放于中间;
+fitEnd	同上,缩放后放于右下角;
+center	保持原图的大小，显示在ImageView的中心。当原图的size大于ImageView的size，超过部分裁剪处理。
+centerCrop	保持横纵比缩放图片,知道完全覆盖ImageView,可能会出现图片的显示不完全
+centerInside	保持横纵比缩放图片,直到ImageView能够完全地显示图片
+matrix	默认值，不改变原图的大小，从ImageView的左上角开始绘制原图， 原图超过ImageView的部分作裁剪处理
+]]
+
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  gravity='center';
+  {
+    ImageView;--图片控件
+    src='icon.png';--图片路径
+    layout_width='300';--图片宽度
+    layout_height='300';--图片高度
+    layout_gravity='center';--重力属性
+    scaleType='fitXY';
+  };
+};
+activity.setContentView(loadlayout(shamrock))】】
+
+
+《《LinearLayout线性布局教程》》
+【【
+--[[
+线性布局即按水平或者垂直方向布局
+常用属性：
+Orientation	布局中组件的排列方式，有horizontal(水平)，vertical(垂直，默认)，两种方式
+gravity	控制组件所包含的子元素的对齐方式，可多个组合，如(left|buttom)
+layout_gravity	控制该组件在父容器里的对其方式
+layout_width	布局的宽度，通常不直接写数字，用wrap,fill或者match填满父容器
+layout_height	布局的高度，参数同上
+id	为该组件设置一个资源id,用作事件触发
+background	为该组件设置一个背景图片，或者直接用颜色覆盖
+
+Weight(权重)讲解：
+该属性是用来等比例划分区域
+最简单的用法：要等比例划分，按比例即可
+
+divider分割线：
+该属性用于为LinearLayout设置分割线图片，通过showDivider来设置分割线
+的所在位置，有四个可选值none,middle,begining,end。
+divider	为LinearLayout设置分割线图片
+showDividers	设置分割线所在的位置，有四个可选值none,middle,begining,end。
+dividerPadding	设置分割线的padding
+]]
+--接下来创建一个布局，用作实例
+shamrock=
+{
+  LinearLayout;--线性布局
+  id='主布局';
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='30%h';--布局高度
+    background='#ff7e5cf8';--布局背景颜色(或者图片路径)
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='30%h';--布局高度
+    background='#ffc45cf8';--布局背景颜色(或者图片路径)
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='horizontal';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='30%h';--布局高度
+    background='#ffffff';--布局背景颜色(或者图片路径)
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='40%w';--布局宽度
+      layout_height='fill';--布局高度
+      background='#ff7e5cf8';--布局背景颜色(或者图片路径)
+    };
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='40%w';--布局宽度
+      layout_height='fill';--布局高度
+      background='#ff7e0ff8';--布局背景颜色(或者图片路径)
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口】】
+
+
+《《Lua适配器教程》》
+【【
+--[[
+适配器适用于有高度规律的列表，网格等视图。
+想要动态为此类控件添加项目就必须得要依靠适配器
+下面是LuaAdapter(Lua适配器)的用法
+lua适配器可以自定义列表的布局。此适配器能完成大部分需求。
+]]
+--写个布局，里面有个列表控件，设置id为list
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  {
+    ListView;--列表视图
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    DividerHeight='1';--设置分隔线宽度,0表示无分隔
+    id="list";--设置id
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))--显示布局
+
+--创建自定义项目视图，也就是一个文字视图。
+item={
+  LinearLayout,
+  orientation="vertical",
+  layout_width="fill",
+  {
+    TextView,
+    id="text",
+    layout_margin="15dp",
+    layout_width="fill"
+  },
+}
+--创建数据表
+data={}
+--创建适配器，将数据表和自定义视图添加进适配器
+adp=LuaAdapter(activity,data,item)
+--为数据表添加数据
+for n=1,100 do
+  table.insert(data,{
+    --值得一提的是，这里可以直接设置布局属性
+    --这里就是设置文字视图的文字属性，后面会有更详细的实例。
+    text={
+      Text=tostring(n), 
+    }, 
+  })
+end
+--为list设置适配器
+list.Adapter=adp】】
+
+
+《《Lua适配器进阶教程》》
+【【
+--[[
+适配器适用于有高度规律的列表，网格等视图。
+想要动态为此类控件添加项目就必须得要依靠适配器
+下面是LuaAdapter(Lua适配器)的用法
+lua适配器可以自定义列表的布局。此适配器能完成大部分需求。
+]]
+--写个布局，里面有个列表控件，设置id为list
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  {
+    ListView;--列表视图
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    DividerHeight='1';--设置分隔线宽度,0表示无分隔
+    id="list";--设置id
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))--显示布局
+
+--创建自定义项目视图，为卡片视图，我将用适配器为卡片设置颜色。
+item={
+  LinearLayout;--线性布局
+  Orientation='horizontal';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='80dp';--布局高度
+  {
+    CardView;--卡片控件
+    id="card";--设置id
+    layout_margin='8dp';--卡片边距
+    layout_gravity='center';--子控件在父布局中的对齐方式
+    CardElevation='4dp';--卡片阴影
+    layout_width='fill';--卡片宽度
+    layout_height='fill';--卡片高度
+    radius='12dp';--卡片圆角
+    CardBackgroundColor='#FFDDA767';--卡片背景颜色
+  };
+};
+--创建颜色表和数据表
+color_table={0xffEF9A9A,0xffF44336,0xffEF9A9A,0xff42A5F5,0xff1976D2,0xff0097A7}
+data={}
+--创建适配器，将数据表和自定义视图添加进适配器
+adp=LuaAdapter(activity,data,item)
+--为数据表添加数据
+for n=1,100 do
+  table.insert(data,{
+    --这里就是根据id设置布局属性，这里是设置卡片颜色
+    card={
+      CardBackgroundColor=color_table[n%#color_table], --表里用了取余算法，让颜色实现循环。
+    }, 
+  })
+end
+--为list设置适配器
+list.Adapter=adp】】
+
+
+《《PageView滑动窗体教程》》
+【【
+--[[
+PageView滑动窗体即可进行滑动切换的视图，常用于初次启动欢迎界面
+它没有什么特殊的方法
+要说特殊也就是需要加个pages，然后在里面写布局。
+需要注意的是，pages中每个视图需要有布局包裹着。
+即一个布局为一个可切换窗体，
+]]
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  {
+    PageView;--滑动窗体
+    pages={--生成窗体布局
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_height='fill';--布局高度
+        background='#ffffff';--布局背景颜色(或图片路径)
+        Gravity="center",--设置居中
+        {
+          CardView;--卡片控件
+          layout_margin='5%w';--卡片边距
+          CardElevation='3';--卡片阴影
+          layout_width='fill';--卡片宽度
+          layout_height='fill';--卡片高度
+          radius='20';--卡片圆角
+          CardBackgroundColor='#A593E0';--卡片背景颜色
+          {
+            TextView;--文本控件
+            layout_width='fill';--文本宽度
+            layout_height='fill';--文本高度
+            Gravity='center';--对齐方式
+            textColor='#ffffff';--文本颜色
+            text='ONE';--显示的文本
+            textSize='50sp';--文本大小
+          };
+        };
+      };
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_height='fill';--布局高度
+        background='#ffffff';--布局背景颜色(或图片路径)
+        Gravity="center",--设置居中
+        {
+          CardView;--卡片控件
+          layout_margin='5%w';--卡片边距
+          CardElevation='3';--卡片阴影
+          layout_width='fill';--卡片宽度
+          layout_height='fill';--卡片高度
+          radius='20';--卡片圆角
+          CardBackgroundColor='#F68657';--卡片背景颜色
+          {
+            TextView;--文本控件
+            layout_width='fill';--文本宽度
+            layout_height='fill';--文本高度
+            Gravity='center';--对齐方式
+            textColor='#ffffff';--文本颜色
+            text='TWO';--显示的文本
+            textSize='50sp';--文本大小
+          };
+        };
+      };
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_height='fill';--布局高度
+        background='#ffffff';--布局背景颜色(或图片路径)
+        Gravity="center",--设置居中
+        {
+          CardView;--卡片控件
+          layout_margin='5%w';--卡片边距
+          CardElevation='3';--卡片阴影
+          layout_width='fill';--卡片宽度
+          layout_height='fill';--卡片高度
+          radius='20';--卡片圆角
+          CardBackgroundColor='#C5E99B';--卡片背景颜色
+          {
+            TextView;--文本控件
+            layout_width='fill';--文本宽度
+            layout_height='fill';--文本高度
+            Gravity='center';--对齐方式
+            textColor='#ffffff';--文本颜色
+            text='THREE';--显示的文本
+            textSize='50sp';--文本大小
+          };
+        };
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))--显示布局】】
+
+
+《《PageView滑动窗体适配器教程》》
+【【
+--[[
+当需要添加的窗体十分多的时候，通过pages挨个添加就显得十分愚蠢。
+这时候就需要适配器，适配器是十分重要的，对于远程，动态更换窗体等都需要适配器。
+适配器的用法如下
+]]
+--先创建一个主布局，为pageview绑定id
+SorrowClover=--创建布局
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  Gravity="center",--设置居中
+  {
+    PageView;--滑动窗体
+    id='page';--绑定id
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))--显示布局
+--然后将需要添加的窗体封装成函数
+function 添加窗体(卡片颜色,显示文本)--封装函数
+  bj={
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='#ffffff';--布局背景颜色(或图片路径)
+    Gravity="center",--设置居中
+    {
+      CardView;--卡片控件
+      layout_margin='5%w';--卡片边距
+      CardElevation='3';--卡片阴影
+      layout_width='fill';--卡片宽度
+      layout_height='fill';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor=卡片颜色;--卡片背景颜色
+      {
+        TextView;--文本控件
+        layout_width='fill';--文本宽度
+        layout_height='fill';--文本高度
+        Gravity='center';--对齐方式
+        textColor='#ffffff';--文本颜色
+        text=显示文本;--显示的文本
+        textSize='50sp';--文本大小
+      };
+    };
+  };
+  return bj--返回布局
+end
+--最后设置适配器动态添加窗体
+adp=ArrayPageAdapter()--初始化适配器
+page.setAdapter(adp)--设置适配器
+adp.add(loadlayout(添加窗体("#D499B9","ONE")))--动态添加布局
+adp.add(loadlayout(添加窗体("#FDD692","TWO")))
+adp.add(loadlayout(添加窗体("#8FBC94","THREE")))】】
+
+
+《《RelativeLayout相对布局教程》》
+【【
+--[[
+相对布局就是相对于其父组件或者兄弟组件进行布局
+基本属性：
+gravity	设置容器内组件的对齐方式
+ignoreGravity	设置了该属性为true的属性的组件，将不受gravity属性的影响
+
+根据父容器定位：
+layout_alignParentLeft	左对齐
+layout_alignParentRight	右对齐
+layout_alignParentTop	顶部对齐
+layout_alignParentBottom	底部对齐
+layout_centerHorizontal	水平居中
+layout_centerVertical	垂直居中
+layout_centerParent	中间位置
+
+根据兄弟组件定位：
+layout_toLeftOf	参考组件的左边
+layout_toRightOf	参考组件的右边
+layout_above	参考组件的上方
+layout_below	参考组件的下方
+layout_alignTop	对齐参考组件的上边界
+layout_alignBottom	对齐参考组件的下边界
+layout_alignLeft	对齐参考组件的左边界
+layout_alignRight	对齐参考组件的右边界
+
+margin(偏移)：
+设置组件与父容器的边距，又叫偏移
+layout_margin	设置组件上下左右的偏移量
+layout_marginLeft	设置组件离左边的偏移量
+layout_marginRight	设置组件离右边的偏移量
+layout_marginTop	设置组件离上面的偏移量
+layout_marginBottom	设置组件离下面的偏移量
+
+padding(填充)：
+设置组件内部元素间的边距(比如TextView里的字体位置)
+padding	往内部元素的上下左右填充一定边距
+paddingLeft	往内部元素的左边填充一定边距
+paddingRight	往内部元素的右边填充一定边距
+paddingTop	往内部元素的上方填充一定边距
+paddingBottom	往内部元素的下方填充一定边距
+]]
+
+--创建一个梅花布局进行示例
+shamrock=
+{
+  RelativeLayout;--相对布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    CardView;--卡片控件
+    id="卡片";--绑定id
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    layout_centerInParent="true";--设置居中
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    layout_toLeftOf="卡片";--位于卡片左边
+    layout_centerVertical="true";--垂直居中
+    CardBackgroundColor='#ffb95cf8';--卡片背景颜色
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    layout_toRightOf="卡片";--位于卡片右边
+    layout_centerVertical="true";--垂直居中
+    CardBackgroundColor='#ffef5cf8';--卡片背景颜色
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    layout_above="卡片";--位于卡片顶部
+    layout_centerHorizontal="true";--水平居中
+    CardBackgroundColor='#ff7ec3f8';--卡片背景颜色
+  };
+  {
+    CardView;--卡片控件
+    Elevation='0';--阴影属性
+    layout_width='100';--卡片宽度
+    layout_height='100';--卡片高度
+    radius='20';--卡片圆角
+    layout_below="卡片";--位于卡片底部
+    layout_centerHorizontal="true";--水平居中
+    CardBackgroundColor='#ff7e0ff8';--卡片背景颜色
+  };
+};
+activity.setContentView(loadlayout(shamrock))--将布局添加至窗口】】
+
+
+《《TextView文本框教程》》
+【【
+--[[
+文本组件即用于显示文本的组件
+常用属性：
+id	为组件绑定id，用于触发事件
+layout_width	组件宽度
+layout_height	组件高度
+gravity	组件中内容对齐方向
+text	显示的文本内容
+textColor	字体颜色
+textSize	字体大小
+background	组件背景颜色
+]]
+--创建简单示例
+shamrock=
+{
+  LinearLayout;--线性布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  gravity='center';--设置居中
+  {
+    TextView;--文本控件
+    layout_width='fill';--文本宽度
+    layout_height='fill';--文本高度
+    Gravity='center';--重力属性
+    textColor='#000000';--文本颜色
+    text='Welcome AndroLuaBox';--显示的文本
+    textSize='50sp';--文本大小
+  };
+};
+activity.setContentView(loadlayout(shamrock))--添加布局至窗口】】
+
+
+《《布局教程概述》》
+【【这篇教程估计是最繁琐的，也是最多材料的
+我将去安卓的官网对照api来进行布局教学
+尽可能的将布局的属性全部列出
+每次的教程也会有相应的简单实例
+尽可能的注释讲解
+当然，如果有不对之处，欢迎指出。
+让我们共同进步吧。
+
+布局尺寸单位
+变量名 常量
+px 0
+dp 1
+sp 2
+pt 3
+in 4
+mm 5
+还有百分比：
+%w 宽度百分比
+%h 高度百分比】】
+
+
+《《简易适配器教程》》
+【【
+--[[
+适配器适用于有高度规律的列表，网格等视图。
+想要动态为此类控件添加项目就必须得要依靠适配器
+下面是AarrayAdapter(简单适配器)的用法
+]]
+--写个布局，里面有个列表控件，设置id为list
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  {
+    ListView;--列表视图
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    DividerHeight='1';--设置分隔线宽度,0表示无分隔
+    id="list";--设置id
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))--显示布局
+
+数据={}--定义一个表，用于适配器添加至列表的数据
+--添加10位数进去表
+for i=1,10 do
+  table.insert(数据,tostring(i))
+end
+--创建适配器，将表添加进适配器。那些看不懂的英文可以不用管，当成固定语法就好。以后懂了可以再去了解。
+适配器=ArrayAdapter(activity,android.R.layout.simple_list_item_1,数据)
+--为列表设置适配器
+list.setAdapter(适配器)
+
+--这样最简单的适配器就完成了。可以手动更改一下添加进表的数字，看看效果。】】
+
+
+《《BlurMaskFilter模糊效果测试》》
+【【
+import 'android.graphics.BlurMaskFilter'
+import 'android.graphics.Color'
+import 'android.graphics.Paint'
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  {
+    LinearLayout;--线性布局
+    id='text1';
+    layout_width='fill';--布局宽度
+    layout_weight='1';
+  };
+  {
+    LinearLayout;--线性布局
+    id='text2';
+    layout_width='fill';--布局宽度
+    layout_weight='1';
+  };
+  {
+    LinearLayout;--线性布局
+    id='text3';
+    layout_width='fill';--布局宽度
+    layout_weight='1';
+  };
+  {
+    LinearLayout;--线性布局
+    id='text4';
+    layout_width='fill';--布局宽度
+    layout_weight='1';
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+
+function 模糊(控件,效果)
+  控件.setBackgroundDrawable(LuaDrawable(function(画布,画笔,图像)
+    画笔.setAntiAlias(true);
+    画笔.setColor(Color.RED);
+    画笔.setStyle(Paint.Style.FILL);
+    画笔.setTextSize(50);
+    画笔.setStrokeWidth(5);
+    bmf = BlurMaskFilter(10,效果)
+    画笔.setMaskFilter(bmf)
+    画布.drawText("模糊测试", 100, 100, 画笔);
+  end))
+end
+模糊(text1,BlurMaskFilter.Blur.NORMAL)
+模糊(text2,BlurMaskFilter.Blur.OUTER)
+模糊(text3,BlurMaskFilter.Blur.INNER)
+模糊(text4,BlurMaskFilter.Blur.SOLID)
+
+--[==[
+BlurMaskFilter.Blur.NORMAL：内外模糊
+BlurMaskFilter.Blur.OUTER：外部模糊
+BlurMaskFilter.Blur.INNER：内部模糊
+BlurMaskFilter.Blur.SOLID：内部加粗，外部模糊
+不止文字，只要是绘制的都可以模糊
+]==]】】
+
+
+《《ShadowLayer自定义阴影测试》》
+【【
+import 'android.graphics.Color'
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  id='test';
+};
+activity.setContentView(loadlayout(SorrowClover))
+
+test.setBackgroundDrawable(LuaDrawable(function(canvas,paint,view_drawable)
+  paint.setAntiAlias(true)
+  paint.setColor(Color.BLUE)
+  paint.setShadowLayer(45,10,10,Color.BLUE)
+  canvas.drawCircle(200,200,100,paint)
+  paint.setColor(Color.RED)
+  paint.setShadowLayer(45,10,10,Color.RED)
+  canvas.drawCircle(200,500,100,paint)
+  paint.setColor(Color.GREEN)
+  paint.setShadowLayer(45,10,10,Color.GREEN)
+  canvas.drawCircle(200,800,100,paint)
+end))
+--[==[
+setShadowLayer(
+float radius ,
+float dx,
+float dy,
+int color
+)
+在图形下面设置阴影层，产生阴影效果， 
+radius为阴影的角度，
+dx和dy为阴影在x轴和y轴上的距离，
+color为阴影的颜色
+部分机型不兼容。。。。原因不明。
+]==]】】
+
+
+《《ShapeDrawable测试》》
+【【
+--[==[
+ShapeDrawable是可以自定义形状的Drawable，
+自定义圆角什么的不再是梦。
+分别有五种，路径，矩形，圆角矩形，椭圆，圆
+以下只演示后四种，路径在开发中基本用不上。故不做演示。
+]==]
+import 'android.graphics.drawable.ShapeDrawable'
+import 'android.graphics.RectF'
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  Gravity="center";
+  {
+    TextView;--文本控件
+    id="rect";
+    layout_width='100dp';--文本宽度
+    layout_marginBottom="10dp";
+    layout_height='50dp';--文本高度
+    Gravity='center';--对齐方式
+    textColor='#ffffff';--文本颜色
+    text='矩形Shape';--显示的文本
+    textSize='18sp';--文本大小
+  };
+  {
+    TextView;--文本控件
+    id="roundrect";
+    layout_width='100dp';--文本宽度
+    layout_marginBottom="10dp";
+    layout_height='50dp';--文本高度
+    Gravity='center';--对齐方式
+    textColor='#ffffff';--文本颜色
+    text='圆角矩形Shape';--显示的文本
+    textSize='18sp';--文本大小
+  };
+  {
+    TextView;--文本控件
+    id="arc";
+    layout_width='100dp';--文本宽度
+    layout_marginBottom="10dp";
+    layout_height='50dp';--文本高度
+    Gravity='center';--对齐方式
+    textColor='#ffffff';--文本颜色
+    text='椭圆Shape';--显示的文本
+    textSize='18sp';--文本大小
+  };
+  {
+    TextView;--文本控件
+    id="oval";
+    layout_width='100dp';--文本宽度
+    layout_marginBottom="10dp";
+    layout_height='100dp';--文本高度
+    Gravity='center';--对齐方式
+    textColor='#ffffff';--文本颜色
+    text='圆形Shape';--显示的文本
+    textSize='18sp';--文本大小
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+--矩形
+import 'android.graphics.drawable.shapes.RectShape'
+import 'android.graphics.Color'
+rect_shape=ShapeDrawable(RectShape())
+rect_shape.getPaint().setColor(Color.BLUE)
+rect.setBackgroundDrawable(rect_shape)
+--圆角矩形
+import 'android.graphics.drawable.shapes.RoundRectShape'
+roundrect_shape=ShapeDrawable(RoundRectShape({10,10,10,10,10,10,10,10},RectF(),{20,20,20,20,20,20,20,20}))
+roundrect_shape.getPaint().setColor(Color.BLUE)
+roundrect.setBackgroundDrawable(roundrect_shape)
+--椭圆
+import 'android.graphics.drawable.shapes.ArcShape'
+arc_shape=ShapeDrawable(ArcShape(500,500))
+arc_shape.getPaint().setColor(Color.BLUE)
+arc.setBackgroundDrawable(arc_shape)
+--圆
+import 'android.graphics.drawable.shapes.OvalShape'
+oval_shape=ShapeDrawable(OvalShape())
+oval_shape.getPaint().setColor(Color.BLUE)
+oval.setBackgroundDrawable(oval_shape)】】
+
+
+《《SharedPreferences测试》》
+【【
+--[==[
+SharedPreferences简称Sp，
+是一种轻量级的数据存储方式,采用Key/value的方式进行映射，
+最终会在手机的/data/data/package_name/shared_prefs/目录下以xml的格式存在。 
+Sp通常用于记录一些参数配置、行为标记等！
+因为其使用简单，所以大多数开发者用起来很爽！但是 
+请注意：千万不要使用Sp去存储量大的数据，
+也千万不要去让你的Sp文件超级大，
+否则会大大影响应用性能
+]==]
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  gravity="center";
+  {
+    EditText;--编辑框控件
+    id="edit";
+    singleLine=true;--设置单行输入
+    layout_width='80%w';--编辑框宽度
+    layout_height='50dp';--编辑框高度
+    textSize='18sp';--文本大小
+    textColor='#000000';--输入文本的颜色
+    Hint='请输入需要储存的数据';--编辑框为空时提示的文本
+    HintTextColor='#333333';--编辑框内容为空的时候显示文本的颜色
+  };
+  {
+    Button;--按钮控件
+    id="save_btn";
+    text='储存数据';--显示的文本
+    textSize='18sp';--文本大小
+    textColor='#000000';--文本颜色
+    layout_width='100dp';--按钮宽度
+    layout_height='50dp';--按钮高度
+    BackgroundColor='#ffffff';--按钮背景颜色
+  };
+  {
+    Button;--按钮控件
+    text='读取数据';--显示的文本
+    id="read_btn";
+    textSize='18sp';--文本大小
+    textColor='#000000';--文本颜色
+    layout_width='100dp';--按钮宽度
+    layout_height='50dp';--按钮高度
+    BackgroundColor='#ffffff';--按钮背景颜色
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+
+import 'android.content.Context'
+save_btn.onClick=function()
+  if (edit.text == "") then
+    print("我才不存储空数据呢!")
+  else
+    储存数据(edit.text)
+  end
+end
+
+read_btn.onClick=function()
+  读取数据()
+end
+
+function 储存数据(str)
+  --获取SharedPreferences文件，后面的第一个参数就是文件名，没有会自己创建，有就读取
+  sp = activity.getSharedPreferences("mysp", Context.MODE_PRIVATE)
+  --设置编辑
+  sped = sp.edit()
+  --设置键值对
+  sped.putString("user",str)
+  --提交保存数据
+  sped.commit()
+  print("储存成功")
+end
+
+function 读取数据()
+  --获取SharedPreferences文件
+  sp = activity.getSharedPreferences("mysp", Context.MODE_PRIVATE)
+  --打印对应的值
+  print(sp.getString("user",""))
+end】】
+
+
+《《sqlite数据库测试》》
+【【
+require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+activity.setTitle('sqlite数据库操作')
+activity.setTheme(android.R.style.Theme_Holo_Light)
+--本篇来自nirenr，用于研究和扩展。
+bj={
+  LinearLayout;
+  orientation="vertical";
+  layout_height="fill";
+  layout_width="fill";
+  {
+    HorizontalScrollView;
+    {
+      LinearLayout;
+      {
+        Button;
+        text="创建表";
+        id="btn1";
+      };
+      {
+        Button;
+        text="添加列";
+        id="btn2";
+      };
+      {
+        Button;
+        text="查询表内所有数据";
+        id="btn3";
+      };
+    };
+  };
+  {
+    TextView;
+    layout_width="fill";
+    text="hello AndroLua+";
+  };
+};
+
+
+activity.setContentView(loadlayout(bj))
+--[[
+
+【常用SQL语句】
+
+1.数据类型：
+整型：int
+字符：char(6)
+varchar(24)
+文本：text
+布尔：bit
+
+日期：smalldatetime
+
+2.删除表：
+drop table 表名
+
+3.修改表：
+alter table 表名 add 字段 类型
+//加约束
+alter table 表名 add constraint 约束
+
+4.创建表：
+create table 表名(
+字段 类型 primary key,
+字段 类型 default'值1' check(字段 in('值1','值2'))
+)
+//多个主键在最后面：
+primary key(字段1,字段2)
+//参照：
+后面加：references 表名(字段)
+//条件：
+不为空：not null
+唯一性：unique
+//约束：
+check(字段>=值 and 字段<=值)
+check(字段 in('值1','值2'))
+
+5.查询语句：
+select * from 表名 where 条件语句
+
+6.插入数据：
+insert into 表名(字段列表) values(值列表)
+
+7.更新语句：
+update 表名 set 字段名 = 值 where 条件
+
+8.删除语句：
+delete from 表名 where 条件
+
+9.分页查询：
+select * from Account limit 3,5
+(获取5条记录，跳过前面3条)
+
+--一一一一一一一一一一一一一一一一一一一一
+
+【常用SQL语句2】
+
+1.子查询：
+例：
+select 学号,成绩 from xs_kc 
+where 课程号=(select 课程号 from kc where 课程名='计算机基础')
+
+2.连接查询：
+例：
+select 学号,成绩 from xs_kc，kc
+where xs_kc.课程号=kc.课程号
+add 课程名='计算机基础'
+
+3.创建存储过程：
+//根据名字查询平均成绩，输入参数，输出参数
+create proc pxs_avgByName(
+@name char(8) ,@avg float output
+)
+as
+set @avg=(select avg(成绩) 
+from xs,xs_kc 
+where xs.学号=xs_kc.学号 
+and xs.姓名=@name)
+go
+//执行存储过程
+declare @ag float
+exec pxs_avgByName '李林',@avg output
+select '平均分' =@ag
+
+4.创建触发器：
+//如果在XS表中添加或修改的学生学号不是以“08”开头，
+//则使用RAISERROR语句向客户端显示一条信息“学号必修以08开头”。
+create trigger tri_n
+on xs
+for insert,update
+as 
+declare @i char(6)
+select @i=学号 from inserted
+if @i not like '08%'
+begin
+ROLLBACK TRANSACTION 
+RAISERROR ('学号必修以08开头，操作已经撤消！', 16, 10)
+end
+go
+
+--一一一一一一一一一一一一一一一一一一一一一
+
+//插入数据
+public void insertData(SQLiteDatabase db,String table,Article article){
+ContentValues values = new ContentValues();
+values.put("title",article.getTitle());
+values.put("author", article.getAuthor());
+
+db.insert(table, null, values);
+}
+
+//删除数据
+public void deletData(SQLiteDatabase db,String table,Integer id){
+db.delete(table, "_id=?", new String[]{id.toString()});
+}
+
+//根据id修改数据
+public void updataData(SQLiteDatabase db,String table,Integer id,Article article){
+ContentValues values = new ContentValues();
+values.put("title",article.getTitle());
+values.put("author", article.getAuthor());
+db.update(table, values, "_id=?", new String[]{id.toString()});
+}
+
+//根据id查询数据库
+public Article selectData(SQLiteDatabase db,String table,Integer id){
+Cursor cursor = db.query(table,null, "_id=?", new String[]{id.toString()}, null, null, null);
+if(cursor.moveToFirst()){
+String title = cursor.getString(cursor.getColumnIndex("title"));
+String author = cursor.getString(cursor.getColumnIndex("author"));
+return new Article(title,author);
+}
+return null;
+}
+
+//查询数据库所有数据
+public List<Article> selectDatas(SQLiteDatabase db,String table){
+List<Article> articles = new ArrayList<Article>();
+Cursor cursor = db.query(table,null, null, null, null, null, null);
+while(cursor.moveToNext()){
+int id = cursor.getInt(cursor.getColumnIndex("_id"));
+String title = cursor.getString(cursor.getColumnIndex("title"));
+
+articles.add(new Article(id,title));
+}
+return articles;
+}
+
+]]
+
+
+
+--导入包
+import "android.database.sqlite.*"
+
+--打开数据库(没有自动创建)
+db = SQLiteDatabase.openOrCreateDatabase(this.getLuaDir() .. "/test.db",MODE_PRIVATE, nil);
+
+
+
+--execSQL()方法可以执行insert、delete、update和CREATE TABLE之类有更改行为的SQL语句
+function exec(sql)
+  db.execSQL(sql);
+end
+
+--rawQuery()方法用于执行select语句。
+function raw(sql,text)
+  cursor=db.rawQuery(sql,text)
+end
+
+
+btn1.onClick=function()
+  CreatrTableSql="create table user(id integer primary key,name varchar(20),age int)"
+  if pcall(exec,CreatrTableSql) then
+    --创建user表，integer类型为自动增长
+    print("创建成功")
+  else
+    print("创建失败")
+  end
+end
+
+btn2.onClick=function()
+  if pcall(exec,"insert into user(name,age) values('泥人',60)") then
+    print("添加列成功")
+  else
+    print("添加列失败")
+  end
+end
+
+btn3.onClick=function()
+  sql="select * from user"
+  if pcall(raw,sql,nil) then
+    print("查询成功")
+    while (cursor.moveToNext()) do
+      userid = cursor.getInt(0); --获取第一列的值,第一列的索引从0开始 
+      name = cursor.getString(1);--获取第二列的值
+      age = cursor.getInt(2);--获取第三列的值
+      print("Id:"..userid.."，Name:"..name.."，Age"..age)
+    end
+    cursor.close()
+  else
+    print("查询失败")
+  end
+end】】
+
+
+《《StackView初仿探探测试》》
+【【
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  Gravity='center',
+  {
+    StackView;
+    id='stack',
+    layout_width='90%w',
+    layout_height='800dp',
+  };
+};
+activity.setContentView(loadlayout(shamrock))
+
+item={
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  Gravity='center',
+  {
+    CardView;--卡片控件
+    id="card",
+    Elevation='3';--阴影属性
+    layout_width='80%w';--卡片宽度
+    layout_height='700dp';--卡片高度
+    radius='40';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    {
+      TextView;--文本控件
+      id="text",
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--重力属性
+      textColor='#ffffff';--文本颜色
+      text='';--显示的文本
+      textSize='20sp';--文本大小
+    };
+  };
+};
+--创建项目数组
+color_table={0xff7e5cf8,0xfff85cf8,0xff7ef5f8,0xfffe5cf8,0xff005cf8,0xff7e00f8}
+zmb={"ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN"}
+data={}
+--创建适配器
+adp=LuaAdapter(activity,data,item)
+--添加数据
+for n=1,10 do
+  a=math.random(1,6)
+  table.insert(data,{
+    text={
+      Text=zmb[n],
+    },
+    card={
+      BackgroundColor=color_table[a],
+    },
+  })
+end
+--设置适配器
+stack.Adapter=adp
+
+stack.onItemClick=function(l,v,p,i)
+  print(zmb[i])
+end】】
+
+
+《《StackView多布局实战》》
+【【
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    LinearLayout;--线性布局
+    Orientation='horizontal';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='50dp';--布局高度
+    {
+      TextView;--文本控件
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--重力属性
+      textColor='#ffffff';--文本颜色
+      text='StackView测试';--显示的文本
+      textSize='20sp';--文本大小
+      background='#ff7e5cf8';
+    };
+  };
+  {
+    ScrollView;--纵向滚动
+    layout_width='fill';--宽
+    layout_height='fill';--高
+    --隐藏竖向滚动滑条
+    VerticalScrollBarEnabled=false;
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      background='#ffffff';--布局背景颜色(或者图片路径)
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_height='250dp';--布局高度
+        {
+          StackView;
+          id='第一stack';
+          layout_width='80%w';
+          layout_height='250dp';
+          layout_gravity='center';
+        }
+      };
+      {
+        LinearLayout;--线性布局
+        Orientation='vertical';--布局方向
+        layout_width='fill';--布局宽度
+        layout_height='250dp';--布局高度
+        {
+          StackView;
+          id='第二stack';
+          layout_width='80%w';
+          layout_height='250dp';
+          layout_gravity='center';
+        }
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))
+
+item={
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  {
+    CardView;--卡片控件
+    layout_margin='1%w';
+    layout_gravity='center';--重力属性
+    Elevation='3';--阴影属性
+    layout_width='70%w';--卡片宽度
+    layout_height='200dp';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    {
+      TextView;--文本控件
+      id='text';
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--重力属性
+      textColor='#ffffff';--文本颜色
+      text='';--显示的文本
+      textSize='20sp';--文本大小
+    };
+  };
+};
+--创建项目数组
+text_table={'不准翻开！','说了不准翻开！','你！怎么不听话！','你是不是喜欢我？？？','翻吧翻吧，没有啦！'}
+data={}
+--创建适配器
+adp=LuaAdapter(activity,data,item)
+--添加数据
+for n=1,5 do
+  table.insert(data,{
+    text={
+      Text=text_table[n],
+    },
+  })
+end
+--设置适配器
+第一stack.Adapter=adp
+
+item={
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  {
+    CardView;--卡片控件
+    layout_margin='1%w';
+    layout_gravity='center';--重力属性
+    Elevation='3';--阴影属性
+    layout_width='70%w';--卡片宽度
+    layout_height='200dp';--卡片高度
+    radius='20';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    {
+      TextView;--文本控件
+      id='text';
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--重力属性
+      textColor='#ffffff';--文本颜色
+      text='';--显示的文本
+      textSize='20sp';--文本大小
+    };
+  };
+};
+--创建项目数组
+text_table={'这次不可以了！','你又来！','你！怎么又不听话！','你要气死我？','翻吧翻吧，这次真没有啦！'}
+data={}
+--创建适配器
+adp=LuaAdapter(activity,data,item)
+--添加数据
+for n=1,5 do
+  table.insert(data,{
+    text={
+      Text=text_table[n],
+    },
+  })
+end
+--设置适配器
+第二stack.Adapter=adp】】
+
+
+《《StackView视图研究笔记》》
+【【
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  gravity='center';
+  {
+    StackView;
+    id='stack';
+    layout_width='300';
+    layout_height='300';
+  };
+};
+activity.setContentView(loadlayout(shamrock))
+
+item={
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#00000000';--布局背景颜色(或者图片路径)
+  {
+    CardView;--卡片控件
+    id='card';
+    layout_gravity='center';--重力属性
+    Elevation='0';--阴影属性
+    layout_width='250';--卡片宽度
+    layout_height='250';--卡片高度
+    radius='50';--卡片圆角
+    CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    {
+      TextView;--文本控件
+      id='text';
+      layout_width='fill';--文本宽度
+      layout_height='fill';--文本高度
+      Gravity='center';--重力属性
+      textColor='#ffffff';--文本颜色
+      text='ONE';--显示的文本
+      textSize='20sp';--文本大小
+    };
+  };
+};
+--创建项目数组
+color_table={0xff7e5cf8,0xff7ef7f8,0xfff65cf8,0xff7e00f8,0xff135cf8}
+data={}
+--创建适配器
+adp=LuaAdapter(activity,data,item)
+--添加数据
+for n=1,5 do
+  table.insert(data,{
+    text={
+      Text=tostring(n),
+    },
+    card={
+      BackgroundColor=color_table[n],
+    },
+  })
+end
+--设置适配器
+stack.Adapter=adp】】
+
+
+《《ViewFlipper翻转视图测试》》
+【【
+平移动画=TranslateAnimation(0, activity.Width, 0, 0)
+平移动画.setDuration(1000)
+平移动画.setFillAfter(true)
+平移动画2=TranslateAnimation(-activity.Width,0 , 0, 0)
+平移动画2.setDuration(1000)
+平移动画2.setFillAfter(true)
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    ViewFlipper,
+    layout_width="fill",
+    layout_height="fill",
+    id="flipper",
+    inAnimation=平移动画,
+    outAnimation=平移动画2,
+    flipInterval="2000",
+    {
+      CardView;--卡片控件
+      layout_gravity='center';--重力属性
+      Elevation='3';--阴影属性
+      layout_width='80%w';--卡片宽度
+      layout_height='500dp';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+    };
+    {
+      CardView;--卡片控件
+      layout_gravity='center';--重力属性
+      Elevation='3';--阴影属性
+      layout_width='80%w';--卡片宽度
+      layout_height='500dp';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#ff7ecdf8';--卡片背景颜色
+    };
+  },
+};
+activity.setContentView(loadlayout(shamrock))
+
+flipper.startFlipping()】】
+
+
+《《Wave波浪球视图研究》》
+【【
+import'com.yuxuan.widget.*'
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  Gravity="center",
+  {
+    CardView;--卡片控件
+    CardElevation='10';--卡片阴影
+    layout_width='200dp';--卡片宽度
+    layout_height='200dp';--卡片高度
+    radius='100dp';--卡片圆角
+    CardBackgroundColor='#ffffff';--卡片背景颜色
+    {
+      WaveView;
+      layout_height="fill",
+      layout_width="fill",
+      id="wave",
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+wave.setStartColor(0xffffffff)
+wave.setCloseColor(0xffA593E0)
+wave.setWaveHeight(50)
+wave.setVelocity(3)】】
+
+
+《《Wave波浪球视图背景测试》》
+【【
+import'com.yuxuan.widget.*'
+SorrowClover=
+{
+  FrameLayout;--帧布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    {
+      WaveView;
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      id="wave";
+    };
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    {
+      CardView;--卡片控件
+      layout_margin='-50dp';--卡片边距
+      CardElevation='3';--卡片阴影
+      layout_width='200dp';--卡片宽度
+      layout_height='200dp';--卡片高度
+      radius='100dp';--卡片圆角
+      CardBackgroundColor='#ffffff';--卡片背景颜色
+      {
+        WaveView;
+        id="wave1";
+      };
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+wave.setStartColor(0xffffffff)
+wave.setCloseColor(0xffA593E0)
+wave.setWaveHeight(10)
+wave.setVelocity(10)
+wave1.setStartColor(0xffffffff)
+wave1.setCloseColor(0xffA593E0)
+wave1.setWaveHeight(10)
+wave1.setVelocity(10)】】
+
+
+《《循环布局测试》》
+【【
+shamrock=
+--布局请写在这里
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或者图片路径)
+  {
+    ScrollView;--纵向滚动
+    layout_width='fill';--宽
+    layout_height='fill';--高
+    --隐藏竖向滚动滑条
+    VerticalScrollBarEnabled=false;
+    {
+      LinearLayout;--线性布局
+      Orientation='vertical';--布局方向
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      id="list",
+    };
+  };
+};
+activity.setContentView(loadlayout(shamrock))
+
+function 添加布局(i)
+  布局={
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='100dp';--布局高度
+    Gravity="center",
+    {
+      CardView;--卡片控件
+      Elevation='3';--阴影属性
+      layout_width='80%w';--卡片宽度
+      layout_height='80dp';--卡片高度
+      radius='20';--卡片圆角
+      CardBackgroundColor='#ff7e5cf8';--卡片背景颜色
+      onClick=function()
+        print(i)
+      end
+    };
+  };
+  return 布局
+end
+
+for i=1,10 do
+  布局=添加布局(i)
+  list.addView(loadlayout(布局))
+end】】
+
+
+《《自定义阴影颜色测试》》
+【【
+SorrowClover=
+{
+  LinearLayout;--线性布局
+  Orientation='vertical';--布局方向
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  gravity="center";
+  {
+    LinearLayout;--线性布局
+    id='btn_ele';
+    layout_width='200dp';--布局宽度
+    layout_height='100dp';--布局高度
+    {
+      Button;--按钮控件
+      layout_marginRight='3dp';--布局外边右距
+      layout_marginBottom='3dp';--布局外边底距
+      text='自定义阴影按钮';--显示的文本
+      textSize='18sp';--文本大小
+      textColor='#ffffff';--文本颜色
+      layout_width='fill';--按钮宽度
+      layout_height='fill';--按钮高度
+      id='btn';
+    };
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))
+import 'android.graphics.drawable.shapes.RoundRectShape'
+import 'android.graphics.drawable.ShapeDrawable'
+import 'android.graphics.Color'
+import 'android.graphics.RectF'
+btn_shape=ShapeDrawable(RoundRectShape({10,10,10,10,10,10,10,10},RectF(),{20,20,20,20,20,20,20,20}))
+btn_shape.getPaint().setColor(Color.BLUE)
+btn.setBackgroundDrawable(btn_shape)
+
+btn_ele_shape=ShapeDrawable(RoundRectShape({20,20,20,20,20,20,20,20},RectF(),{20,20,20,20,20,20,20,20}))
+btn_ele_shape.getPaint().setColor(Color.BLUE)
+btn_ele_shape.setAlpha(300)
+btn_ele.setBackgroundDrawable(btn_ele_shape)】】
+
+
+《《贝塞尔曲线初探》》
+【【
+--贝塞尔曲线
+import 'com.androlua.LuaDrawable'
+import 'android.graphics.Paint'
+import 'android.graphics.Path'
+SorrowClover=
+{
+  FrameLayout;--帧布局
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffff';--布局背景颜色(或图片路径)
+  {
+    LinearLayout;--线性布局
+    Orientation='vertical';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    layout_marginBottom='300';--布局外边底距
+  };
+  {
+    LinearLayout;--线性布局
+    Orientation='horizontal';--布局方向
+    layout_width='fill';--布局宽度
+    layout_height='300';--布局高度
+    layout_gravity='bottom';--子控件在父控件中的对齐方式
+    BackgroundDrawable=LuaDrawable(function(canvas,paint,draw)
+      b=draw.getBounds()
+      w=b.width()
+      h=b.height()
+      paint.setAntiAlias(true)
+      paint.setColor(0xffF17F42)
+      path=Path()
+      path.lineTo(b.centerX()-150,0)
+      path.cubicTo(b.centerX()-75,150,b.centerX()+75,150,b.centerX()+150,0)
+      path.lineTo(w,0)
+      path.lineTo(w,h)
+      path.lineTo(0,h)
+      path.close()
+      canvas.drawPath(path,paint)
+    end);--布局背景颜色(或图片路径)
+  };
+  {
+    LinearLayout;--线性布局
+    layout_width='300';--布局宽度
+    layout_height='300';--布局高度
+    layout_gravity='bottom|center';--子控件在父控件中的对齐方式
+    layout_marginBottom='200';--布局外边底距
+    BackgroundDrawable=LuaDrawable(function(canvas,paint,draw)
+      b=draw.getBounds()
+      w=b.width()
+      h=b.height()
+      paint.setShadowLayer(45,0.5,0.5,0xffF17F42)
+      paint.setAntiAlias(true)
+      paint.setColor(0xffF17F42)
+      path=Path()
+      path.addCircle(b.centerX(),b.centerY(),140,Path.Direction.CCW)
+      canvas.clipPath(path)
+      path.moveTo(30,b.centerY())
+      canvas.drawPath(path,paint)
+      mypaint=Paint()
+      mypaint.setColor(0xffffffff)
+      mypaint.setStyle(Paint.Style.STROKE)
+      mypaint.setStrokeWidth(10)
+      path.lineTo(w-30,b.centerY())
+      path.moveTo(b.centerX(),30)
+      path.lineTo(b.centerX(),h-30)
+      canvas.drawPath(path,mypaint)
+    end);
+  };
+};
+activity.setContentView(loadlayout(SorrowClover))】】
+
+
+《《高斯模糊测试》》
+【【
+import "android.renderscript.Element"
+import "android.renderscript.Allocation"
+import "android.renderscript.RenderScript"
+import "android.graphics.Bitmap"
+import "android.renderscript.ScriptIntrinsicBlur"
+import "android.graphics.Matrix"
+import 'android.graphics.drawable.BitmapDrawable'
+
+function 高斯模糊(id,tp,radius1,radius2)
+  function blur( context, bitmap, blurRadius)
+    renderScript = RenderScript.create(context);
+    blurScript = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+    inAllocation = Allocation.createFromBitmap(renderScript, bitmap);
+    outputBitmap = bitmap;
+    outAllocation = Allocation.createTyped(renderScript, inAllocation.getType());
+    blurScript.setRadius(blurRadius);
+    blurScript.setInput(inAllocation);
+    blurScript.forEach(outAllocation);
+    outAllocation.copyTo(outputBitmap);
+    inAllocation.destroy();
+    outAllocation.destroy();
+    renderScript.destroy();
+    blurScript.destroy();
+    return outputBitmap;
+  end
+  function zoomBitmap(bitmap,scale)
+    w = bitmap.getWidth();
+    h = bitmap.getHeight();
+    matrix = Matrix();
+    matrix.postScale(scale, scale);
+    bitmap = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
+    return bitmap;
+  end
+  function blurAndZoom(context,bitmap,blurRadius,scale)
+    return zoomBitmap(blur(context,zoomBitmap(bitmap, 1 / scale), blurRadius), scale);
+  end
+  id.setBackgroundDrawable(BitmapDrawable((blurAndZoom(activity,tp,radius1,radius2))))
+end
+--[[
+高斯模糊(id,tp,radius1,radius2)
+radius1 范围：1-25
+radius2 范围：1-？(据图片而定太大报错)
+]]
+
+--调用例子
+img=ImageView(activity)
+activity.setContentView(img)
+
+高斯模糊(img,loadbitmap("https://image.uisdc.com/wp-content/uploads/2019/06/uisdc-banner-20190614-2.jpg"),4,2)
+--此代码来自mlua手册，稍微改动便于使用。如有侵权请联系我，会立刻删除。】】
+
+
+《《loading文字动画对话框》》
+【【
+function loading文字动画对话框()
+  import 'android.graphics.drawable.ShapeDrawable'
+  import 'android.graphics.drawable.shapes.RoundRectShape'
+  dialog_layout={
+    LinearLayout;--线性布局
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='#ffffff';--布局背景颜色(或图片路径)
+    gravity='center';
+    {
+      LinearLayout;--线性布局
+      id='dialog_anime';
+      layout_width='300';--布局宽度
+      layout_height='300';--布局高度
+    };
+  };
+  dl = LuaDialog(this)
+  dl.setCancelable(true)
+  dl.setView(loadlayout(dialog_layout))
+  dl.getWindow().setBackgroundDrawable(ShapeDrawable(RoundRectShape({12,12,12,12,12,12,12,12},nil,nil)))
+  dl.show()
+
+  function 绘制(str)
+    dialog_anime.setBackgroundDrawable(LuaDrawable(function(canvas,paint,draw)
+      paint.setTextSize(50)
+      canvas.drawText(str,60,180,paint)
+    end))
+  end
+
+  str="loading..."
+  i=0
+  ti=Ticker()
+  ti.Period=200
+  ti.onTick=function()
+    --事件
+    绘制(str:sub(0,i))
+    i=i+1
+    if(i==11) then
+      i=0
+    end
+  end
+  --启动Ticker定时器
+  ti.start()
+  --停止Ticker定时器
+  dl.onDismiss=function()
+    ti.stop()
+  end
+  return dl
+end
+dl=loading文字动画对话框()
+--dl.dismiss()关闭对话框】】
+
+
+《《仿微信加载loading对话框》》
+【【
+function 仿微信加载loading()
+  import 'android.graphics.drawable.shapes.RoundRectShape'
+  import 'android.graphics.drawable.ShapeDrawable'
+  import 'android.graphics.Paint'
+  import 'android.graphics.Color'
+  import 'android.graphics.RectF'
+  import 'android.graphics.drawable.shapes.RoundRectShape'
+  dialog_layout={
+    LinearLayout;--线性布局
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='#ffffff';--布局背景颜色(或图片路径)
+    gravity='center';
+    {
+      LinearLayout;--线性布局
+      id='dialog_anime';
+      layout_width='300';--布局宽度
+      layout_height='300';--布局高度
+    };
+  };
+  dl = LuaDialog(this)
+  dl.setCancelable(true)
+  dl.setView(loadlayout(dialog_layout))
+  dl.getWindow().setBackgroundDrawable(ShapeDrawable(RoundRectShape({12,12,12,12,12,12,12,12},nil,nil)))
+  dl.show()
+  function 绘制(角度)
+    dialog_anime.setBackgroundDrawable(LuaDrawable(function(canvs,paint,draw)
+      paint.setAntiAlias(true)
+      paint.setColor(Color.BLUE)
+      canvs.drawArc(RectF(100,100,200,200),180,角度,true,paint)
+      paint2 = Paint()
+      paint2.setStyle(Paint.Style.STROKE)
+      paint2.setColor(Color.BLUE)
+      canvs.drawCircle(150,150,60,paint2)
+      draw.invalidateSelf()
+    end))
+  end
+  i=0
+  ti=Ticker()
+  ti.Period=10
+  ti.onTick=function()
+    --事件
+    绘制(i)
+    i=i+1
+    if(i==360) then
+      i=0
+    end
+  end
+  ti.start()
+  dl.onDismiss=function()
+    ti.stop()
+  end
+  return dl
+end
+
+dl = 仿微信加载loading()
+--对话框消失：dl.dismiss()】】
+
+《《水波纹动画对话框》》
+【【
+function 水波纹动画对话框()
+  import 'android.graphics.drawable.ShapeDrawable'
+  import 'android.graphics.drawable.shapes.RoundRectShape'
+  import 'android.graphics.Color'
+  import 'android.graphics.Paint'
+  dialog_layout={
+    LinearLayout;--线性布局
+    layout_width='fill';--布局宽度
+    layout_height='fill';--布局高度
+    background='#ffffff';--布局背景颜色(或图片路径)
+    gravity='center';
+    {
+      LinearLayout;--线性布局
+      id='dialog_anime';
+      layout_width='300';--布局宽度
+      layout_height='300';--布局高度
+    };
+  };
+  dl = LuaDialog(this)
+  dl.setCancelable(true)
+  dl.setView(loadlayout(dialog_layout))
+  dl.getWindow().setBackgroundDrawable(ShapeDrawable(RoundRectShape({12,12,12,12,12,12,12,12},nil,nil)))
+  dl.show()
+
+  function 绘制(i)
+    dialog_anime.setBackgroundDrawable(LuaDrawable(function(canvas,paint,draw)
+      paint.setColor(Color.BLUE)
+      paint.setStyle(Paint.Style.STROKE)
+      paint.setStrokeWidth(5)
+      canvas.drawCircle(150,150,i,paint)
+    end))
+  end
+
+  i=0
+  ti=Ticker()
+  ti.Period=20
+  ti.onTick=function()
+    --事件
+    绘制(i)
+    i=i+1
+    if(i==50) then
+      i=0
+    end
+  end
+  --启动Ticker定时器
+  ti.start()
+
+  dl.onDismiss=function()
+    ti.stop()
+  end
+
+  return dl
+end
+dl=水波纹动画对话框()
+--dl.dismiss()关闭对话框】】
+
+
+
+
+《《列表适配器教程》》
+【【
+全屏框架=
+--创建布局在这里
+{
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    CardView;--卡片控件
+    layout_gravity='center';--重力
+    --左:left 右:right 中:center 顶:top 底:bottom
+    elevation='5';--阴影
+    layout_width='fill';--宽度
+    layout_height='50dp';--高度
+    CardBackgroundColor='#ff94d0ad';--颜色
+    radius='';--圆角
+  };
+
+  {
+    ListView,--列表视图控件
+    layout_width="fill",--布局宽度
+    layout_height="90%h",--布局高度
+    dividerHeight="1",--分割线高度
+    id="lv",
+    verticalScrollBarEnabled=false,--隐藏滑条
+  },
+
+  {
+    ProgressBar,--进度条控件
+    layout_width="fill",--布局宽度
+    layout_height="20dp",--布局高度
+    max="100",
+    min="5",
+    Visibility=8,
+    indeterminate=true,
+    id="pabr", 
+    secondaryProgress=26,
+    style="?android:attr/progressBarStyleHorizontal"
+  };
+};
+
+activity.setContentView(loadlayout(全屏框架))
+
+数据={}
+
+for i=1,20 do
+  数据[#数据+1]={te={Text=tostring(i)}}
+end
+local item={
+
+  LinearLayout;
+  orientation='vertical';--重力属性
+  layout_width='fill';--布局宽度
+  --layout_height='';--布局高度
+  --background='';--布局背景颜色(或者图片路径)
+
+  {
+    TextView;--文本控件
+    layout_width='fill';--文本宽度
+    layout_height='fill';--文本高度
+    layout_margin='15dp';--卡片边距
+    id="te",
+
+  };
+};
+
+array_adp=LuaAdapter(activity,数据,item)
+--设置适配器
+lv.setAdapter(array_adp)
+isadd=true
+lv.setOnScrollListener{
+  onScroll=function(view,a,b,c)
+    if a+b==#lv.adapter.getData() and isadd then
+      isadd=false
+      pabr.Visibility=0
+      task(2000,function()
+        for i=#lv.adapter.getData(),#lv.adapter.getData()+50 do
+          lv.adapter.add{te=tostring(i)}
+        end
+        isadd=true
+        pabr.Visibility=8
+      end)
+    end
+  end
+}
+】】
+
+
+《《美化PopMenu》》
+【【
+require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+import "android.graphics.Typeface"
+import "android.graphics.drawable.ColorDrawable"
+import "android.graphics.drawable.ColorDrawable"
+import "android.content.res.ColorStateList"
+--activity.setTitle('AndroLua+')
+--activity.setTheme(android.R.style.Theme_Holo_Light)
+layout={
+  LinearLayout,
+  orientation="vertical",
+  layout_width="fill",
+  layout_height="fill",
+  {
+    TextView,
+    text="点我吧",
+    layout_height="10%h",
+    layout_width="fill",
+    id="aaa",
+  },
+  {
+    TextView,
+    text="点我嘛~~",
+    layout_height="10%h",
+    layout_width="fill",
+    id="aa",
+  },
+}
+
+activity.setContentView(loadlayout(layout))
+
+function dp2px(dpValue)
+  local scale = activity.getResources().getDisplayMetrics().scaledDensity
+  return dpValue * scale + 0.5
+end
+小部件=0xffbb000000
+主题色=0xff009688
+
+function showPopMenu(tab,views,title)
+
+  lp = activity.getWindow().getAttributes();
+  lp.alpha = 0.85;
+  activity.getWindow().setAttributes(lp);
+  activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+  ripple = activity.obtainStyledAttributes({android.R.attr.selectableItemBackgroundBorderless}).getResourceId(0,0)
+  ripples = activity.obtainStyledAttributes({android.R.attr.selectableItemBackground}).getResourceId(0,0)
+
+  Popup_layout={
+    LinearLayout;
+    {
+      CardView;
+      Elevation="0";
+      CardBackgroundColor=0xfffafafa;
+      Radius="4dp";
+      layout_width="192dp";
+      layout_height="-2";
+      --  layout_marginTop="8dp";
+      layout_marginLeft="8dp";
+      {
+        LinearLayout;
+        layout_height="-1";
+        layout_width="-1";
+        orientation="vertical",
+        id="Popup_list";
+      };
+    };
+  };
+
+  --PopupWindow
+  pops=PopupWindow(activity)
+  --PopupWindow加载布局
+  pops.setContentView(loadlayout(Popup_layout))
+  pops.setWidth(-2)
+  pops.setHeight(-2)
+  pops.setFocusable(true)
+  pops.setOutsideTouchable(true)
+  pops.setBackgroundDrawable(ColorDrawable(0x00000000))
+
+  pops.onDismiss=function()
+    lp = activity.getWindow().getAttributes();
+    lp.alpha = 1;
+    activity.getWindow().setAttributes(lp);
+    activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+
+  end
+
+  --PopupWindow列表项布局
+
+  Popup_list_title={
+    LinearLayout;
+    layout_width="-1";
+    layout_height="48dp";
+    {
+      TextView;
+      id="popadp_text";
+      Typeface=Typeface.DEFAULT_BOLD,
+      textColor=主题色;
+
+      layout_width="-1";
+      layout_height="-1";
+      textSize="14sp";
+      gravity="left|center";
+      paddingLeft="16dp";
+      Enabled=false,
+      --  Alpha=0.5,
+
+    };
+  };
+
+  if title
+    view=loadlayout(Popup_list_title)
+    Popup_list.addView(view)
+    popadp_text.setText(title)
+  end
+
+  Popup_list_item={
+    LinearLayout;
+    layout_width="-1";
+    layout_height="48dp";
+    {
+      TextView;
+      id="popadp_text";
+      textColor=小部件;
+      layout_width="-1";
+      layout_height="-1";
+      textSize="14sp";
+      gravity="left|center";
+      paddingLeft="16dp";
+
+    };
+  };
+
+  for k,v in pairs(tab)
+
+    view=loadlayout(Popup_list_item)
+    view.BackgroundDrawable=activity.Resources.getDrawable(ripples).setColor(ColorStateList(int[0].class{int{}},int{0x10000000}));
+    if type(v)=="table"
+
+      Popup_list.addView(view)
+      popadp_text.setText(k.."...")
+      view.onClick=function()
+        pops.dismiss()
+        task(50,function()
+
+          showPopMenu(v,views,k.."...")
+        end)
+        -- pops.dismiss()
+      end
+
+     elseif type(v)=="function"
+
+      Popup_list.addView(view)
+      popadp_text.setText(k)
+      view.onClick=function()
+        pops.dismiss()
+        task(50,function()
+
+          v()
+        end)
+      end
+    end
+  end
+  pops.showAsDropDown(views)
+end
+
+
+tabs={
+  ["工程"]={
+    ["打开"]=function()
+      print"什么都没有噗哈哈哈哈哈哈"
+    end,
+  },
+  ["打开"]=function()
+    print"打开你的心~~"
+  end,
+
+}
+aaa.onClick=function()
+  showPopMenu(tabs,aaa,"标题")
+end
+
+tab={
+  ["作者"]={
+    ["小绵羊233"]=function()
+      print"1935528751"
+    end,
+  },
+  ["你好"]=function()
+    print"你好"
+  end,
+
+}
+aa.onClick=function()
+  showPopMenu(tab,aa,"感恩")
+end】】
+
+
+《《视频嗅探》》
+【【
+--企鹅君Robin
+
+require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout={
+  LinearLayout;
+  layout_height="fill";
+  orientation="vertical";
+  layout_width="fill";
+  {
+    Button;
+    text="点击开始嗅探";
+    id="bt";
+    layout_gravity="center";
+  };
+  {
+    LuaWebView;
+    layout_width="match_parent";
+    id="webView2";
+    layout_height="50%h";
+    Visibility="2";
+  };
+  {
+    TextView;
+    id="txt";
+    layout_width="match_parent";
+  };
+  {
+    ListView;
+    id="lv";
+    layout_height="match_parent";
+    layout_width="match_parent";
+  };
+};
+
+
+activity.setTheme(android.R.style.Theme_DeviceDefault_Light)--设置md主题
+--activity.setTheme(R.AndLua1)
+activity.setTitle("资源嗅探")
+activity.setContentView(loadlayout(layout))
+
+
+
+import "android.content.Intent"
+import "android.net.Uri"
+
+--urr="https://m.iqiyi.com/v_19rre7wlpk.html"
+
+item={
+  LinearLayout;
+  orientation="vertical";
+  {
+    TextView;
+    id="tx";
+    layout_width="match_parent";
+  };
+};
+
+
+data={}
+adp=LuaAdapter(activity,data,item)
+lv.Adapter=adp
+
+
+
+bt.onClick=function
+  adp.clear()
+
+  InputLayout={
+    LinearLayout;
+    orientation="vertical";
+    Focusable=true,
+    FocusableInTouchMode=true,
+
+
+    {
+      EditText;
+      text="http://okjx.cc/?url=https://m.v.qq.com/x/cover/z/zr5a67l333ehzu9.html";
+      hint="输入需要嗅探的链接";
+      layout_marginTop="5dp";
+      layout_width="80%w";
+      layout_gravity="center",
+      id="ed1";
+    };
+    {
+      TextView;
+      text="部分链接需要网页加载完成才能嗅探出，如视频";
+      layout_width="match_parent";
+    };
+
+  };
+
+  AlertDialog.Builder(this)
+  .setTitle("需要嗅探的链接")
+  .setView(loadlayout(InputLayout))
+  .setPositiveButton("确定",{onClick=function(v)
+
+      n=0
+      webView2.loadUrl(ed1.Text)
+      webView2.setWebViewClient{
+
+        onLoadResource=function(view,url)
+
+          if (url:find'm3u8')or (url:find'mp4') then--嗅探关键词，可自行添加
+            -- webView2.stopLoading()
+            adp.add{tx=url}
+            n=n+1
+            txt.setText("已嗅探到"..tostring(n).."条视频链接")
+          end
+        end }
+
+
+
+    end})
+  .setNegativeButton("取消",nil)
+  .show()
+
+
+
+end
+
+
+import "android.content.Context"
+lv.onItemClick=function(l,v,p,i)
+  url=v.Tag.tx.Text
+  activity.getSystemService(Context.CLIPBOARD_SERVICE).setText(url)
+  import "android.content.Intent"
+  import "android.net.Uri"
+  viewIntent = Intent("android.intent.action.VIEW",Uri.parse(url))
+  activity.startActivity(viewIntent)
+  return true
+end
+
+】】
+
+
+《《顶部下拉弹窗》》
+【【
+require"import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "android.graphics.Color"
+import "android.animation.ObjectAnimator"
+import "android.animation.ArgbEvaluator"
+layout={
+  FrameLayout;
+  layout_width="fill";
+  layout_height="fill";
+  {
+    LinearLayout;
+    layout_height="fill";
+    gravity="center";
+    layout_width="fill";
+    orientation="vertical";
+    {
+      Button;
+    };
+    {
+      Button;
+    };
+  };
+}
+
+soosh={
+  FrameLayout;
+  layout_height="fill";
+  layout_width="fill";
+  {
+    TextView;
+    layout_height="24sp";
+    id="bbtn";
+    background="#3F51B5";
+    layout_width="fill";
+  };
+  {
+    FrameLayout;
+    id="mpes";
+    -- background="#ff009688";
+    layout_height="fill";
+    clickable=false;
+    layout_width="fill";
+    {
+      LinearLayout;
+      Visibility=8;
+      id="bbt";
+      background="#E91E63";
+      layout_marginTop="-25dp";
+      layout_height="148dp";
+      gravity="center";
+      layout_margin="25dp";
+      layout_width="fill";
+      {
+        ImageView;
+        layout_height="fill";
+        src="ic_fan.png";
+        id="cgh";
+        layout_width="50dp";
+      };
+    };
+    {
+      LinearLayout;
+      id="mpen";
+      orientation="vertical";
+      gravity="center|top|right";
+      clickable=true;
+      layout_margin="25dp";
+      layout_width="fill";
+      {
+        CardView;
+        CardElevation="4dp";
+        id="peg";
+        background="#E91E63";
+        clickable=true;
+        radius="8dp";
+        layout_width="fill";
+        {
+          LinearLayout;
+          layout_height="200dp";
+          background="#E91E63";
+          layout_width="fill";
+          {
+            LinearLayout;
+            layout_width="fill";
+            orientation="vertical";
+            layout_margin="25dp";
+            layout_marginTop="40dp";
+            {
+              TextView;
+              text="安卓系统";
+              layout_width="fill";
+              textColor="#FFFFFF";
+              textSize="20dp";
+            };
+            {
+              ScrollView;
+              verticalScrollBarEnabled=false;
+              OverScrollMode=2;
+              layout_width="fill";
+              layout_marginTop="5dp";
+              {
+                TextView;
+                text=[==[Android是一种基于Linux的自由及开放源代码的操作系统，主要使用于移动设备，如智能手机和平板电脑，由Google公司和开放手机联盟领导及开发。尚未有统一中文名称，中国大陆地区较多人使用“安卓”或“安致”。
+Android操作系统最初由Andy Rubin开发，主要支持手机。2005年8月由Google收购注资。2007年11月，Google与84家硬件制造商、软件开发商及电信营运商组建开放手机联盟共同研发改良Android系统。随后Google以Apache开源许可证的授权方式，发布了Android的源代码。第一部Android智能手机发布于2008年10月。Android逐渐扩展到平板电脑及其他领域上，如电视、数码相机、游戏机等。2011年第一季度，Android在全球的市场份额首次超过塞班系统，跃居全球第一。 2012年11月数据显示，Android占据全球智能手机操作系统市场76%的份额，中国市场占有率为90%。2013年09月24日谷歌开发的操作系统Android在迎来了5岁生日，全世界采用这款系统的设备数量已经达到10亿台。]==];
+                layout_width="fill";
+                textColor="#FFFFFF";
+                textSize="15dp";
+              };
+            };
+          };
+        };
+      };
+      {
+        CardView;
+        CardElevation="4dp";
+        radius="2dp";
+        background="#E91E63";
+        clickable=true;
+        rotation="45";
+        layout_marginTop="-16dp";
+        layout_height="26dp";
+        id="mnl";
+        layout_marginRight="50dp";
+        layout_width="26dp";
+      };
+      {
+        LinearLayout;
+        id="vbg";
+        translationZ="3dp";
+        layout_marginRight="47dp";
+        gravity="center";
+        orientation="vertical";
+        {
+          TextView;
+          id="jkl";
+          background="#E91E63";
+          layout_marginTop="4dp";
+          layout_height="150dp";
+          translationZ="4dp";
+          layout_width="2dp";
+        };
+        {
+          CardView;
+          layout_marginBottom="-13dp";
+          radius="2dp";
+          background="#E91E63";
+          rotation="45";
+          layout_height="18dp";
+          CardElevation="4dp";
+          id="mns";
+          layout_width="18dp";
+        };
+        {
+          CardView;
+          layout_marginBottom="4dp";
+          id="bvs";
+          background="#E91E63";
+          layout_marginTop="-3dp";
+          radius="15dp";
+          CardElevation="4dp";
+          {
+            ImageView;
+            id="mcg";
+            src="ic_window_close.png";
+            padding="4dp";
+            rotation="45";
+            ColorFilter="#FCE4EC";
+            style="?android:attr/buttonBarButtonStyle";
+            layout_height="26dp";
+            scaleType="fitXY";
+            layout_margin="3dp";
+            layout_width="26dp";
+          };
+        };
+      };
+    };
+  };
+};
+
+activity.setContentView(loadlayout(layout))
+--activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).setStatusBarColor(0x00000000);
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+local mLayoutParams=ViewGroup.LayoutParams(-1,-1)
+activity.Window.DecorView.addView(loadlayout(soosh),mLayoutParams)
+hsn=this.getResources().getDimensionPixelSize(luajava.bindClass("com.android.internal.R$dimen")().status_bar_height )--获取状态栏高
+linearParams = bbtn.getLayoutParams()
+linearParams.height=hsn
+bbtn.setLayoutParams(linearParams)
+local lastX=0
+local lastY=0
+local vx=0
+local vy=0
+task(10,function()
+  mpen.setY(-peg.getHeight()+hsn)
+  mpes.onClick=function()
+    acw=-peg.getHeight()+hsn
+    mpes.setClickable(false)
+    bbt.setVisibility(View.GONE)
+    ObjectAnimator().ofFloat(mcg,"rotation",{0,-45}).setDuration(300).start()
+    ObjectAnimator.ofInt(mpes,"backgroundColor",{0xAF000000,0x00000000}).setDuration(300).setEvaluator(ArgbEvaluator()).start()
+    ObjectAnimator().ofFloat(mpen,"Y",{0,acw,acw+100,acw,acw+50,acw+10,acw}).setDuration(500).start()
+  end
+  mpes.setClickable(false)
+end)
+
+mcg.onTouch=function(v,e)
+  local ry=e.getRawY()--获取触摸绝对Y位置
+  local rx=e.getRawX()--获取触摸绝对X位置
+  if e.getAction() == MotionEvent.ACTION_DOWN then
+    local vy=ry-e.getY()--获取视图的Y位置
+    local vx=rx-e.getX()--获取视图的X位置    
+    local lastY=ry--记录按下的Y位置  
+    local lastX=rx--获取视图的X位置
+    p=0
+    uy,ux=mpen.getY(),e.getX()
+   elseif e.getAction() == MotionEvent.ACTION_MOVE then
+    if math.abs(e.rawY-uy)>=2 then
+      vs=math.abs((vy-e.rawY)/(os.clock()-p)/1000)
+    end
+    p=os.clock()
+    vbg.setRotation(-((vx+(rx-lastX)-bvs.getWidth())/activity.getWidth())*90)
+    vbg.setRotation(vbg.getRotation()+64)
+    vbg.setPivotY(0)
+    cgh.setRotation(vy+(ry-lastY))
+
+    --y轴位置限制
+    if vy+(ry-lastY)<=mpen.getHeight()-hsn then
+      bbt.setVisibility(View.GONE)
+      mpen.setY((vy+(ry-lastY))-mpen.getHeight()+hsn)--移动的相对位置
+      alpha = (150+(150 * ((vy+(ry-lastY))/peg.getHeight())));
+      mpes.setBackgroundColor(Color.argb(alpha,0,0,0))
+      if vy+(ry-lastY)<=peg.getHeight() then
+        mpes.setBackgroundColor(Color.argb(0,0,0,0))
+        mpen.setY(-(peg.getHeight()-hsn))
+      end
+     else
+      bbt.setVisibility(View.VISIBLE)
+      mpen.setY((vy+(ry-lastY)-(mpen.getHeight()-hsn))/3)--移动的相对位置
+      mpes.setBackgroundColor(Color.argb(180,0,0,0))
+      --mpen.setY(0)
+    end
+
+   elseif e.getAction() == MotionEvent.ACTION_UP then
+    if vbg.getRotation()<0 then
+      ObjectAnimator().ofFloat(vbg,"rotation",{vbg.getRotation(),vbg.getRotation()/4,-vbg.getRotation()/6,vbg.getRotation()/8,0}).setDuration(1000).start()
+     else
+      ObjectAnimator().ofFloat(vbg,"rotation",{vbg.getRotation(),vbg.getRotation()/3,-vbg.getRotation()/3,vbg.getRotation()/10,-vbg.getRotation()/15,vbg.getRotation()/20,0}).setDuration(1000).start()
+    end
+    if mpen.getY()~=0 and mpen.getY()~=-peg.getHeight()+hsn then
+      if mpen.getY()<=-peg.getHeight()/3 then
+        backgrounds = mpes.getBackground();
+        mpes.setClickable(false)
+        ObjectAnimator().ofFloat(mcg,"rotation",{0,45}).setDuration(500).start()
+        ObjectAnimator.ofInt(mpes,"backgroundColor",{backgrounds.getColor(),0x00000000}).setDuration(vs).setEvaluator(ArgbEvaluator()).start()
+        ObjectAnimator().ofFloat(mpen,"Y",{mpen.getY(),-peg.getHeight()+hsn}).setDuration(vs).start()
+       else
+        mpes.setClickable(true)
+        background = mpes.getBackground();
+        ObjectAnimator().ofFloat(mcg,"rotation",{45,0}).setDuration(500).start()
+        ObjectAnimator.ofInt(mpes,"backgroundColor",{background.getColor(),0xAF000000}).setDuration(vs).setEvaluator(ArgbEvaluator()).start()
+        ObjectAnimator().ofFloat(mpen,"Y",{mpen.getY(),0,-200,0,-50,0,-30,0}).setDuration(vs*2).start()
+      end
+     else
+      if mpen.getY()<=-peg.getHeight()+hsn then
+        mpen.setClickable(false)
+        ObjectAnimator().ofFloat(mcg,"rotation",{0,45}).setDuration(500).start()
+       else
+        mpes.setClickable(true)
+        ObjectAnimator().ofFloat(mcg,"rotation",{45,0}).setDuration(500).start()
+      end
+
+      if ux==e.getX() then
+        if mpen.getY()==0 then
+          acw=-peg.getHeight()+hsn
+          backgrounds = mpes.getBackground();
+          bbt.setVisibility(View.GONE)
+          mpes.setClickable(false)
+          ObjectAnimator().ofFloat(mcg,"rotation",{45,0}).setDuration(300).start()
+          ObjectAnimator.ofInt(mpes,"backgroundColor",{0xAF000000,0x00000000}).setDuration(300).setEvaluator(ArgbEvaluator()).start()
+          ObjectAnimator().ofFloat(mpen,"Y",{0,acw,acw+100,acw,acw+50,acw+10,acw}).setDuration(500).start()
+         else
+          bbt.setVisibility(View.GONE)
+          mpes.setClickable(true)
+          ObjectAnimator().ofFloat(mcg,"rotation",{45,0}).setDuration(300).start()
+          ObjectAnimator.ofInt(mpes,"backgroundColor",{0x00000000,0xAF000000}).setDuration(300).setEvaluator(ArgbEvaluator()).start()
+          ObjectAnimator().ofFloat(mpen,"Y",{-peg.getHeight()+hsn,0,-300,0,-100,0,-50,0,-30,0}).setDuration(800).start()
+        end
+      end
+    end
+  end
+end
+】】
+
+
+
+
+
+
+
+《《悬浮按钮点击动画》》
+【【
+
+
+require"import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "java.io.File"
+
+import "android.view.View"
+import "android.view.animation.ScaleAnimation"
+import "android.animation.ObjectAnimator"
+import "android.graphics.drawable.GradientDrawable"
+import "android.graphics.drawable.GradientDrawable"
+import "android.content.DialogInterface"
+import "android.graphics.drawable.BitmapDrawable"
+
+--作者 Error 
+
+layout=
+{
+  FrameLayout;
+  {
+    Button,
+    id="fab",
+    background=fab_bck,
+    elevation="30dp",
+    text="+";
+    layout_width="60dp";
+    layout_height="60dp";
+    layout_marginTop="450dp",
+    layout_marginLeft="280dp",
+    TextColor="#ff60c4ba";
+    TextSize="35";
+  },
+
+  {
+    Button;
+    elevation="45dp",
+
+    layout_width="130dp";
+    layout_height="60dp";
+    layout_marginTop="173dp",
+    layout_marginLeft="110dp",
+    id="cardview1";
+    text="Button1",
+    TextColor="#ff60c4ba";
+  };
+
+  {
+    Button;
+    elevation="45dp",
+
+    layout_width="130dp";
+    layout_height="60dp";
+    layout_marginTop="219dp",
+    layout_marginLeft="110dp",
+    id="cardview2";
+    text="Button2",
+    TextColor="#ff60c4ba";
+  };
+  {
+    Button;
+    elevation="45dp",
+
+    layout_width="130dp";
+    layout_height="60dp";
+    layout_marginTop="265dp",
+    layout_marginLeft="110dp",
+    id="cardview3";
+    text="Button3",
+    TextColor="#ff60c4ba";
+  };
+  {
+    Button;
+    elevation="40dp",
+    layout_width="130dp";
+    layout_height="60dp";
+    layout_marginTop="310dp",
+    layout_marginLeft="110dp",
+    id="cardview4";
+    text="Button4",
+    TextColor="#ff60c4ba";
+  };
+}
+
+
+
+
+--activity.setTitle("悬浮按钮菜单")
+activity.setContentView(layout)
+
+cardview1.setVisibility(View.INVISIBLE)
+cardview2.setVisibility(View.INVISIBLE)
+cardview3.setVisibility(View.INVISIBLE)
+cardview4.setVisibility(View.INVISIBLE)
+
+
+
+fab_bck=GradientDrawable() fab_bck.setShape(GradientDrawable.OVAL) fab_bck.setColor(0xff60c4ba) fab_bck.setCornerRadii({90,90,90,90,90,90,90,90})
+W=activity.width H=activity.height
+fab.onClick=function(v)
+
+  ObjectAnimator().ofFloat(v,"scaleX",{1.2,.8,1.1,.9,1}).start() ObjectAnimator().ofFloat(v,"scaleY",{1.2,.8,1.1,.9,1}).start()
+  if cardview1.getVisibility()==0 then
+    import "android.view.animation.Animation$AnimationListener"
+    import "android.view.animation.ScaleAnimation"
+    cardview1.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(500))
+    cardview1.setVisibility(View.INVISIBLE)
+    cardview2.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(400))
+    cardview2.setVisibility(View.INVISIBLE)
+    cardview3.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(300))
+    cardview3.setVisibility(View.INVISIBLE)
+    cardview4.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(200))
+    cardview4.setVisibility(View.INVISIBLE)
+   else
+    import "android.view.animation.ScaleAnimation"
+    cardview1.setVisibility(View.VISIBLE)
+    cardview2.setVisibility(View.VISIBLE)
+    cardview3.setVisibility(View.VISIBLE)
+    cardview4.setVisibility(View.VISIBLE)
+
+    cardview1.startAnimation(ScaleAnimation(0.0, 1.0, 0.0, 1.0,1, 0.5, 1, 0.5).setDuration(200))
+    cardview2.startAnimation(ScaleAnimation(0.0, 1.0, 0.0, 1.0,1, 0.5, 1, 0.5).setDuration(300))
+    cardview3.startAnimation(ScaleAnimation(0.0, 1.0, 0.0, 1.0,1, 0.5, 1, 0.5).setDuration(400))
+    cardview4.startAnimation(ScaleAnimation(0.0, 1.0, 0.0, 1.0,1, 0.5, 1, 0.5).setDuration(500))
+  end
+end
+
+】】
+
+
+《《轻函-极速浏览器》》
+【【
+layout={--主布局代码
+  FrameLayout,
+  layout_width="fill",
+  layout_height="fill",
+  {
+    LinearLayout,
+    layout_width="fill",
+    layout_height="fill",
+    orientation="vertical",
+
+
+    {
+      FrameLayout,
+      layout_width="fill",
+      layout_weight="1",
+      {
+        LuaWebView,
+        layout_width="fill",
+        layout_height="fill",
+        id="myWebView",
+      },
+      {
+        LinearLayout,
+        layout_width="fill",
+        layout_height="fill",
+        background="#FFFFFFFF",
+        Gravity="center|top",
+        orientation="vertical",
+        clickable="true",
+        id="SearchViewLayout",
+        {
+          ImageView,
+          layout_marginTop="5%h",
+          layout_width="100%w",
+          layout_height="5%h",
+          src="http://pan.17k.tv/public/uploads/20190827/1/1_976sCthb_plus_logo_web.png ",
+        },
+        {
+          CardView,
+          layout_marginTop="20dp",
+          layout_width="85%w",
+          layout_height="44dp",
+          radius="22dp",
+          cardElevation="0",
+          background="#FFEAEAEA",
+
+          {
+            LinearLayout,
+            layout_width="fill",
+            layout_height="44dp",
+            {
+              EditText,
+              layout_weight="1",
+              layout_height="44dp",
+              background="#00000000",
+              paddingLeft="20dp",
+              textColor="#FF808080",
+              singleLine="true",
+              id="SearchViewEditText",
+            },
+            {
+              ImageView,
+              layout_width="44dp",
+              layout_height="44dp",
+              padding="12dp",
+              colorFilter="#80808080",
+              src="res/search",
+              id="MyViewGo",
+            },
+          },
+
+
+        },
+      },
+    },
+
+  },
+
+
+}
+
+
+
+require "import"
+--require "Pretend"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+activity.setTitle('程序标题')
+activity.setTheme(android.R.style.Theme_DeviceDefault_Light)--设置md主题
+--activity.setTheme(R.Theme_AppLua14)
+activity.ActionBar.setElevation(0)
+--设置ActionBar背景颜色
+import "android.graphics.drawable.ColorDrawable"
+activity.ActionBar.setBackgroundDrawable(ColorDrawable(0xff4285f4))
+import "android.widget.PullingLayout$OnRefreshListener"
+
+--自定义ActionBar标题颜色
+import "android.text.SpannableString"
+import "android.text.style.ForegroundColorSpan"
+import "android.text.Spannable"
+sp = SpannableString("轻函-极速浏览器")
+sp.setSpan(ForegroundColorSpan(0xffffffff),0,#sp,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+activity.ActionBar.setTitle(sp)
+
+--沉浸状态栏------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+if Build.VERSION.SDK_INT >= 23 then
+  activity.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+  activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).setStatusBarColor(0xff4285f4);
+  --activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+  --activity.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+ elseif Build.VERSION.SDK_INT <= 23 then
+  activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+end
+activity.setContentView(loadlayout(layout))
+--myWebView.removeView(myWebView.getChildAt(0))
+
+
+
+webSettings = myWebView.getSettings();
+
+--支持JS(建议无论如何加上)
+webSettings.setJavaScriptEnabled(true);
+
+--无广告百度UA字符串
+APP_NAME_UA="Mozilla/5.0 (Linux; Android 7.0; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/48.0.2564.116 Mobile Safari/537.36 T7/10.3 SearchCraft/2.6.2 (Baidu; P1 7.0)"
+
+--自定义UA
+webSettings.setUserAgentString(webSettings.getUserAgentString()..APP_NAME_UA);
+
+--WebView设置字体大小:100表示正常,120表示文字放大1.2倍
+webSettings.setTextZoom(100)
+
+MyViewGo.onClick=function()
+  import "android.content.Context"
+  import "android.view.inputmethod.InputMethodManager"
+  if SearchViewEditText.Text~="" then
+    SearchViewLayout.setVisibility(View.INVISIBLE)
+    myWebView.loadUrl("https://m.baidu.com/s?word="..SearchViewEditText.Text)
+    imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE)
+    imm.toggleSoftInput(0,InputMethodManager.HIDE_NOT_ALWAYS)
+  end
+end
+
+
+--按两次返回键退出
+参数=0
+function onKeyDown(code,event)
+  if string.find(tostring(event),"KEYCODE_BACK") ~= nil then
+    if 参数+2 > tonumber(os.time()) then
+      SearchViewLayout.setVisibility(View.VISIBLE)
+     elseif 参数+3 > tonumber(os.time()) then
+      activity.finish()
+     else
+      layout={
+        LinearLayout,
+        layout_width="100%w";
+        gravity="center";
+        layout_height="fill";
+        background="#FF5D6EFF";
+        {
+          TextView;
+          gravity="center";
+          text="请再按一下返回键返回";
+          textColor="#ffffff";
+          textSize=="15sp";
+          layout_width="110%w";
+          layout_height="40dp";
+        };
+      }
+      布局=loadlayout(layout)
+      local toast=Toast.makeText(activity,"提示",Toast.LENGTH_LONG).setView(布局).show().setGravity(Gravity.BOTTOM, 0, 0).show()
+      .show()
+      参数=tonumber(os.time())
+    end
+    return true
+  end
+end
+
+
+】】
+
+《《仿谷歌悬浮球按钮兼容板》》
+【【
+layout={
+  RelativeLayout;
+  layout_width="fill";
+  layout_height="fill";
+  background="#dddddd";
+  {
+    LinearLayout;
+    layout_height="-1";
+    layout_width="-1";
+  };
+  {
+    Button;
+    layout_height="56dp";
+    layout_marginRight="32dp";
+    background="#eeeeee";
+    id="bt";
+    layout_alignParentRight="true";
+    layout_width="56dp";
+    layout_alignParentBottom="true";
+    text="打开";
+    layout_marginBottom="32dp";
+  };
+  {
+    Button;
+    layout_alignLeft="bt";
+    layout_height="56dp";
+    id="bt1";
+    layout_above="bt";
+    background="#eeeeee";
+    layout_width="56dp";
+    Visibility="invisible";
+    layout_marginBottom="16dp";
+  };
+  {
+    Button;
+    layout_alignLeft="bt";
+    layout_height="56dp";
+    id="bt2";
+    layout_above="bt1";
+    background="#eeeeee";
+    layout_width="56dp";
+    Visibility="invisible";
+    layout_marginBottom="16dp";
+  };
+};
+
+
+require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+activity.setContentView(loadlayout(layout))
+
+activity.setTitle('AndroLua')
+import "android.view.animation.Animation$AnimationListener"
+import "android.view.animation.ScaleAnimation"
+import "android.view.animation.ScaleAnimation"
+function CircleButton (InsideColor,radiu,...)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable = GradientDrawable()
+  drawable.setShape(GradientDrawable.RECTANGLE)
+  drawable.setColor(InsideColor)
+  drawable.setCornerRadii({radiu,radiu,radiu,radiu,radiu,radiu,radiu,radiu});
+  for k,v in ipairs({...}) do
+    v.setBackgroundDrawable(drawable)
+  end
+end
+CircleButton(0xffeeeeee,100,bt,bt1,bt2)
+bt.onClick=function(v)
+  if bt1.getVisibility()==0 then
+    bt2.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(200))
+    bt2.setVisibility(View.INVISIBLE)
+    bt1.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(300))
+    bt1.setVisibility(View.INVISIBLE)
+    bt.text="打开"
+   else
+    bt1.setVisibility(View.VISIBLE)
+    bt2.setVisibility(View.VISIBLE)
+    bt1.startAnimation(ScaleAnimation(0.0, 1.0, 0.0, 1.0,1, 0.5, 1, 0.5).setDuration(200))
+    bt2.startAnimation(ScaleAnimation(0.0, 1.0, 0.0, 1.0,1, 0.5, 1, 0.5).setDuration(300))
+    bt.text="关闭"
+  end
+end
+bt1.onClick=function(v)
+  bt1.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(200))
+  bt1.setVisibility(View.INVISIBLE)
+  bt2.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(300))
+  bt2.setVisibility(View.INVISIBLE)
+end
+bt2.onClick=function(v)
+  bt1.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(200))
+  bt1.setVisibility(View.INVISIBLE)
+  bt2.startAnimation(ScaleAnimation(1.0, 0.0, 1.0, 0.0,1, 0.5, 1, 0.5).setDuration(300))
+  bt2.setVisibility(View.INVISIBLE)
+end
+--因为之前那个版本不能向下兼容，改成了button版了，本质是一样的
+
+
+】】
+
+
+《《简易指南针》》
+【【
+
+--&收集自快乐小程序
+layout={
+  LinearLayout;
+  orientation="vertical";
+  layout_width="fill";
+  layout_height="fill";
+  id="coe",
+  gravity="center";
+  {
+    TextView;
+    id="dir";
+    layout_width="fill";
+    textColor="#0090FF";
+    layout_height="7%h";
+    textSize="25dp";
+    gravity="center";
+    text="南";
+  };
+  {
+
+
+    LinearLayout;
+    id="cors";
+    orientation="vertical";
+    layout_width="70%w";
+    gravity="center";
+    layout_height="70%w";
+    {
+      LinearLayout;
+      layout_gravity="center";
+      orientation="vertical";
+      id="cor";
+      layout_width="50%w";
+      gravity="start";
+      layout_height="50%w";
+      {
+        TextView;
+        layout_gravity="center";
+        textColor="#0088ff";
+        id="n";
+        textSize="20dp";
+        gravity="center";
+        text="N";
+      };
+      {
+        LinearLayout;
+        layout_width="fill";
+        layout_marginTop="6%h";
+        layout_height="8%h";
+        {
+          TextView;
+          id="w";
+          textColor="0xff0088ff";
+          paddingLeft="6dp";
+          textSize="20dp";
+          gravity="left";
+          text="W";
+        };
+        {
+          TextView;
+          layout_width="16.5%w";
+          layout_marginLeft="9%w";
+          textColor="0xff0088ff";
+          layout_height="8%h";
+          textSize="27dp";
+          gravity="center";
+          text="↑";
+        };
+        {
+          TextView;
+          layout_marginRight="6dp";
+          id="e";
+          layout_marginLeft="11%w";
+          textColor="0xff0088ff";
+          textSize="20dp";
+          layout_width="6%w";
+          gravity="right";
+          text="E";
+        };
+      };
+      {
+        TextView;
+        layout_gravity="center";
+        layout_marginTop="6%h";
+        textColor="#0088ff";
+        id="s";
+        textSize="20dp";
+        gravity="center";
+        text="S";
+
+      };
+    };
+
+  };
+  {
+    TextView;
+    id="deg";
+    textColor="0xff0088ff";
+    layout_height="8%h";
+    textSize="27dp";
+    gravity="center";
+    text="0°";
+  };
+};
+
+activity.setContentView(loadlayout(layout))
+
+
+import "android.content.Context"
+import "android.hardware.SensorManager"
+import "android.hardware.SensorEventListener"
+import "android.hardware.Sensor"
+dirs=""
+FPS=50
+磁场=0
+传感器 = activity.getSystemService(Context.SENSOR_SERVICE)
+local 磁场传感器 = 传感器.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+传感器.registerListener(SensorEventListener({
+  onSensorChanged=function(event)
+    磁场 = event.values[0]
+  end,nil}), 磁场传感器, SensorManager.SENSOR_DELAY_NORMAL)
+function CircleButton(view,InsideColor,radiu,da,db)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable = GradientDrawable()
+  drawable.setShape(GradientDrawable.RECTANGLE)
+  drawable.setStroke(10, 0xff0088ff,da,db)
+  drawable.setColor(InsideColor)
+  drawable.setCornerRadii({radiu,radiu,radiu,radiu,radiu,radiu,radiu,radiu});
+  drawable.setGradientType(1)
+  view.setBackgroundDrawable(drawable)
+end
+角度=activity.getWidth()
+控件id=cor
+控件颜色=0xFFFFFFFF
+CircleButton(控件id,控件颜色,角度,2,2)
+CircleButton(cors,控件颜色,角度,(activity.getWidth()*0.8)/2,10)
+tick=Ticker()
+tick.Period=1000/FPS
+tick.onTick=function()
+  if 磁场>165 and 磁场<195 then
+    dirs="南"
+   elseif 磁场>195 and 磁场<255 then
+    dirs="西南"
+   elseif 磁场>255 and 磁场<285 then
+    dirs="西"
+   elseif 磁场>285 and 磁场<345 then
+    dirs="西北"
+   elseif 磁场>345 or 磁场<15 then
+    dirs="北"
+   elseif 磁场>15 and 磁场<75 then
+    dirs="东北"
+   elseif 磁场>75 and 磁场<105 then
+    dirs="东"
+   elseif 磁场>105 and 磁场<165 then
+    dirs="东南"
+  end
+  dir.setText(dirs)
+  cors.setRotation(360-磁场)
+  w.setRotation(磁场)
+  s.setRotation(磁场)
+  n.setRotation(磁场)
+  e.setRotation(磁场)
+  deg.setText(tostring(tointeger(磁场).."°"))
+  --Toast.makeText(activity,tostring(磁场.."°"),Toast.LENGTH_SHORT).show()
+end
+tick.start()
+
+function onDestroy()
+  tick.stop()
+  传感器.unregisterListener(Listener);
+end
+
+function onTouchEvent(event)
+  ac=event.action
+  if ac==2 or ac==0 then
+    x=event.X
+    y=event.Y
+    coe.setRotationX((activity.getHeight()-y)/30)
+    coe.setRotationY(x/30)
+   elseif ac==1 then
+    coe.setRotationX(0)
+    coe.setRotationY(0)
+  end
+end
+--coe.setRotationX(activity.getHeight()*0.33)
+】】
+
+
+《《RC4加解密》》
+【【
+require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+activity.setTheme(android.R.style.Theme_DeviceDefault_Light)--设置md主题
+activity.setTitle("RC4加解蜜")
+
+--Copyright© Ayaka_Ago. All Rights Reserved.
+--加解密函数由 凌云(3116817790) 开源
+
+local minicrypto = {}--RC4加解密算法(lua实现)
+local insert, concat, modf, tostring,char = table.insert, table.concat, math.modf,tostring, string.char
+local function numberToBinStr(x)
+  local ret = {}
+  while x~=1 and x~=0 do
+    insert(ret, 1, x%2)
+    x=modf(x/2)
+  end
+  insert(ret, 1, x)
+  for i = 1, 8 - #ret do
+    insert(ret, 1, 0)
+  end
+  return concat(ret)
+end
+local function computeBinaryKey(str)
+  local t = {}
+  for i = #str, 1, -1 do
+    insert(t, numberToBinStr(str:byte(i,i)))
+  end
+  return concat(t)
+end
+local binaryKeys = setmetatable({}, {__mode = "k"})
+local function binaryKey(key)
+  local v = binaryKeys[key]
+  if v == nil then
+    v = computeBinaryKey(key)
+    binaryKeys[key] = v
+  end
+  return v
+end
+local function initialize_state(key)
+  local S = {}; for i = 0, 255 do S[i] = i end
+  key = binaryKey(key)
+  local j = 0
+  for i = 0, 255 do
+    local idx = (i % #key) +1
+    j = (j + S[i] + tonumber(key:sub(idx, idx))) % 256
+    S[i], S[j] = S[j], S[i]
+  end
+  S.i = 0
+  S.j = 0
+  return S
+end
+local function encrypt_one(state, byt)
+  state.i = (state.i+1) % 256
+  state.j = (state.j + state[state.i]) % 256
+  state[state.i], state[state.j] = state[state.j], state[state.i]
+  local K = state[(state[state.i] + state[state.j]) % 256]
+  return K ~ byt
+end
+function minicrypto.encrypt(text, key)
+  local state = initialize_state(key)
+  local encrypted = {}
+  for i = 1, #text do
+    encrypted[i] = ("%02X"):format(encrypt_one(state, text:byte(i,i)))
+  end
+  return concat(encrypted)
+end
+function minicrypto.decrypt(text, key)
+  local state = initialize_state(key)
+  local decrypted = {}
+  for i = 1, #text, 2 do
+    insert(decrypted, char(encrypt_one(state, tonumber(text:sub(i, i+1), 16))))
+  end
+  return concat(decrypted)
+end
+
+this.setContentView(loadlayout({
+  LinearLayout,
+  orientation="vertical",
+  {
+    TextView,
+    text="RC4加解密",
+    layout_height="52dp",
+    paddingLeft="18dp",
+    textSize="18dp",
+    gravity="center",
+    textColor=图标色,
+  },
+  {
+    ScrollView,
+    layout_width="fill",
+    {
+      LinearLayout,
+      orientation="vertical",
+      padding="18dp",
+      layout_width="fill",
+      {
+        EditText,
+        layout_marginBottom="18dp",
+        layout_width="fill",
+        backgroundColor=0,
+        textSize="16dp",
+        textColor=文字色,
+        id="from",
+        gravity="top",
+        minLines=6,
+        hint="输入要加密/解密的内容",
+        hintTextColor=次要文字色,
+      },
+      {
+        CardView,
+        radius="20dp",
+        layout_width="fill",
+        backgroundColor=强调色,
+        layout_marginBottom="18dp",
+        {
+          LinearLayout,
+          layout_width="fill",
+          {
+            TextView,
+            textColor="#009688",
+            text="解密",
+            gravity="center",
+            layout_marginLeft="12dp",
+            layout_marginRight="12dp",
+            textSize="16dp",
+            layout_weight=1,
+            onClick=function()
+              if pcall(function() resul.text=minicrypto.decrypt(from.text,pass.text) end) then else
+                print("请输入密钥") end
+            end,
+            --backgroundDrawable=波纹(0x40000000),
+          },
+          {
+            EditText,
+            layout_weight=1,
+            backgroundColor=0,
+            textSize="16dp",
+            gravity="center",
+            textColor="#66ccff",
+            singleLine=true,
+            id="pass",
+
+            hint="输入密钥",
+            hintTextColor="#009688"
+            --hintTextColor=Color.LTGRAY,
+          },
+          {
+            TextView,
+            textColor="#009688",
+            layout_marginLeft="12dp",
+            layout_marginRight="12dp",
+            gravity="center",
+            text="加密",
+            textSize="16dp",
+            onClick=function()
+              if pcall(function() resul.text=minicrypto.encrypt(from.text,pass.text) end) then else
+                toast("请输入密钥") end
+            end,
+            --backgroundDrawable=波纹(0x40000000),
+            layout_weight=1,
+          },
+        },
+      },
+      {
+        TextView,
+        layout_width="fill",
+        textColor=文字色,
+        text="加密/解密后的文本显示在此处",
+        textSize="16dp",
+        padding="6dp",
+        id="resul",
+        textIsSelectable=true,
+      },
+    },
+  },
+}))
+】】
+
+
+《《时间绘制》》
+【【
+
+require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "layout"
+
+
+bssy=--绘制时钟
+{
+  LinearLayout;
+  orientation='vertical';--重力属性
+  layout_width='fill';--布局宽度
+  layout_height='fill';--布局高度
+  background='#ffffffff';--布局背景颜色(或者图片路径)
+  {
+    TextView;--文本控件
+    layout_margin='60dp';--卡片边距
+    layout_width='200dp';--文本宽度
+    layout_height='200dp';--文本高度
+    gravity='center';--重力属性
+    textColor='#ffff0000';--文字颜色
+    id="tv";
+  };
+};
+activity.setContentView(loadlayout(bssy))--布局视图
+
+
+tv.background=LuaDrawable(function(c,p,d)
+  p.setColor(0xff);
+  p.setAntiAlias(true);
+  p.setStrokeWidth(4);
+  local b=d.bounds
+  local W=b.right
+  local H=b.bottom
+  local mCircleWidth=0
+  local r=math.min(W/2,H/2)
+  p.setStyle(p.class.Style.STROKE)
+  import "android.graphics.Paint"
+  p.setStyle(Paint.Style.FILL);
+  c.drawCircle(b.right/2,b.bottom/2,r,p)
+  for i=0 ,60 do
+    if(i==0 or i==15 or i==30 or i==45)then
+      p.setStrokeWidth(3);
+      p.setColor(0xff000000);
+      p.setTextSize(25)
+      c.drawLine(W/2,H/2-W/2+mCircleWidth/2,
+      W/2,H/2-W/2+mCircleWidth/2+40,p);
+      scaleTv=String.valueOf(tostring(tointeger(i==0 and 12 or i/5)));
+      c.drawText(scaleTv,W/2-p.measureText(scaleTv)/2,
+      H/2-W/2+mCircleWidth/2+80,p);
+     elseif i==5 or i==10 or i==20 or i==25 or i==35 or i==40 or i==50 or i==55 then
+      p.setStrokeWidth(2);
+      p.setColor(0xff000000);
+      c.drawLine(W/2,H/2-W/2+mCircleWidth/2,
+      W/2,H/2-W/2+mCircleWidth/2+30,p);
+      t=tostring(tointeger(i/5))
+      scaleTv=String.valueOf(t);
+      c.drawText(scaleTv,W/2-p.measureText(scaleTv)/2,
+      H/2-W/2+mCircleWidth/2+75,p);
+     else
+      p.setColor(0xff000000);
+      p.setStrokeWidth(1);
+      c.drawLine(W/2,H/2-W/2+mCircleWidth/2,
+      W/2,H/2-W/2+mCircleWidth+30,p);
+    end
+    c.rotate(6,W/2,H/2);
+  end
+  mCalendar=Calendar.getInstance();
+  hours = mCalendar.get(Calendar.HOUR);
+  minutes = mCalendar.get(Calendar.MINUTE);
+  seconds=mCalendar.get(Calendar.SECOND);
+  p.setStrokeCap(Paint.Cap.ROUND);
+  c.save();
+  p.setColor(0xff4d2eff);
+  p.setStrokeWidth(7);
+  --这里计算时针需要旋转的角度 实现原理是计算出一共多少分钟除以60计算出真实的小时数（带有小数，为了更加准确计算度数），已知12小时是360度，现在求出了实际小时数比例求出角度
+  hoursAngle = (hours * 60 + minutes) / 60 / 12 * 360;
+  c.rotate(hoursAngle, W / 2, H / 2);
+  c.drawLine(W / 2, H / 2 - W/2*0.5, W / 2, H/ 2 + W/2*0.15, p);
+  c.restore();
+  c.save();
+  p.setColor(0xff4d2eff);
+  p.setStrokeWidth(5);
+  --这里计算分针需要旋转的角度 60分钟360度，求出实际分钟数所占的度数
+  minutesAngle =(minutes*60+seconds) / 60/ 60 * 360;
+  c.rotate(minutesAngle, W/ 2, H/ 2);
+  c.drawLine(W/ 2, H/ 2 - W/2*0.7, W / 2, H/ 2 + W/2*0.15, p);
+  c.restore();
+  --绘制秒针
+  c.save();
+  p.setColor(0xffff0000);
+  p.setStrokeWidth(4);
+  p.setStyle(Paint.Style.STROKE);
+  --这里计算秒针需要旋转的角度 60秒360度，求出实际秒数所占的度数
+  secondAngle = seconds/60*360;
+  c.rotate(secondAngle, W / 2, H/ 2);
+  c.drawLine(W/ 2, H / 2 - W/2*0.8, W/ 2, H / 2 + W/2*0.2, p);
+  c.restore();
+  --绘制中间的圆圈
+  c.save();
+  p.setColor(0xff000000);
+  p.setStrokeWidth(6);
+  p.setStyle(Paint.Style.FILL);
+  c.drawCircle(W/2,H/2,10,p);
+  c.restore();
+  d.invalidateSelf()
+end)
+
+】】
+
+
+《《年份：时间秒》》
+【【
+
+layout=
+
+{
+LinearLayout;
+orientation='';--重力属性
+layout_width='fill';--布局宽度
+layout_height='fill';--布局高度
+background='vertical';--布局背景颜色(或者图片路径)
+{
+LinearLayout;
+gravity='center';--重力属性
+orientation='horizontal';--重力属性
+layout_width='fill';--布局宽度
+layout_height='fill';--布局高度
+--background='';--布局背景颜色(或者图片路径)
+{
+CardView;--卡片控件
+layout_margin='10dp';--卡片边距
+layout_gravity='center';--重力属性
+elevation='5';--阴影属性
+layout_width='200dp';--卡片宽度
+CardBackgroundColor='#ffffffff';--卡片背景颜色
+layout_height='30dp';--卡片高度
+radius='5';--卡片圆角
+
+{
+TextView;--文本控件
+layout_width='fill';--文本宽度
+layout_height='fill';--文本高度
+gravity='center';--重力属性
+textColor='#fff42e91';--文字颜色
+text='年份';--显示的文字
+--textSize='16dp';--文字大小
+id="年底";
+};
+};
+
+{
+CardView;--卡片控件
+--layout_margin='10dp';--卡片边距
+layout_gravity='center';--重力属性
+elevation='5';--阴影属性
+layout_width='120dp';--卡片宽度
+CardBackgroundColor='#ffffffff';--卡片背景颜色
+layout_height='30dp';--卡片高度
+radius='5';--卡片圆角
+
+{
+TextView;--文本控件
+layout_width='fill';--文本宽度
+layout_height='fill';--文本高度
+gravity='center';--重力属性
+textColor='#fff42e91';--文字颜色
+text='时间';--显示的文字
+--textSize='16dp';--文字大小
+id="时分秒";
+};
+};
+};
+};
+activity.setContentView(loadlayout(layout))--布局视图
+
+
+
+
+
+
+function 月份()
+  年份()
+end
+
+function 年份()
+  年底.setText(os.date("%Y年-%m月-%d日-星期%w"))--获取当前系统时间
+end
+
+function 刷新()
+  require "import"
+  while true do--执行循环命令
+    Thread.sleep(100)--延迟执行
+    call("月份")
+  end
+end
+
+thread(刷新)--运行线程,循环刷新时间
+
+
+
+
+
+
+--本地系统时间
+function 时间()
+  时间秒()
+end
+
+function 时间秒()
+  时分秒.setText(os.date("%H时:%M分:%S秒"))--获取当前系统时间
+end
+
+function 刷新()
+  require "import"
+  while true do--执行循环命令
+    Thread.sleep(100)--延迟执行
+    call("时间")
+  end
+end
+
+thread(刷新)--运行线程,循环刷新时间
+--[[
+设置下划线(时分秒,1)
+
+
+]]
+
+】】
+
+
+《《SearchView搜索控件》》
+【【
+--主题
+activity.setTheme(android.R.style.Theme_DeviceDefault_Light)
+--隐藏标题栏
+activity.ActionBar.hide()
+import "android.graphics.drawable.ColorDrawable"
+--标题栏
+--activity.ActionBar.setBackgroundDrawable(ColorDrawable(0xff1e8ae8))--颜色0xFF4C8DAD
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).setStatusBarColor(0xFF222A26);
+
+
+
+layout=
+{
+  LinearLayout,--线性布局
+  orientation='vertical',--方向
+  layout_width='fill',--宽度
+  layout_height='wrap',--高度
+  -- background="#FFEEEEEE",--背景颜色或图片路径
+
+  {
+    FrameLayout,--帧布局
+    --orientation='vertical',--方向
+    layout_width='fill',--宽度
+    layout_height='50dp',--高度
+    background="#FF222A26",--背景颜色或图片路径
+    {
+      LinearLayout,--线性布局
+      -- gravity='center';--重力
+      padding="6dp",--往内部元素的填充一定边距
+      orientation='horizontal',--方向
+      layout_width='fill',--宽度
+      layout_height='fill',--高度
+      {
+        ImageView;--图片控件
+        layout_gravity='center';--重力
+        layout_margin='5dp';--边距
+        src='https://www.kuqimv.com/skin/kuqimv/images/logo.png';--图片路径
+        layout_width='100dp';--宽度
+        layout_height='33dp';--高度
+        scaleType='fitXY';--图片显示类型
+        --ColorFilter='#ffffffff';--图片着色
+
+      };
+
+      {
+        CardView;--卡片控件
+        layout_margin='5dp';--边距
+        layout_gravity='center';--重力
+        --左:left 右:right 中:center 顶:top 底:bottom
+        elevation='0dp';--阴影
+        layout_weight='1';--剩余属性
+        --  layout_width='250dp';--宽度
+        layout_height='33dp';--高度
+        -- CardBackgroundColor='#FFFFFFFF';--颜色
+        radius='3dp';--圆角
+
+        {
+          SearchView;--搜索控件
+          imeOptions="actionSearch";--设置键盘右下角操作
+          queryHint="请输入您喜爱的MV或歌手...";--设置提示文本
+          -- inputType="number";--设置文本类型
+          --  SubmitButtonEnabled=true;--设置是否显示搜索框展开时的提交按钮
+          -- iconifiedByDefault=false;--设置搜索图标是否显示在搜索框内左下角是false，中下角是true
+          Focusable=false;--禁用编辑框
+          -- background="#C5FFFFFF",--背景颜色或图片路径
+          id="suosou";
+        };
+      };
+      {
+        ImageView;--图片控件
+        layout_gravity='center';--重力
+        layout_weight='1';--剩余属性
+        padding="6dp",--往内部元素的填充一定边距
+        src='https://m1.im5i.com/2021/11/17/UnTYPv.png';--图片路径
+        -- layout_width='33dp';--宽度
+        --layout_height='33dp';--高度
+        --scaleType='fitXY';--图片显示类型
+        ColorFilter='#ffffffff';--图片着色
+
+      };
+    };
+  };
+
+  {
+    LinearLayout,--线性布局
+    orientation='vertical',--方向
+    layout_width='fill',--宽度
+    layout_height='wrap',--高度
+    background='#00FFFFFF',--背景颜色或图片路径
+
+    {
+      ListView;--列表视图
+      layout_width='fill';--布局宽度
+      layout_height='fill';--布局高度
+      DividerHeight='1';--设置分隔线宽度,0表示无分隔线
+      --background='';--布局背景颜色(或图片路径)
+      id="liebiao";
+    };
+
+  };
+
+};
+activity.setContentView(loadlayout(layout))
+
+--默认展开，可以收起搜索框
+--suosou.setIconified(false);
+--默认展开，图标在外边，不能关闭搜索框
+--suosou.setIconifiedByDefault(false);
+--展开搜索框，打开键盘
+suosou.onActionViewExpanded();
+--取消焦点，第一次进入后强制取消焦点，则不会弹起键盘
+suosou.clearFocus();
+--搜索框不自动缩小为一个搜索图标，而是match_parent
+--suosou.setIconifiedByDefault(false);
+--   显示搜索按钮
+--suosou.setSubmitButtonEnabled(true);
+--   默认提示文本
+suosou.setQueryHint("查找")
+
+
+
+itme=
+{
+  LinearLayout,--线性布局
+  orientation='horizontal',--方向
+  layout_width='fill',--宽度
+  layout_height='fill',--高度
+  --background='#00FFFFFF',--背景颜色或图片路径
+  {
+    ImageView;--图片控件
+    layout_margin='6dp';--边距
+    layout_gravity='center';--卡片重力
+    --左:left 右:right 中:center 顶:top 底:bottom
+    src='icon.png';--图片路径
+    layout_width='40dp';--宽度
+    layout_height='40dp';--高度
+    scaleType='fitXY';--图片显示类型
+  };
+  {
+    LinearLayout,--线性布局
+    gravity='center|left';--重力
+    orientation='vertical',--方向
+    layout_width='fill',--宽度
+    layout_height='fill',--高度
+    background='#00FFFFFF',--背景颜色或图片路径
+
+
+    {
+      TextView;--文本控件
+      gravity='center';--重力
+      textColor='#eb000000';--文字颜色
+      text='大标题';--显示文字
+      textSize='15dp';--文字大小
+      id="biaoti1"
+    };
+    {
+      TextView;--文本控件
+      gravity='center';--重力
+      textColor='#eb000000';--文字颜色
+      text='小标题';--显示文字
+      textSize='12dp';--文字大小
+      id="biaoti2"
+
+    };
+  };
+};
+
+function 自动搜索(isEmpty)
+  adp=LuaAdapter(activity,itme)
+  liebiao.setAdapter(adp)
+  --数据过滤函数setFilter
+  adp.setFilter(function(a,b,c)
+    for i,v in ipairs(a)do
+      if tostring(v.biaoti1..v.biaoti2):find(tostring(c),0,true) then
+        b[#b+1]=v
+      end
+    end
+  end)
+
+  列表=[=[
+
+《ALua布局助手作者》
+【aluajzhushou】
+
+《寒武纪》
+【qq: 2975208179】
+
+《广粤语歌》
+【guangyueyuge】
+
+《刘德华》
+【liudehua】
+
+《周润发》
+【zhourunfa】
+
+《周星驰》
+【zhouxingchi】
+
+《徐小凤》
+【xuxiaofeng】
+
+]=]
+
+  过滤=列表:gmatch("《(.-)》\n【(.-)】")
+
+  for a,b in 过滤 do
+    adp.add{
+      biaoti1=a,--大标题
+      biaoti2=b,--小标题
+    }
+  end
+end
+
+
+liebiao.onItemClick=function(p,v,i,s)
+  --列表项目被单击
+  项目=v.Tag.biaoti1.Text
+  print(v.Tag.biaoti1.Text)
+  print(v.Tag.biaoti2.Text)
+  return true--返回
+end
+
+
+自动搜索("")
+
+
+suosou.setOnQueryTextListener{
+  --onQueryTextSubmit的单击搜索按钮的监听
+  --onQueryTextChange的输入字符的监听
+  onQueryTextChange=function(a,b)
+    if b==nil then
+      --filter函数用于过滤序列
+      adp.filter(tostring(a))
+     else
+    end
+end}
+
+】】

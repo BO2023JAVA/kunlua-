@@ -1,0 +1,5494 @@
+
+《《主题多类》》
+【【
+
+--主题
+--背景白色无标题栏
+activity.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar)--背景白色无标题栏
+--背景白色标题栏
+--activity.setTheme(android.R.style.Theme_DeviceDefault_Light)--背景白色标题栏
+--背景白色~状态透明
+--activity.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_TranslucentDecor)--背景白色~状态透明
+
+
+--主题多类
+--activity.setTheme(android.R.style.Theme_DeviceDefault_Light_DialogWhenLarge_NoActionBar)--主题状态
+--activity.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_TranslucentDecor)--主题透明
+--activity.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
+--activity.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Overscan)
+--activity.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar)
+
+--activity.setTheme(android.R.style.Theme_Light_NoTitleBar)-- 白色背景并无标题栏
+--activity.setTheme(android.R.style.Theme_NoTitleBar)-- 不显示应用程序标题栏
+--activity.setTheme(android.R.style.Theme_Light_NoTitleBar_Fullscreen)-- 白色背景，无标题栏，全屏
+--activity.setTheme(android.R.style.Theme_Light_NoTitleBar)-- 白色背景并无标题栏
+
+】】
+《《载入窗口参数》》
+【【--载入窗口参数
+activity.newActivity("Lua文件名",{参数,参数})
+】】
+《《载入跳转页面》》
+【【--载入跳转页面
+activity.newActivity("Lua文件名")
+】】
+《《揭露动画》》
+【【function 揭露动画(view,a,b,c,d,e)
+  translationUp = ViewAnimationUtils.createCircularReveal(view,a,b,c,d)
+  translationUp.setInterpolator(DecelerateInterpolator())
+  translationUp.setDuration(e)
+  translationUp.start()
+end
+--调用方法
+task(1,function()
+  揭露动画(填写控件ID,0,0,0,activity.Height,2000)
+end)
+】】
+《《水珠动画》》
+【【function 水珠动画(view,time)
+  import "android.animation.ObjectAnimator"
+  ObjectAnimator().ofFloat(view,"scaleX",{1.2,.8,1.1,.9,1}).setDuration(time).start()
+  ObjectAnimator().ofFloat(view,"scaleY",{1.2,.8,1.1,.9,1}).setDuration(time).start()
+end
+--调用方法
+控件id.onClick=function()
+  水珠动画(控件id,300)
+end
+】】
+
+《《缓冲旋转》》
+【【function 缓冲旋转(控件,频率)
+  import "android.view.animation.Animation"
+  import "android.view.animation.RotateAnimation"
+  rotate = RotateAnimation(0,360,Animation.RELATIVE_TO_SELF,0.5,Animation.RELATIVE_TO_SELF,0.5)
+  rotate.setDuration(频率)
+  rotate.setRepeatCount(频率)
+  控件.startAnimation(rotate)
+end
+--调用方法
+缓冲旋转(填写控件ID,5000)
+】】
+《《单次旋转》》
+【【function 单次旋转(控件,频率)
+  import "android.view.animation.Animation"
+  import "android.view.animation.RotateAnimation"
+  rotate = RotateAnimation(0,360,Animation.RELATIVE_TO_SELF,0.5,Animation.RELATIVE_TO_SELF,0.5)
+  rotate.setDuration(频率)
+  rotate.setRepeatCount(0.5)
+  控件.startAnimation(rotate)
+end
+--调用方法
+单次旋转(填写控件ID,5000)
+】】
+《《流畅旋转》》
+【【function 流畅旋转(控件,频率,顺时针,逆时针)
+  import "android.view.animation.LinearInterpolator"
+  c = ObjectAnimator()
+  c.setTarget(控件)
+  c.setDuration(频率)
+  c.setRepeatCount(ValueAnimator.INFINITE)
+  c.setPropertyName("rotation")
+  c.setFloatValues({顺时针,逆时针})
+  c.setRepeatMode(ValueAnimator.INFINITE)
+  c.setInterpolator(LinearInterpolator())
+  c.start()
+end
+--调用方法
+流畅旋转(填写控件ID,90000,720,0)
+】】
+《《设置边框圆角函数》》
+【【--设置边框圆角函数
+function 卡片(边框厚度,边框颜色,背景颜色,圆角度)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable=GradientDrawable()
+  drawable.setShape(GradientDrawable.RECTANGLE)
+  drawable.setStroke(边框厚度,tonumber(边框颜色))--边框厚度和背景颜色
+  drawable.setColor(tonumber(背景颜色))--背景颜色
+  drawable.setCornerRadius(圆角度)--圆角
+  return drawable
+end
+--调用方法
+--分别为:ID,边框厚度,边框颜色,背景颜色,圆角度
+控件ID.BackgroundDrawable=卡片(3,0xdb00ffe6,0xffffff,35);
+】】
+《《圆角度控件》》
+【【--圆角度控件
+function CircleButton(view,InsideColor,radiu)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable = GradientDrawable()
+  drawable.setShape(GradientDrawable.RECTANGLE)
+  drawable.setColor(InsideColor)
+  drawable.setCornerRadii({radiu,radiu,radiu,radiu,radiu,radiu,radiu,radiu});
+  view.setBackgroundDrawable(drawable)
+end
+--调用方法
+角度=30
+控件id=控件的ID
+控件颜色=0xff1e8ae8
+CircleButton(控件id,控件颜色,角度)
+】】
+《《设置填充色圆角边》》
+【【import "android.graphics.Color"
+InsideColor = Color.parseColor("#FFC5BCEB")
+radiu = 60
+import "android.graphics.drawable.GradientDrawable"
+drawable = GradientDrawable()
+drawable.setShape(GradientDrawable.RECTANGLE)
+--设置填充色
+drawable.setColor(InsideColor)
+--设置圆角 : 左上 右上 右下 左下
+drawable.setCornerRadii({720, 600, 720, 600, 10, 10, 10, 10});
+--设置边框 : 宽度 颜色
+drawable.setStroke(2, Color.parseColor("#FF73AB80"))
+控件ID.setBackgroundDrawable(drawable)
+】】
+《《闪耀动画》》
+【【import "android.view.animation.Animation"
+import "android.view.animation.RotateAnimation"
+function 闪耀动画(控件)
+  sydh = ObjectAnimator.ofFloat(控件,"alpha",{0,1})
+  sydh.setDuration(2000)--动画时间
+  sydh.setInterpolator(DecelerateInterpolator())--动画插值器，减速
+  sydh.setRepeatCount(-1)--动画重复次数，这里-1代表无限
+  sydh.start()--启动动画
+end
+闪耀动画(控件ID)】】
+
+《《控件点击波纹函数》》
+【【
+--控件点击波纹函数
+function ControlsCorrugated(id,color)
+  import "android.content.res.ColorStateList"
+  local attrsArray = {android.R.attr.selectableItemBackgroundBorderless}
+  local typedArray =activity.obtainStyledAttributes(attrsArray)
+  ripple=typedArray.getResourceId(0,0)
+  Pretend=activity.Resources.getDrawable(ripple)
+  Pretend.setColor(ColorStateList(int[0].class{int{}},int{color}))
+  id.setBackground(Pretend.setColor(ColorStateList(int[0].class{int{}},int{color})))
+end
+--调用方法文本控件的ID
+ControlsCorrugated(控件id,0xFFE5E5E5)】】
+
+《《控件横竖渐变》》
+【【function 横竖渐变(控件,左色,右色,横竖)
+  if 横竖=="竖" then
+    横竖=GradientDrawable.Orientation.TOP_BOTTOM
+  elseif 横竖=="横" then
+    横竖=GradientDrawable.Orientation.LEFT_RIGHT
+  end
+  drawable=GradientDrawable(横竖,{左色,右色})
+  控件.setBackgroundDrawable(drawable)
+end
+横竖渐变(控件ID,0xff0eb83a,0xfffa8c35,"竖")】】
+
+《《扩散动画》》
+【【import "android.view.ViewAnimationUtils"
+function 扩散动画(v,sx,ex,sy,ey,time)
+  ViewAnimationUtils.createCircularReveal(v,sx,ex,sy,ey).setDuration(time).start()
+end
+--显示动画
+赋值ID.show()--显示
+扩散动画(控件ID,this.width,0,0,this.height,750)
+
+--关闭动画
+扩散动画(控件ID,this.width,0,this.height,0,750)
+task(700,function()--1000毫秒=1秒
+  赋值ID.dismiss()--关闭
+end)】】
+
+
+《《晃动动画》》
+【【import "android.view.animation.Animation"
+import "android.view.animation.RotateAnimation"
+function 晃动动画(控件,效果)
+  if 效果=="单" then
+    ObjectAnimator().ofFloat(控件,"scaleX",{1,.9,1.1,1.2,.8,1.1,.9,1}).start().setDuration(600)
+  elseif 效果=="双" then
+    ObjectAnimator().ofFloat(控件,"scaleX",{1,.9,1.1,1.2,.8,1.1,.9,1}).start()
+    ObjectAnimator().ofFloat(控件,"scaleY",{1,.9,1.1,1.2,.8,1.1,.9,1}).start().setDuration(1800)
+  end
+end
+晃动动画(控件ID,"双")--单--双】】
+
+《《单击缩放动画》》
+【【单击缩放={
+  onTouch=function (v,e)
+    if e.action==0 then
+      设置缩放(v,1,0.95,250)
+    else
+      设置缩放(v,0.90,1,250)
+    end
+  end
+}
+function 设置缩放(view,startscale,endscale,time)
+  local animatorSetsuofang = AnimatorSet()
+  local scaleX=ObjectAnimator.ofFloat(view,"scaleX",{startscale,endscale})
+  local scaleY=ObjectAnimator.ofFloat(view,"scaleY",{startscale,endscale})
+  animatorSetsuofang.setDuration(time)
+  animatorSetsuofang.setInterpolator(DecelerateInterpolator())
+  animatorSetsuofang.play(scaleX).with(scaleY)
+  animatorSetsuofang.start()
+end
+控件ID.onTouchListener=单击缩放】】
+
+《《振幅动画》》
+【【function 振幅动画(id,mo,v,e,b,xx,yy)
+  local e= e/100
+  local b=b/500
+  local sj = math.random(-v,v)
+  local eee = v
+  vvti=Ticker()
+  vvti.Period=5
+  vvti.onTick=function()
+    local v = math.sin(sj)
+    local bod = (-eee - eee)*v
+    eee = eee - b
+    sj =sj + e
+    if eee <0 then
+      vvti.stop()
+    end
+    if mo==1 then
+      id.setRotation(bod)
+    elseif mo==2 then
+      id.setRotationX(bod)
+    elseif mo==3 then
+      id.setRotationY(bod)
+    end
+  end
+  if xx~=nil then
+    id.setPivotX(xx)
+  end
+  if yy~=nil then
+    id.setPivotY(yy)
+  end
+  vvti.start()
+end
+--控件id,摆动模式，摆动最大角度，重力值，阻力值，旋转中心点X坐标,旋转中心点Y坐标
+振幅动画(控件ID,2,5,3,5,nil,nil)】】
+《《流畅旋转动画》》
+【【import "android.view.animation.LinearInterpolator"
+function 流畅旋转(控件,频率,顺时针,逆时针)
+  c = ObjectAnimator()
+  c.setTarget(控件)
+  c.setDuration(频率)
+  c.setRepeatCount(ValueAnimator.INFINITE)
+  c.setPropertyName("rotation")
+  c.setFloatValues({顺时针,逆时针})
+  c.setRepeatMode(ValueAnimator.INFINITE)
+  c.setInterpolator(LinearInterpolator())
+  c.start()
+end
+流畅旋转(控件ID,90000,720,0)】】
+
+《《缓冲旋转动画》》
+【【import "android.view.animation.Animation"
+import "android.view.animation.RotateAnimation"
+function 缓冲旋转(控件,频率,顺时针,逆时针)
+  rotate = RotateAnimation(顺时针,逆时针,Animation.RELATIVE_TO_SELF,0.5,Animation.RELATIVE_TO_SELF,0.5)
+  rotate.setDuration(频率)
+  rotate.setRepeatCount(频率)
+  控件.startAnimation(rotate)
+end
+缓冲旋转(控件ID,5000,0,360)】】
+
+《《单次旋转动画》》
+【【import "android.view.animation.Animation"
+import "android.view.animation.RotateAnimation"
+function 单次旋转(控件,频率,顺时针,逆时针)
+  rotate = RotateAnimation(顺时针,逆时针,Animation.RELATIVE_TO_SELF,0.5,Animation.RELATIVE_TO_SELF,0.5)
+  rotate.setDuration(频率)
+  rotate.setRepeatCount(0.5)
+  控件.startAnimation(rotate)
+end
+单次旋转(控件ID,5000,0,360)】】
+
+《《波纹特效》》
+【【function 波纹(控件,颜色)--波纹特效
+  import "android.content.res.ColorStateList"
+  local attrsArray={android.R.attr.selectableItemBackgroundBorderless}
+  local typedArray=activity.obtainStyledAttributes(attrsArray)
+  Pretend = activity.Resources.getDrawable(typedArray.getResourceId(0,0))
+  Pretend.setColor(ColorStateList(int[0].class{int{}},int{颜色}))
+  控件.setBackground(Pretend.setColor(ColorStateList(int[0].class{int{}},int{颜色})))
+end
+--调用方法
+波纹(填写控件ID,0xffffffff)
+】】
+《《波纹特效v2》》
+【【function 波纹特效v2(颜色)
+    import"android.content.res.ColorStateList"
+    return activity.Resources.getDrawable(activity.obtainStyledAttributes({android.R.attr.selectableItemBackground--[[Borderless]]}).getResourceId(0,0))
+    .setColor(ColorStateList(int[0]
+    .class{int{}},int{颜色 or 0x20000000}))
+end
+--调用方法
+填写控件ID.foreground=波纹特效v2(0xffff0000)
+】】
+《《闪波纹》》
+【【function 闪波纹(控件,颜色)
+  import "android.graphics.drawable.ColorDrawable"
+  控件.setBackgroundDrawable(ColorDrawable(颜色))
+  task(10,function()
+    import "android.graphics.drawable.ColorDrawable"
+    控件.setBackgroundDrawable(ColorDrawable(0))
+  end)
+end
+--调用方法
+闪波纹(填写控件ID,0x39000000)
+】】
+《《闪动字体》》
+【【function 闪动字体(控件,频率,颜色1,颜色2,颜色3,颜色4)
+  import "android.animation.ObjectAnimator"
+  import "android.animation.ArgbEvaluator"
+  import "android.animation.ValueAnimator"
+  import "android.graphics.Color"
+  colorAnim = ObjectAnimator.ofInt(控件,"textColor",{颜色1,颜色2,颜色3,颜色4})
+  colorAnim.setDuration(频率)
+  colorAnim.setEvaluator(ArgbEvaluator())
+  colorAnim.setRepeatCount(ValueAnimator.INFINITE)
+  colorAnim.setRepeatMode(ValueAnimator.REVERSE)
+  colorAnim.start()
+end
+--调用方法
+闪动字体(填写文本控件ID,5000,0xffFF8080,0xff8080FF,0xff80ffff,0xff80ff80)
+】】
+《《文本垂直渐变》》
+【【--文本垂直渐变
+function 文本垂直渐变(控件,上色,下色)
+  import "android.graphics.Shader"
+  import "android.graphics.LinearGradient" shader=LinearGradient(0,0,0,控件.getTextSize(),上色,下色,Shader.TileMode.CLAMP)
+  控件.getPaint().setShader(shader)
+end
+--调用方法
+文本垂直渐变(hanwj,0xffff5ae8,0xff6effff)
+】】
+《《文本水平渐变》》
+【【--文本水平渐变
+function 文本水平渐变(控件,右色,左色)
+  import "android.graphics.LinearGradient"
+import "android.graphics.Shader"
+shader=LinearGradient(800,控件.getTextSize(),控件.getTextSize(),2,右色,左色,Shader.TileMode.CLAMP)
+控件.getPaint().setShader(shader)
+end
+--调用方法
+文本水平渐变(hanwj,0xffff5ae8,0xff6effff)
+】】
+《《闪动背景》》
+【【function 闪动背景(控件,频率，颜色1,颜色2,颜色3,颜色4)
+  import "android.animation.ObjectAnimator"
+  import "android.animation.ArgbEvaluator"
+  import "android.animation.ValueAnimator"
+  import "android.graphics.Color"
+  colorAnim = ObjectAnimator.ofInt(ID,"backgroundColor",{颜色1,颜色2,颜色3,颜色4})
+  colorAnim.setDuration(频率)
+  colorAnim.setEvaluator(ArgbEvaluator())
+  colorAnim.setRepeatCount(ValueAnimator.INFINITE)
+  colorAnim.setRepeatMode(ValueAnimator.REVERSE)
+  colorAnim.start()
+end
+--调用方法
+闪动背景(填写控件ID,5000,0xffFF8080,0xff8080FF,0xff80ffff,0xff80ff80)
+】】
+《《四层渐变》》
+【【function 四层渐变(控件,颜色1,颜色2,颜色3,颜色4)
+  import "android.graphics.drawable.GradientDrawable"
+  控件.setBackgroundDrawable(GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,{颜色1,颜色2,颜色3,颜色4,}))
+end
+--调用方法
+四层渐变(填写控件ID,0xFFA593E0,0xff000000,0xffF17F42,0xff9055A2)
+】】
+
+《《三色渐变》》
+【【function 三色渐变(控件,左色,中色,右色,圆角)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable = GradientDrawable(GradientDrawable.Orientation.TR_BL,{左色,中色,右色});
+  drawable.setCornerRadii({圆角,圆角,圆角,圆角,圆角,圆角,圆角,圆角});
+  控件.setBackgroundDrawable(drawable)
+end
+--调用方法
+三色渐变(填写控件ID,0xfff349eb,0xfff9c00c,0xff00b9f1,360)
+】】
+《《上下渐变颜色》》
+【【import "android.graphics.drawable.GradientDrawable"
+控件ID.setBackgroundDrawable(GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,{
+  0xFFA593E0,0xffffffff,0xffffffff,0xffffffff,
+}))--上下渐变颜色，
+】】
+《《渐变圆角》》
+【【function 渐变圆角(控件,左色,右色,圆角)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable = GradientDrawable(GradientDrawable.Orientation.TR_BL,{右色,左色});
+  drawable.setCornerRadii({圆角,圆角,圆角,圆角,圆角,圆角,圆角,圆角});
+  控件.setBackgroundDrawable(drawable)
+end
+--调用方法
+渐变圆角(填写控件ID,0xffeeeeee,0xffff0000,360)
+】】
+《《颜色渐变》》
+【【function 颜色渐变(控件,左色,右色)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable = GradientDrawable(GradientDrawable.Orientation.TR_BL,{左色,右色,});
+  控件.setBackgroundDrawable(drawable)
+end
+--调用方法
+颜色渐变(填写控件ID,0xffffe6d1,0xFF1467DF)
+】】
+《《顶栏渐变色》》
+【【--顶栏渐变色
+import "android.graphics.drawable.GradientDrawable"
+function 渐变(left_jb,right_jb,id)
+  drawable = GradientDrawable(GradientDrawable.Orientation.TR_BL,{
+    right_jb,
+    left_jb,
+  });
+  id.setBackgroundDrawable(drawable)
+end
+渐变(0xFF28D1DB,0xFF28D1DB,toolbarParent)
+】】
+《《缩放动画》》
+【【点击监听={
+  onTouch=function (v,e)
+    if e.action==2 then
+      缩放动画(v, 0,0.95,250)
+     else
+      缩放动画(v,0.95,1,250)
+    end
+  end}
+function 缩放动画(view,startscale,endscale,time)
+  local animatorSetsuofang = AnimatorSet()
+  local scaleX=ObjectAnimator.ofFloat(view,"scaleX",{startscale,endscale})
+  local scaleY=ObjectAnimator.ofFloat(view,"scaleY",{startscale,endscale})
+  animatorSetsuofang.setDuration(time)
+  animatorSetsuofang.setInterpolator(DecelerateInterpolator())
+  animatorSetsuofang.play(scaleX).with(scaleY);
+  animatorSetsuofang.start()
+end
+--调用方法
+--点击监听放到布局控件里
+onTouchListener=点击监听,--动画效果
+】】
+《《递归搜索文件》》
+【【require "import"
+--递归搜索文件
+function find(catalog,name)
+  local n=0
+  local t=os.clock()
+  local ret={}
+  require "import"
+  import "java.io.File" 
+  import "java.lang.String"
+  function FindFile(catalog,name)
+    local name=tostring(name)
+    local ls=catalog.listFiles() or File{}
+    for 次数=0,#ls-1 do
+      --local 目录=tostring(ls[次数])
+      local f=ls[次数]
+      if f.isDirectory() then--如果是文件夹则继续匹配
+        FindFile(f,name)
+      else--如果是文件则
+        n=n+1
+        if n%1000==0 then
+          --print(n,os.clock()-t)
+        end
+        local nm=f.Name
+        if string.find(nm,name) then
+          --thread(insert,目录)
+          table.insert(ret,nm)
+          print(nm)
+        end
+      end
+      luajava.clear(f)
+    end
+  end
+  FindFile(catalog,name)
+  print("ok",n,#ret)
+end
+import "java.io.File"
+catalog=File("sdcard/")
+name=".j?pn?g"
+--task(find,catalog,name,print)
+thread(find,catalog,name)
+】】
+《《调用系统下载》》
+【【--导入包
+import "android.content.Context"
+import "android.net.Uri"
+--调用系统下载
+downloadManager=activity.getSystemService(Context.DOWNLOAD_SERVICE);
+url=Uri.parse("绝对下载链接");
+request=DownloadManager.Request(url);
+request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE|DownloadManager.Request.NETWORK_WIFI);
+request.setDestinationInExternalPublicDir("目录名，可以是Download","下载的文件名");
+request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+downloadManager.enqueue(request);
+】】
+《《安装APK》》
+【【import "android.content.*" 
+import "android.net.*" 
+--安装APK
+intent = Intent(Intent.ACTION_VIEW); 
+intent.setDataAndType(Uri.parse("file:///sdcard/jc.apk"), "application/vnd.android.package-archive"); 
+intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+activity.startActivity(intent); 
+】】
+《《Zip解压》》
+【【ZipUtil.unzip("ZIP路径","解压到的路径")
+--另一种Java方法
+import "java.io.FileOutputStream"
+import "java.util.zip.ZipFile"
+import "java.io.File"
+zipfile = "/sdcard/压缩包.zip"--压缩文件路径和文件名
+sdpath = "/sdcard/文件.lua"--解压后路径和文件名
+zipfilepath = "内容.lua"--需要解压的文件名
+function unzip(zippath , outfilepath , filename)
+  local time=os.clock()
+  task(function(zippath,outfilepath,filename)
+    require "import"
+    import "java.util.zip.*"
+    import "java.io.*"
+    local file = File(zippath)
+    local outFile = File(outfilepath)
+    local zipFile = ZipFile(file)
+    local entry = zipFile.getEntry(filename)
+    local input = zipFile.getInputStream(entry)
+    local output = FileOutputStream(outFile)
+    local byte=byte[entry.getSize()]
+    local temp=input.read(byte)
+    while temp ~= -1 do
+      output.write(byte)
+      temp=input.read(byte)
+    end
+    input.close()
+    output.close()
+  end,zippath,outfilepath,filename,
+  function()
+    print("解压完成，耗时 "..os.clock()-time.." s")
+  end)
+end
+unzip(zipfile,sdpath,zipfilepath)
+】】
+《《PopupWindow弹出窗口》》
+【【--弹出窗口
+pos=PopupWindow(activity)--创建PopWindow
+pos.setContentView(loadlayout(布局))--设置布局
+pos.setWidth(-1) --设置显示宽度
+pos.setHeight(-1) --设置显示高度
+pos.setFocusable(true)--设置可获得焦点
+pos.setBackgroundDrawable(ColorDrawable(0x00000000))
+pos.setOutsideTouchable(false)
+pos.showAtLocation(view,0,0,0)
+】】
+《《popupMenu弹出菜单》》
+【【--popupMenu弹出菜单
+pop=PopupMenu(activity,view)
+menu=pop.Menu
+menu.add("项目1").onMenuItemClick=function(a)
+end
+menu.add("项目2").onMenuItemClick=function(a)
+end
+pop.show()
+】】
+《《监听滑动窗体》》
+【【local kuan=356/1
+--监听滑动窗体
+滑动控件ID.setOnPageChangeListener(PageView.OnPageChangeListener{
+  onPageScrolled=function(a,b,c)
+    if a==0 then
+      hhh=0
+     elseif a==1 then
+      hhh=1
+     elseif a==2 then
+      hhh=2
+     elseif a==3 then
+      hhh=3
+    end
+    --打印当前滑动页面
+  end})
+】】
+《《修改按钮颜色》》
+【【import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+--修改按钮颜色
+button.getBackground().setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+--修改编辑框颜色
+edittext.getBackground().setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP));
+--修改Switch颜色
+switch.ThumbDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP));
+switch.TrackDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+--修改ProgressBar颜色
+progressbar.IndeterminateDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+--修改SeekBar滑条颜色
+seekbar.ProgressDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+--修改SeekBar滑块颜色
+seekbar.Thumb.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+】】
+《《timer定时器》》
+【【
+--timer定时器
+t=timer(function()
+  --事件
+end,延迟,间隔,初始化)
+--暂停timer定时器
+t.Enable=false
+--启动timer定时器
+t.Enable=true
+--Ticker定时器
+ti=Ticker()
+ti.Period=间隔
+ti.onTick=function()
+  --事件
+end
+--启动Ticker定时器
+ti.start()
+--停止Ticker定时器
+ti.stop()
+】】
+《《防止网页弹出对话框》》
+【【--如何防止网页弹出对话框
+--带上WebView控件
+import 'android.webkit.WebView'
+浏览器控件ID.addJavascriptInterface({},'alert')
+】】
+《《取文件名》》
+【【function 取文件名(path)
+  return path:match(".+/(.+)$")
+end
+function 取文件名无后缀(path)
+  return path:match(".+/(.+)%..+$")
+end
+print(取文件名("/com/mukapp/top/muk.lua"))
+print(取文件名无后缀("/com/mukapp/top/muk.lua"))
+】】
+《《获取文件类型》》
+【【--获取文件类型
+function GetFileMime(name)
+  import "android.webkit.MimeTypeMap"
+  ExtensionName=tostring(name):match("%.(.+)")
+  Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+  return tostring(Mime)
+end
+print(GetFileMime("/sdcard/a.png"))
+】】
+《《获取文件字节》》
+【【--获取文件字节
+import "java.io.File"--导入File类
+File(路径).length()
+】】
+《《获取文件修改时间》》
+【【--获取文件修改时间
+function GetFilelastTime(path)
+  f = File(path); 
+  cal = Calendar.getInstance();
+  time = f.lastModified()
+  cal.setTimeInMillis(time); 
+  return cal.getTime().toLocaleString()
+end
+】】
+《《获取文件大小》》
+【【--获取文件大小
+function GetFileSize(path)
+  import "java.io.File"
+  import "android.text.format.Formatter"
+  size=File(tostring(path)).length()
+  Sizes=Formatter.formatFileSize(activity, size)
+  return Sizes
+end
+】】
+《《获取文件名称》》
+【【--获取文件名称
+import "java.io.File"--导入File类
+File(路径).getName()
+】】
+《《获取文件列表》》
+【【--获取文件列表
+import("java.io.File")
+luajava.astable(File(文件夹路径).listFiles())
+】】
+《《替换文件字符串》》
+【【--替换文件字符串
+function 替换文件字符串(路径,要替换的字符串,替换成的字符串)
+  if 路径 then
+    路径=tostring(路径)
+    内容=io.open(路径):read("*a")
+    io.open(路径,"w+"):write(tostring(内容:gsub(要替换的字符串,替换成的字符串))):close()
+  else
+    return false
+  end
+end
+】】
+《《删除文件或文件夹》》
+【【--删除文件或文件夹
+--使用File类
+import "java.io.File"--导入File类
+File(文件路径).delete()
+--使用os方法
+os.remove (filename)
+】】
+《《按行读取文件》》
+【【--按行读取文件
+for c in io.lines(文件路径) do
+  print(c)
+end
+】】
+《《写入文件创建路经》》
+【【--写入文件创建路经
+function 写入文件(路径,内容)
+  import "java.io.File"
+  f=File(tostring(File(tostring(路径)).getParentFile())).mkdirs()
+  io.open(tostring(路径),"w"):write(tostring(内容)):close()
+end
+】】
+《《写入文件》》
+【【--写入文件
+io.open(文件路径,"w"):write("内容"):close()
+】】
+《《更新文件》》
+【【--更新文件
+io.open(文件路径,"w+"):write("更新的内容"):close()
+】】
+《《追加更新文件》》
+【【--追加更新文件
+io.open(文件路径,"a+"):write("更新的内容"):close()
+】】
+《《创建新文件侠》》
+【【--创建新文件侠
+--使用File类
+import "java.io.File"--导入File类
+File(文件夹路径).mkdir()
+--创建多级文件夹
+File(文件夹路径).mkdirs()
+--shell
+os.execute('mkdir '..文件夹路径)
+】】
+《《创建新文件》》
+【【--创建新文件
+--使用File类
+import "java.io.File"--导入File类
+File(文件路径).createNewFile()
+--使用io库
+io.open("/sdcard/aaaa", 'w')
+】】
+《《全局Js删除元素》》
+【【
+--全局Js删除元素
+config.global_js=([[var remove=n=>{n.split(",").forEach(v=>{if(v.indexOf("@ID(")==0){document.getElementById(v.substring(4,v.length-1)).style.display="none"}else{for(let e of document.getElementsByClassName(v))e.style.display="none"}})}
+remove("这里填写元素名称，带有@ID的排在最后")]])--全局Js
+--设置UA
+webView.settings.setUserAgentString([[UCWEB/2.0 (MIDP-2.0; U; Adr 9.0.0) UCBrowser U2/1.0.0 Gecko/63.0 Firefox/63.0 iPhone/7.1 SearchCraft/2.8.2 baiduboxapp/3.2.5.10 BingWeb/9.1 ALiSearchApp/2.4]])
+--加载网页
+加载网页("填写网页链接")
+】】
+《《本地网页控制》》
+【【
+--网页控制,域名填写 1 保存即可
+config.web_control[1].url=([[输入域名]])--网址域名
+config.web_control[1].remove_element=([[输入元素]])--删除元素
+config.web_control[1].js=([[输入Js代码]])--加载Js
+--网页控制,域名填写 2 保存即可、以此类推
+config.web_control[2].url=([[输入域名]])--网址域名
+config.web_control[2].remove_element=([[输入元素]])--删除元素
+config.web_control[2].js=([[输入Js代码]])--加载Js
+--全局Js
+config.global_js=([[输入Js代码]])--全局Js
+】】
+《《远程网页控制》》
+【【
+--远程网页控制
+Http.get("填写讯飞语记链接",nil,nil,nil,function(code,content)
+  if (code==200) then--判断网络链接
+    --截取范围
+    链接失败=content:match([[id="content">
+<p>(.-)</div>
+<div class=]])
+    --过滤字符
+    网页过滤=链接失败:gsub("&lt;","<"):gsub("&gt;",">"):gsub([[&nbsp; ]],""):gsub("&nbsp;",""):gsub("amp;",""):gsub("</p><p>","\n"):gsub("<br/>","")
+    --填写域名
+    config.web_control[1].url=网页过滤:match("《一号域名》(.-)《一号域名》")
+    --删除元素
+    config.web_control[1].remove_element=网页过滤:match("《一号元素》(.-)《一号元素》")
+    --JS代码
+    config.web_control[1].js=网页过滤:match("《一号JS》(.-)《一号JS》")
+    --全局JS
+    config.global_js=网页过滤:match("《全局》(.-)《全局》")
+  else--网络链接失败事件
+    print("错误，网络链接失败！")
+  end--判断网络链接结束
+end)--讯飞语记远程结束
+--网页控制 域名填写 1 再按保存 即可
+--以此类推，如果想控制多个网页
+--则写 二号域名 二号元素 二号JS 、 全局只需一个
+--[1] 也要改成 [2]
+--然后 网页控制 域名填写 2 再按保存 即可
+--以此类推。
+】】
+《《fas 调用系统浏览器解析视频》》
+【【function 浏览器解析(链接)
+import "android.content.Intent"
+import "android.net.Uri"
+activity.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(链接)))
+end
+--调用方法
+浏览器解析("填写解析接口"..webView.getUrl())】】
+《《赋值对话框单击阴影不消失》》
+【【填写赋值ID.setCanceledOnTouchOutside(faslse)】】
+《《添加背景音乐》》
+【【import "android.media.MediaPlayer"
+mediaPlayer = MediaPlayer()
+mediaPlayer.reset()--初始化参数
+--设置播放资源
+mediaPlayer.setDataSource("https://pan.cccyun.cc/down.php/d1ab975c254a20759f1f5cccbb389214.mp3")
+mediaPlayer.prepare()--开始缓冲资源
+--是否循环播放该资源
+mediaPlayer.setLooping(true)--循环播放 --单次播放则改为 faslse
+mediaPlayer.isPlaying()--是否在播放
+task(1000,function()--延迟一秒
+mediaPlayer.start()--播放
+end)
+--mediaPlayer.pause()--暂停播放
+--mediaPlayer.stop()--停止播放
+】】
+《《后台强制关闭事件》》
+【【function onPause()
+--后台强制关闭时,执行的事件
+end】】
+《《判断是否安装》》
+【【if pcall(function() activity.getPackageManager().getPackageInfo("填写包名",0) end) then
+print("安装了")
+else
+print("没安装")
+end】】
+《《监听编辑框》》
+【【edit.addTextChangedListener({
+onTextChanged=function()
+print("您正在输入: "..edit.Text)--这里加入其他事件，比如可以判断是否为网址等
+end
+})】】
+《《手机息屏事件/后台运行事件》》
+【【function onStop()
+print("执行的事件")
+end】】
+《《读取本地文件》》
+【【"file://"..activity.getLuaDir().."/xxx.mp4或mp3或apk或html等等"】】
+《《弹出菜单列表》》
+【【pop=PopupMenu(activity,ID)--弹出ID坐标
+menu=pop.Menu
+menu.add("选项名称1").onMenuItemClick=function(a)
+print("选项名称1执行的事件")
+end
+menu.add("选项名称2").onMenuItemClick=function(a)
+print("选项名称2执行的事件")
+end
+menu.add("选项名称3").onMenuItemClick=function(a)
+print("选项名称3执行的事件")
+end
+pop.show()--显示】】
+《《自定义打印消息坐标》》
+【【function print(文本)
+  context=activity.getApplicationContext()
+  duration=Toast.LENGTH_SHORT
+  toast=Toast.makeText(context,文本,duration)
+  toast.setGravity(Gravity.TOP,0,300)--Gravity.TOP,1,40)--设置位置
+  toast.show()
+end
+--调用方法
+print("我爱你")】】
+
+
+《《轻破解》》
+【【对话框()
+.设置消息(dump(config))
+.设置积极按钮("确定")
+.显示()】】
+《《取本地时间》》
+【【os.date("%Y-%m-%d %H:%M:%S")】】
+《《判断版本》》
+【【if 远端 > 本地 then
+--如果 远端 >大于 本地 执行的事件
+else
+--如果远端 <小于 本地 执行的事件
+end】】
+《《判断赋值开关》》
+【【if kaig==nil then
+弹出消息("开启，执行的事件")
+kaig=0
+else
+弹出消息("关闭，执行的事件")
+kaig=nil
+end】】
+《《折叠列表事件》》
+【【--主列表
+填写ID.onGroupClick=function(l,v,p,s)
+print(v.Text..'主列表')
+end
+--子列表
+填写ID.onChildClick=function(l,v,g,c)
+print(v.Text..'子列表')
+end】】
+《《加载网页》》
+【【填写浏览ID.loadUrl("链接")】】
+《《刷新网页》》
+【【填写浏览ID.reload()】】
+《《网页前进》》
+【【填写浏览ID.goForward()】】
+《《网页后退》》
+【【填写浏览ID.goBack()】】
+《《设置是否支持JS》》
+【【浏览ID.getSettings().setJavaScriptEnabled(true)--支持 --faslse不支持】】
+《《加载JS代码》》
+【【填写浏览ID.loadUrl([[javascript:dataBox('填写代码');]])】】
+《《返回网页底部》》
+【【加载Js([[javascript:document.getElementsByTagName('BODY')[0].scrollTop=document.getElementsByTagName('BODY')[0].scrollHeight;]])】】
+《《更换转换UA》》
+【【填写浏览ID.settings.setUserAgentString('填写UA代码')】】
+《《取当前网页图标》》
+【【填写浏览ID.getfasvicon()】】
+《《取网页加载进度》》
+【【填写浏览ID.getProgress()】】
+《《系统音量调节》》
+【【import "android.media.AudioManager"
+mAudioManager=activity.getSystemService(Context.AUDIO_SERVICE);
+mVolume=mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,100,0);--100音量，音量调节窗口隐藏为0，显示则1】】
+《《创建函数事件》》
+【【function 填写ID()
+end】】
+《《单击事件》》
+【【填写ID.onClick=function()
+end】】
+《《长按事件》》
+【【填写ID.onLongClick=function()
+--执行的事件
+return true
+end】】
+《《延时事件》》
+【【task(1000,function()--1000毫秒=1秒
+end)】】
+《《触摸事件》》
+【【填写ID.onTouch=function()
+end】】
+《《输入法回车键确定事件》》
+【【imeOptions='actionSearch';--输入法确定按钮
+--↑编辑框控件，属性加入此代码
+--输入法回车键确定事件
+import"android.graphics.Paint"
+edit.setOnKeyListener({
+onKey=function(v,keyCode,event)
+if (KeyEvent.KEYCODE_ENTER == keyCode and KeyEvent.ACTION_DOWN == event.getAction()) then
+if edit.text=="" then
+Toast.makeText(activity,"错误，您还没有输入内容！",Toast.LENGTH_SHORT).show()
+else
+--填写执行的事件
+end
+return true;
+else
+return faslse;
+end
+end
+})】】
+《《创建文件夹/文件》》
+【【import"java.io.File"
+if File("sdcard/测试文件/文本.txt").exists() then
+--文件存在事件
+else File("/sdcard/测试文件").mkdir()--不存在 则创建
+io.open("sdcard/测试文件/文本.txt",'w')
+io.open("sdcard/测试文件/文本.txt","w+"):write("中国开发者"):close()
+end】】
+《《读取文件信息》》
+【【import"java.io.File"
+读取目录=io.open("sdcard/测试文件/文本.txt"):read("*a")
+内容=读取目录:match("中国开发者QQ：(.-)\n")】】
+《《修改文件内容并保存》》
+【【import"java.io.File"
+io.open("sdcard/测试文件/文本.txt","w+"):write("内容"):close()】】
+《《写入文件》》
+【【function 写入文件(路径,内容)
+import"java.io.File"
+f=File(tostring(File(tostring(路径)).getParentFile())).mkdirs()
+io.open(tostring(路径),"w"):write(tostring(内容)):close()
+end
+--调用方法
+写入文件("sdcard/Download/文件名称.txt","文件写入的内容")】】
+《《解压apk内的压缩包》》
+【【zip=this.getFilesDir().toString().."/drawable/文件名称.zip"
+ZipUtil.unzip(zip,"/storage/emulated/0/")】】
+《《压缩/解压zip》》
+【【--压缩成zip：要压缩的文件目录，压缩到文件目录
+ZipUtil.zip("sdcard/文件夹名称/文件.apk","/storage/emulated/0/")
+--解压zip：要解压的文件目录，解压到文件目录
+ZipUtil.unzip("sdcard/文件夹名称/压缩包.zip","/storage/emulated/0/")】】
+《《弹出消息布局》》
+【【function 弹出消息(文本)
+tcxx={
+LinearLayout;--线性布局
+orientation='vertical';--布局方向
+layout_width='fill';--布局宽度
+layout_height='fill';--布局高度
+{
+CardView;--卡片控件
+layout_width='wrap';--卡片宽度
+layout_height='wrap';--卡片高度
+CardBackgroundColor='#aaeeeeee';--卡片颜色
+elevation=0;--阴影属性
+radius='19dp';--卡片圆角
+{
+TextView;
+layout_width="wrap";--布局宽度
+layout_height="wrap";--布局高度
+background="#cc000000";--背景颜色
+padding="8dp";--布局填充
+textSize="15sp";--文字大小
+TextColor="#ffeeeeee";--文字颜色
+gravity="center";--布局居中
+id="wenzi";--控件ID
+};
+};
+};
+local toast=Toast.makeText(activity,"文本",Toast.LENGTH_SHORT).setView(loadlayout(tcxx))
+toast.setGravity(Gravity.BOTTOM,0,120)
+wenzi.Text=tostring(""..文本.."")
+toast.show()
+end
+--调用方法
+弹出消息("文本内容")】】
+《《赋值框关闭事件》》
+【【dialog1.OnDismissListener=function()
+if dialog1.dismiss() then--如果 赋值框被关闭
+--执行事件
+if edit.Text ~= "" then--判断 编辑框内容是否为空
+弹出消息("有输入反馈")--有内容执行的事件
+else--为空执行的事件
+弹出消息("没有输入反馈")--没有内容执行的事件
+end--判断 结束
+end--如果 结束
+end--关闭事件 结束】】
+《《缩放动画》》
+【【function 缩放动画(控件)
+import "android.view.animation.*"
+控件.startAnimation(ScaleAnimation(0.0,1.0,0.0,1.0,1,0.5,1,0.5).setDuration(200))
+end
+--调用方法
+缩放动画(填写控件ID)】】
+《《单击缩放动画》》
+【【单击缩放={
+onTouch=function (v,e)
+if e.action==0 then
+设置缩放(v,1,0.95,250)
+else
+设置缩放(v,0.90,1,250)
+end
+end}
+function 设置缩放(view,startscale,endscale,time)
+local animatorSetsuofasng = AnimatorSet()
+local scaleX=ObjectAnimator.ofFloat(view,"scaleX",{startscale,endscale})
+local scaleY=ObjectAnimator.ofFloat(view,"scaleY",{startscale,endscale})
+animatorSetsuofasng.setDuration(time)
+animatorSetsuofasng.setInterpolator(DecelerateInterpolator())
+animatorSetsuofasng.play(scaleX).with(scaleY);
+animatorSetsuofasng.start()
+end
+--调用方法
+填写控件ID.onTouchListener=单击缩放;】】
+《《单击返回键退出》》
+【【function onKeyDown(code)
+if code==4 then
+activity.finish()--退出页面
+return true
+end
+end】】
+《《双击返回键退出》》
+【【退出=0
+function onKeyDown(code,event)
+if string.find(tostring(event),"KEYCODE_BACK") ~= nil then
+if 退出+2 > tonumber(os.time()) then
+activity.finish()--退出页面
+else
+Toast.makeText(activity,"双击返回键退出",Toast.LENGTH_SHORT).show()
+退出=tonumber(os.time())
+end
+return true
+end
+end】】
+《《指定浏览器打开链接》》
+【【function 指定浏览器打开(包名,链接)
+import"android.os.*"
+import"android.widget.*"
+import"android.view.*"
+import"android.text.*"
+import"android.content.*"
+intent=Intent("android.intent.action.VIEW")
+intent.setPackage(包名)
+intent.setData(Uri.parse(链接))
+this.startActivity(intent)
+end
+--调用方法
+指定浏览器打开("填写程序包名","填写网页链接")】】
+《《重新启动程序》》
+【【if pcall(function() activity.getPackageManager().getPackageInfo("填写程序包名",0) end) then
+import "android.content.*"
+intent = Intent()
+componentName = ComponentName("填写程序包名","com.androlua.Welcome")
+intent.setComponent(componentName)
+activity.startActivity(intent)
+end】】
+《《调用其他程序打开》》
+【【function OpenFile(path)
+import "android.webkit.MimeTypeMap"
+import "android.content.Intent"
+import "android.net.Uri"
+import "java.io.File"
+FileName=tostring(File(path).Name)
+ExtensionName=FileName:match("%.(.+)")
+Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+if Mime then
+intent = Intent();
+intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+intent.setAction(Intent.ACTION_VIEW);
+intent.setDataAndType(Uri.fromFile(File(path)), Mime);
+activity.startActivity(intent);
+else
+Toastc("找不到可以用来打开此文件的程序")
+end
+end
+OpenFile("/storage/emulated/0/Download/这是个示例.jpg")】】
+《《调用程序应用商店给予好评》》
+【【对话框()
+.设置标题("提示")
+.设置消息("小哥哥，能不能给伦家一个好评呀~")
+.设置积极按钮("点击好评",function()
+intent=Intent("android.intent.action.VIEW")
+intent.setPackage("com.coolapk.market")--应用商店包名
+intent.setData(Uri.parse( "market://details?id=填写你的程序包名"))--id=后面是自己的程序包名
+intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK)
+this.startActivity(intent)
+弹出消息("感谢支持！")
+end)
+.设置中立按钮("取消",function()
+print("你真无情")
+end)
+.显示()】】
+《《调用系统创建任务下载》》
+【【function 创建下载(直链)
+import "android.content.Intent"
+import "android.net.Uri"
+intent = Intent(Intent.ACTION_VIEW)
+intent.setDataAndType(Uri.parse(直链),"audio")
+this.startActivity(intent)
+end
+--调用方法
+创建下载("http://pan.cccyun.cc/view.php/fe2db3c644322de831482bf60ca57ef3.png")】】
+《《调用系统播放音乐》》
+【【import "android.content.Intent"
+import "android.net.Uri"
+intent =Intent(Intent.ACTION_VIEW)
+uri = Uri.parse("file:///sdcard/fas助手/填写歌名.mp3")--填写路径或直链
+intent.setDataAndType(uri,"audio/mp3")
+this.startActivity(intent)】】
+《《调用系统播放视频》》
+【【function 系统播放器(直链)
+import "android.content.Intent"
+import "android.net.Uri"
+intent = Intent(Intent.ACTION_VIEW)
+intent.setDataAndType(Uri.parse(直链),"video/mp4")
+activity.startActivity(intent)
+end
+--调用方法
+系统播放器("填写视频直链")】】
+《《控件圆角》》
+【【function 控件圆角(控件,颜色,圆角)
+import "android.graphics.drawable.GradientDrawable"
+drawable = GradientDrawable()
+drawable.setShape(GradientDrawable.RECTANGLE)
+drawable.setColor(颜色)
+drawable.setCornerRadii({圆角,圆角,圆角,圆角,圆角,圆角,圆角,圆角})
+控件.setBackgroundDrawable(drawable)
+end
+--调用方法
+控件圆角(填写ID,0xFF6AAFE6,360)】】
+《《自定义圆角》》
+【【function 自定义圆角(控件,颜色,圆角1,圆角2,圆角3,圆角4)
+import "android.graphics.drawable.GradientDrawable"
+drawable = GradientDrawable()
+drawable.setShape(GradientDrawable.RECTANGLE
+drawable.setColor(颜色)
+drawable.setCornerRadii({圆角1,圆角1,圆角2,圆角2,圆角3,圆角3,圆角4,圆角4})
+控件.setBackgroundDrawable(drawable)
+end
+--调用方法
+自定义圆角(填写控件ID,0xFF177cb0,360,0,160,0)】】
+《《沉浸状态栏》》
+【【if Build.VERSION.SDK_INT >=21 then--系统SDK21以上生效
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).setStatusBarColor(0xff4285f4)
+end
+if Build.VERSION.SDK_INT >=19 then--系统SDK19以上生效
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+end】】
+《《开关控件颜色》》
+【【开关ID.ThumbDrawable.setColorFilter(PorterDuffColorFilter(0xffff0000,PorterDuff.Mode.SRC_ATOP))--开关控件颜色】】
+《《设置拖动条滑条颜色》》
+【【import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+拖动条ID.ProgressDrawable.setColorFilter(PorterDuffColorFilter(0xffff0000,PorterDuff.Mode.SRC_ATOP))】】
+《《设置拖动条圆形滑条颜色》》
+【【import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+拖动条ID.Thumb.setColorFilter(PorterDuffColorFilter(0xff0000ff,PorterDuff.Mode.SRC_ATOP))】】
+《《拖动条值》》
+【【拖动条ID.setProgress(50)--拖动条值】】
+《《进度条值》》
+【【进度条ID.incrementProgressBy(50)--进度条值】】
+《《判断开关控件状态》》
+【【控件ID.isChecked()】】
+《《勾选/选择复选开关》》
+【【控件ID.checked=true】】
+
+《《状态栏颜色》》
+【【activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).setStatusBarColor(0xff4285f4)】】
+《《显示状态栏》》
+【【import "android.view.WindowManager"
+activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)】】
+《《隐藏状态栏》》
+【【import "android.view.WindowManager"
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)】】
+《《设置底部虚拟按键沉浸》》
+【【activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)】】
+《《设置底部导航栏颜色》》
+【【activity.getWindow().setNavigationBarColor(Color.parseColor("#ffff0000"))】】
+《《联系QQ号》》
+【【function 联系QQ(账号)
+import "android.content.Intent"
+import "android.net.Uri"
+activity.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..账号)))
+end
+--调用方法
+联系QQ(782268899)】】
+《《添加QQ群》》
+【【function 加QQ群(群号)
+import "android.content.Intent"
+import "android.net.Uri"
+activity.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("mqqapi://card/show_pslcard?src_type=internal&version=1&uin="..群号.."&card_type=group&source=qrcode")))
+end
+--调用方法
+加QQ群(114733348)】】
+《《查看QQ资料》》
+【【function 查看QQ资料(账号)
+import "android.content.Intent"
+import "android.net.Uri"
+this.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("mqqapi://card/show_pslcard?uin="..账号))
+end
+--调用方法
+查看QQ资料(782268899)】】
+《《隐藏控件》》
+【【填写控件ID.setVisibility(View.GONE)】】
+《《显示控件》》
+【【填写控件ID.setVisibility(View.VISIBLE)】】
+《《运行lua+txt》》
+【【dofile(tostring("/storage/emulated/0/填写文件夹名称/填写文件名.lua"))】】
+《《调用系统浏览器搜索内容》》
+【【function 浏览器搜索(文本)
+import "android.content.Intent"
+import "android.app.SearchManager"
+intent = Intent()
+intent.setAction(Intent.ACTION_WEB_SEARCH)
+intent.putExtra(SearchManager.QUERY,文本)
+activity.startActivity(intent)
+end
+--调用方法
+浏览器搜索("马云是谁？")】】
+《《调用系统浏览器打开链接》》
+【【function 浏览器打开(链接)
+import "android.content.Intent"
+import "android.net.Uri"
+viewIntent = Intent("android.intent.action.VIEW",Uri.parse(链接))
+activity.startActivity(viewIntent)
+end
+--调用方法
+浏览器打开("http://www.lanzou.com/")】】
+《《分享文本内容》》
+【【function 分享文本(标题,内容)
+intent=Intent(Intent.ACTION_SEND)
+intent.setType("text/plain")
+intent.putExtra(Intent.EXTRA_SUBJECT,"分享")
+intent.putExtra(Intent.EXTRA_TEXT,内容)
+intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+activity.startActivity(Intent.createChooser(intent,标题))
+end
+--调用方法
+分享文本("填写标题","填写内容")】】
+《《分享文件》》
+【【function 分享文件(标题,路径)
+import "android.webkit.MimeTypeMap"
+import "android.content.Intent"
+import "android.net.Uri"
+import "java.io.File"
+FileName=tostring(File(路径).Name)
+ExtensionName=FileName:match("%.(.+)")
+Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+intent=Intent()
+intent.setAction(Intent.ACTION_SEND)
+intent.setType(Mime)
+file=File(路径)
+uri=Uri.fromFile(file)
+intent.putExtra(Intent.EXTRA_STREAM,uri)
+intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+activity.startActivity(Intent.createChooser(intent,标题))
+end
+--调用方法
+分享文件("填写标题","/storage/emulated/0/Download/文件名称.apk")】】
+《《复制文本》》
+【【import "android.content.*"
+activity.getSystemService(Context.CLIPBOARD_SERVICE).setText("填写文本内容")】】
+《《删除文件》》
+【【os.execute("rm -r sdcard/文件夹名称/文件名.apk")】】
+《《打开系统设置》》
+【【import "android.content.Intent"
+import "android.provider.Settings"
+activity.startActivity(Intent(Settings.ACTION_SETTINGS))】】
+《《打开应用程序》》
+【【function 打开程序(包名)
+import "android.content.Intent"
+import "android.content.pm.PackageManager"
+manager = activity.getPackageManager()
+open = manager.getLaunchIntentForPackage(包名)
+this.startActivity(open)
+end
+--调用方法
+打开程序("填写程序包名")】】
+《《卸载应用程序》》
+【【function 卸载程序(包名)
+import "android.content.Intent"
+import "android.net.Uri"
+intent = Intent(Intent.ACTION_DELETE,Uri.parse("package:"..包名))
+activity.startActivity(intent)
+end
+--调用方法
+卸载程序("填写程序包名")】】
+《《安装应用程序》》
+【【function 安装程序(路径)
+import "android.net.*"
+import "android.content.*"
+intent = Intent(Intent.ACTION_VIEW)
+intent.setDataAndType(Uri.parse("file:///sdcard/"..路径),"application/vnd.android.package-archive")
+intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+activity.startActivity(intent)
+end
+--调用方法
+安装程序("文件夹名称/文件名.apk")】】
+《《隐藏输入法》》
+【【function 隐藏输入法(控件)
+import "android.view.inputmethod.InputMethodManager"
+activity.getSystemService(Context.INPUT_METHOD_SERVICE).hideSoftInputFromWindow(控件.getWindowToken(),0)
+end
+--调用方法
+隐藏输入法(填写编辑框控件ID)】】
+《《显示输入法》》
+【【function 显示输入法(控件)
+import "android.view.inputmethod.InputMethodManager"
+activity.getSystemService(Context.INPUT_METHOD_SERVICE).showSoftInput(控件,0)
+end
+--调用方法
+显示输入法(填写编辑框控件ID)】】
+《《打开输入法》》
+【【function 打开输入法(控件)
+import "android.widget.*"
+import "android.view.*"
+import "android.content.*"
+import "android.view.inputmethod.InputMethodManager"
+srfas = 控件.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)
+srfas.toggleSoftInput(0,InputMethodManager.HIDE_NOT_ALWAYS)
+local jiaodian=控件--设置焦点到编辑框
+jiaodian.setFocusable(true)
+jiaodian.setFocusableInTouchMode(true)
+jiaodian.requestFocus()
+jiaodian.requestFocusFromTouch()
+end
+--调用方法
+打开输入法(edit)】】
+《《取程序版本信息》》
+【【版本名=this.getPackageManager().getApplicationLabel(this.getPackageManager().getApplicationInfo(this.getPackageName(),0))
+版本号=tostring(this.getPackageManager().getPackageInfo(this.getPackageName(),((782268899/2/2-8183)/10000-6-231)/9).versionName)】】
+《《隐藏时间》》
+【【import "android.view.WindowManager"
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)】】
+《《显示时间》》
+【【import "android.view.WindowManager"
+activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)】】
+《《暗色主题》》
+【【this.setTheme(android.R.style.Theme_Material)】】
+《《亮色主题》》
+【【this.setTheme(android.R.style.Theme_Material_Light)】】
+《《光标颜色》》
+【【function 光标颜色(控件,颜色)
+import "android.graphics.*
+local mEditorField=TextView.getDeclaredField('mEditor')
+mEditorField.setAccessible(true)
+local mEditor = mEditorField.get(控件)
+local field = Editor.getDeclaredField('mCursorDrawable')
+field.setAccessible(true)
+local mCursorDrawable=field.get(mEditor)
+local mccdf = TextView.getDeclaredField('mCursorDrawableRes')
+mccdf.setAccessible(true)
+local mccd = activity.getResources().getDrawable(mccdf.getInt(控件))
+mccd.setColorFilter(PorterDuffColorFilter(颜色,PorterDuff.Mode.SRC_ATOP))
+mCursorDrawable[0] = mccd
+mCursorDrawable[1] = mccd
+end
+--调用方法
+光标颜色(填写编辑框控件ID,0xffff0000)】】
+《《打开微信扫一扫》》
+【【function 微信扫一扫()
+import "android.content.Intent"
+import "android.content.ComponentName"
+intent = Intent()
+intent.setComponent(ComponentName("com.tencent.mm","com.tencent.mm.ui.LauncherUI"))
+intent.putExtra("LauncherUI.From.Scaner.Shortcut",true)
+intent.setFlags(335544320)
+intent.setAction("android.intent.action.VIEW")
+activity.startActivity(intent)
+end
+--调用方法
+微信扫一扫()】】
+《《打开支付宝扫一扫》》
+【【function 支付宝扫一扫()
+import "android.net.Uri"
+import "android.content.Intent"
+intent = Intent(Intent.ACTION_VIEW,Uri.parse("alipayqr://platformapi/startapp?saId=10000007"))
+activity.startActivity(intent)
+end
+--调用方法
+支付宝扫一扫()】】
+《《禁用系统截图功能》》
+【【this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE)】】
+《《发送邮件》》
+【【function 发送邮件(邮箱,标题,内容)
+import "android.content.Intent"
+i = Intent(Intent.ACTION_SEND)
+i.setType("message/rfc822")
+i.putExtra(Intent.EXTRA_EMAIL,{邮箱})
+i.putExtra(Intent.EXTRA_SUBJECT,标题)
+i.putExtra(Intent.EXTRA_TEXT,内容)
+activity.startActivity(Intent.createChooser(i,"Choice"))
+end
+--调用方法
+发送邮件("782268899@qq.com","填写标题","填写要发送的内容")】】
+《《反向输入法》》
+【【function 反向输入法()
+import "android.view.inputmethod.InputMethodManager"
+imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE)
+imm.toggleSoftInput(0,InputMethodManager.HIDE_NOT_ALWAYS)
+end
+--调用方法
+反向输入法()】】
+《《调用系统应用商店搜索》》
+【【function 商店搜索(包名)
+import "android.content.Intent"
+import "android.net.Uri"
+intent = Intent("android.intent.action.VIEW")
+intent.setData(Uri.parse("market://details?id="..包名))
+this.startActivity(intent)
+end
+--调用方法
+商店搜索("填写程序包名")】】
+
+《《禁止手势滑动》》
+【【
+-- 禁止手势滑动
+import "android.widget.DrawerLayout"
+ccch.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);】】
+
+《《清除图片缓存数据》》
+【【import "android.content.*"
+os.execute("rm -rf /sdcard/AndroLua/cache")】】
+《《清除影视缓存数据》》
+【【os.execute("rm -rf /data/data/"..this.packageName.."/cache/")
+os.execute("rm -rf /data/data/"..this.packageName.."/files/data/")】
+《《清除全部数据》》
+【【os.execute("rm -rf /data/data/"..this.packageName.."/cache/")
+os.execute("rm -rf /data/user/0/"..this.packageName.."/cache/")
+os.execute("rm -rf /data/data/"..this.packageName.."/files/data/")
+os.execute("rm -rf /data/user/0/"..this.packageName.."/files/data/")
+os.execute("rm -rf /sdcard/Android/data/"..this.packageName.."/files/VideoCache/main/")
+os.execute("rm -rf /storage/emulated/0/Android/data/"..this.packageName.."/files/VideoCache/main/")
+os.execute("pm clear "..this.packageName)】】
+《《程序后台运行》》
+【【import "android.content.Intent"
+intent = Intent()
+intent.setAction("android.intent.action.MAIN")
+intent.addCategory("android.intent.category.HOME")
+activity.startActivity(intent)】】
+《《打开侧滑栏自动隐藏输入法》》
+【【填写侧滑栏ID.DrawerListener={
+onDrawerSlide=function(v,i)
+--if i==1 then--如果侧滑栏完全展开后,再关闭输入法
+import "android.view.inputmethod.InputMethodManager"
+activity.getSystemService(Context.INPUT_METHOD_SERVICE).hideSoftInputFromWindow(填写编辑框ID.getWindowToken(),0)
+--end
+end
+}】】
+《《隐藏虚拟按键》》
+【【activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)】】
+《《单次隐藏虚拟按键》》
+【【activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)】】
+《《输入法影响布局》》
+【【activity.getWindow().setSoftInput
+Mode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)】】
+《《输入法不影响布局》》
+【【activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)】】
+《《固定屏幕方向》》
+【【activity.setRequestedOrientation(0)--横屏0--竖屏1】】
+《《自动感应屏幕方向》》
+【【import "android.content.pm.ActivityInfo"
+activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)】】
+《《关闭侧滑栏》》
+【【填写侧滑栏ID.closeDrawer(3)--左边3--右边5】】
+《《打开侧滑栏》》
+【【填写侧滑栏ID.openDrawer(3)--左边3--右边5】】
+《《关闭侧滑栏阴影》》
+【【填写侧滑栏ID.setScrimColor(0)】】
+《《设置视图路径》》
+【【import "android.graphics.Bitmapfasctory"
+填写图片控件ID.setImageBitmap(loadbitmap("填写图片路径"))】】
+《《设置图片颜色》》
+【【填写图片控件ID.setColorFilter(Color.parseColor("#ffff0000"))】】
+《《设置文本内容》》
+【【填写文本控件ID.setText("文本内容")】】
+《《设置文本大小》》
+【【填写文本控件ID.setTextSize(35)】】
+《《设置文本颜色》》
+【【填写文本控件ID.setTextColor(0xffff0000)】】
+《《设置斜体字》》
+【【import "android.graphics.*"
+填写文本控件ID.getPaint().setTextSkewX(-0.2)】】
+《《设置字体加粗》》
+【【import "android.graphics.Paint"
+填写文本控件ID.getPaint().setfaskeBoldText(true)】】
+《《设置中划线字体》》
+【【import "android.graphics.*"
+填写文本控件ID.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG)】】
+《《设置下划线字体》》
+【【import "android.graphics.*"
+填写文本控件ID.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG)】】
+《《设置字体风格》》
+【【import "android.graphics.Typefasce"
+填写文本控件ID.getPaint().setTypefasce(填写字体风格)
+--选择字体风格：
+Typefasce.DEfasULT--默认字体
+Typefasce.DEfasULT_BOLD--加粗字体
+Typefasce.MONOSPACE--monospace字体
+Typefasce.SANS_SERIF--sans字体
+Typefasce.SERIF--serif字体】】
+《《设置编辑框为空时的文本颜色》》
+【【填写编辑框控件ID.setHintTextColor(0xffff0000)】】
+《《设置控件背景颜色》》
+【【import "android.graphics.drawable.ColorDrawable"
+填写控件ID.setBackgroundColor(Color.parseColor("#ffff0000"))】】
+《《设置线性背景图片》》
+【【import "android.graphics.drawable.BitmapDrawable"
+填写控件ID.setBackground(BitmapDrawable(loadbitmap("填写图片路径")))】】
+《《设置线性背景颜色》》
+【【import "android.graphics.drawable.ColorDrawable"
+填写控件ID.setBackgroundDrawable(ColorDrawable(0xffff0000))】】
+《《发送短信》》
+【【function 发送短信(号码,内容)
+import "android.content.*"
+import "android.net.*"
+intent = Intent(Intent.ACTION_SENDTO,Uri.parse("smsto:"..号码))
+intent.putExtra("sms_body",内容)
+intent.setAction("android.intent.action.VIEW")
+activity.startActivity(intent)
+end
+--调用方法
+发送短信(15888888888,"今天约吗？")】】
+《《拨打电话》》
+【【function 拨打电话(号码)
+import "android.content.*"
+import "android.net.*"
+intent=Intent(Intent.ACTION_CALL,Uri.parse("tel:"..号码))
+intent.setAction("android.intent.action.VIEW")
+activity.startActivity(intent)
+end
+--调用方法
+拨打电话(10086)】】
+《《退出页面》》
+【【activity.finish()】】
+《《退出程序》》
+【【activity.finish()】】
+《《结束进程》》
+【【os.exit()】】
+《《加载aly布局》》
+【【activity.setContentView(loadlayout("layout"))】】
+《《Lua进入子页面》》
+【【activity.newActivity("Lua文件名",{参数,参数})】】
+《《传递参数》》
+【【标题str,内容str=...】】
+《《隐藏标题栏》》
+【【activity.ActionBar.hide()】】
+《《导入基本函数库》》
+【【require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "android.support.v7.widget.*"
+import "android.support.v4.widget.*"
+import "android.graphics.Typefasce"】】
+《《运行远程布局》》
+【【assert(loadstring(远端布局))()】】
+《《基本函数库》》
+【【require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"】】
+
+《《预备函数库》》
+【【import "android.support.v7.widget.*"
+import "android.support.v4.widget.*"
+import "android.support.v7.widget.CardView"--空白模板
+
+import "android.graphics.Typeface"--文字显示类型加粗
+import "android.view.WindowManager"--状态栏颜色
+import "android.graphics.Color"--低栏导航颜色
+import "android.content.Context"--显隐输入法
+
+import "android.content.res.ColorStateList"--波纹导入类
+import "android.graphics.drawable.GradientDrawable"--圆角导入类
+
+import "android.graphics.drawable.ColorDrawable"--窗口背景透明
+import "android.graphics.PorterDuffColorFilter"--加载条
+import "android.graphics.PorterDuff"--加载条
+
+import "android.graphics.BitmapFactory"--视图导入类
+
+import "java.io.*"--文件导入类
+import "java.io.File"】】
+
+《《打印消息》》
+【【print("文本内容")】】
+
+《《Toast消息》》
+【【Toast.makeText(activity,"文本内容",Toast.LENGTH_SHORT).show()】】
+
+《《Toast消息位置》》
+【【Toast.makeText(activity,"文本内容",Toast.LENGTH_LONG).setGravity(Gravity.CENTER,0,0).show()】】
+
+《《Toast图片消息》》
+【【图片路径=loadbitmap("/sdcard/xxx.png")
+toast=Toast.makeText(activity,"文本内容",Toast.LENGTH_LONG)
+toastView=toast.getView()
+imageCodeProject=ImageView(activity)
+imageCodeProject.setImageBitmap(图片路径)
+toastView.addView(imageCodeProject,0)
+toast.show()】】
+
+《《Toast布局消息》》
+【【布局赋值=loadlayout(布局名称)
+local toast=Toast.makeText(activity,"文本内容",Toast.LENGTH_SHORT).setView(布局赋值).show()】】
+
+《《控件单击事件》》
+【【控件ID.onClick=function()
+  print("控件单击事件")
+  return true
+end】】
+
+《《控件单击事件2》》
+【【function 控件ID.onClick()
+  print("控件单击事件2")
+end】】
+
+《《控件长按事件》》
+【【控件ID.onLongClick=function()
+  print("控件长按事件")
+  return true
+end】】
+
+《《控件长按事件2》》
+【【function 控件ID.onLongClick()
+  print("控件长按事件2")
+end】】
+
+《《适配单击事件》》
+【【适配控件ID.onItemClick=function(a,b)
+  print(b.Tag.控件ID.Text)
+  return true
+end】】
+
+《《适配长按事件》》
+【【适配控件ID.onItemLongClick=function(a,b)
+  print(b.Tag.控件ID.Text)
+  return true
+end】】
+
+《《监听编辑框事件》》
+【【编辑框ID.addTextChangedListener{
+  onTextChanged=function(a)
+    if a~="" then
+      print("监听编辑框事件:"..a.Text)
+    end
+  end,
+}】】
+
+《《列表下滑到最底事件》》
+【【list.setOnScrollListener{
+  onScrollStateChanged=function(l,s)
+    if list.getLastVisiblePosition()==list.getCount()-1 then
+      print("列表下滑到最底事件")
+    end
+  end,
+}】】
+
+
+《《延时事件》》
+【【task(1000,function()--1000毫秒=1秒
+  print("延时事件")
+end)】】
+
+《《窗口创建事件》》
+【【function onCreate()
+  print("窗口创建")
+end】】
+
+《《窗口回调事件》》
+【【function onActivityResult()
+  print("窗口回调")
+end】】
+
+《《活动开始事件》》
+【【function onStart()
+  print("活动开始")
+end】】
+
+《《返回程序事件》》
+【【function onResume()
+  print("返回程序")
+end】】
+
+《《程序暂停事件》》
+【【function onPause()
+  print("程序暂停")
+end】】
+
+《《程序已退出事件》》
+【【function onDestroy()
+  print("程序已退出")
+end】】
+
+《《返回键事件》》
+【【function onKeyDown(code,event)
+  if code==4 then
+    print("返回键事件")
+    return true
+  end
+end】】
+
+《《单击返回键退出》》
+【【function onKeyDown(code,event)
+  if code==4 then
+    activity.finish()
+    return true
+  end
+end】】
+
+《《双击返回键退出》》
+【【退出参数=0
+function onKeyDown(code,event)
+  if string.find(tostring(event),"KEYCODE_BACK")~=nil then
+    if 退出参数+2 > tonumber(os.time()) then
+      activity.finish()
+    else
+      Toast.makeText(activity,"双击返回键退出",Toast.LENGTH_SHORT).show()
+      退出参数=tonumber(os.time())
+    end
+    return true
+  end
+end】】
+
+《《函数控件布件》》
+【【function 函数命名()
+  return 
+end】】
+
+《《迭代器》》
+【【储存表={}
+for a in 迭代内容 do
+  table.insert(储存表,a)
+end】】
+
+《《极简构建适配器》》
+【【function 极简构建(数据)
+  adp=ArrayAdapter(activity,android.R.layout.simple_list_item_1,String(数据))--重新适配
+  list.setAdapter(adp)--设置适配器
+end
+
+function 更新适配(标题,内容)
+  标题源={}--创建空表
+  内容源={}--创建空表
+  local 读取列表=列表内容:gmatch("《(.-)》\n【(.-)】")
+  for a,b in 读取列表 do--循环取值
+    标题源[#标题源+1]=a--标题
+    内容源[a]=b--内容
+  end
+  极简构建(标题源)--构建适配
+end
+
+--单击适配项目
+list.onItemClick=function(a,b)
+  print(b.Text)--标题
+  print(内容源[b.Text])--内容
+  return true--返回
+end】】
+
+《《常规构建适配器/框架》》
+【【adp=LuaAdapter(activity,适配布局命名)
+适配ID.setAdapter(adp)】】
+
+《《构建控件布局/框架》》
+【【控件ID.addView(loadlayout(layout))】】
+
+《《构建全屏布局/框架》》
+【【activity.setContentView(loadlayout(layout))】】
+
+《《构建aly布局/框架》》
+【【activity.setContentView(loadlayout("aly文件名"))】】
+
+《《构建窗口布局/框架》》
+【【xxx=AlertDialog.Builder(this)
+xxx.setView(loadlayout(布局名称))
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()
+
+--背景透明
+import "android.graphics.drawable.ColorDrawable"
+xxx.getWindow().setBackgroundDrawable(ColorDrawable(0x00000000))
+
+--xxx.show()--显示
+--xxx.dismiss()--关闭】】
+
+《《构建对话框布局/框架》》
+【【xxx=AlertDialog.Builder(this)
+xxx.setTitle("标题")--标题
+xxx.setView(loadlayout(布局名称))--框架
+xxx.setPositiveButton("确定",function()--积极按钮
+  print("对话框布局")
+end)
+xxx.setNegativeButton("取消",nil)--消极按钮
+xxx.setNeutralButton("其他",nil)--中立按钮
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()--显示
+
+--xxx.show()--显示
+--xxx.dismiss()--关闭】】
+
+
+《《窗口重力属性》》
+【【窗口赋值ID.getWindow().setGravity(Gravity.填写重力属性)--顶：TOP--底：BOTTOM--左：LEFT--右：RIGHT】】
+
+《《销毁子布局》》
+【【布局名称.removeView(控件ID)】】
+
+《《销毁循环布局》》
+【【控件ID.removeAllViews()】】
+
+《《传递参数》》
+【【标题str,内容str=...】】
+
+《《进入子页面》》
+【【activity.newActivity("Lua文件名",{参数,参数})】】
+
+《《退出页面/关闭程序》》
+【【activity.finish()】】
+
+《《结束进程》》
+【【os.exit()】】
+
+《《Menu弹出菜单》》
+【【xxx=PopupMenu(activity,v)--菜单
+xxx.Menu.add("选项标题1").onMenuItemClick=function()
+  print("菜单事件1")
+end
+xxx.Menu.add("选项标题2").onMenuItemClick=function()
+  print("菜单事件2")
+end
+xxx.Menu.add("选项标题3").onMenuItemClick=function()
+  print("菜单事件3")
+end
+xxx.show()--显示】】
+
+《《三角标题菜单》》
+【【菜单列表={
+  {
+    SubMenu,--菜单名称
+    title="选择布局",--菜单父标题
+    {
+      MenuItem,--菜单子标题
+      title="线性布局",--菜单子名称
+    },
+  },
+  {
+    SubMenu,--菜单名称
+    title="选择控件",--菜单父标题
+    {
+      MenuItem,--菜单子标题
+      title="卡片控件",--菜单子名称
+    },
+    {
+      MenuItem,--菜单子标题
+      title="图片控件",--菜单子名称
+    },
+  },
+  {
+    MenuItem,--菜单子标题
+    title="其他功能",--菜单子名称
+  },
+}
+caidan=PopupMenu(activity,控件ID)--菜单坐标
+--控件单击事件：caidan.show()
+loadmenu(caidan.Menu,菜单列表)--构建菜单
+--菜单项目被单击
+caidan.setOnMenuItemClickListener{
+  onMenuItemClick=function(a)
+    名称=tostring(a)--转换字符串
+    --判断名称执行事件
+    if 名称=="线性布局" then--如果名称被单击
+      print(名称)
+    elseif 名称=="卡片控件" then--以此类推
+      print(名称)
+    end
+  end
+}】】
+
+《《显示窗口》》
+【【赋值ID.show()--显示】】
+
+《《关闭窗口》》
+【【赋值ID.dismiss()--关闭】】
+
+《《替换文本》》
+【【内容=content:gsub('当前文本',"替换为")--替换文本】】
+
+《《文本取值》》
+【【内容=content:match([[前字符(.-)后字符]])--文本取值】】
+
+《《适配文本取值》》
+【【内容=content:gmatch([[前字符(.-)后字符]])--适配文本取值】】
+
+《《转换数字》》
+【【tonumber(】】
+
+《《转换字符串》》
+【【tostring(】】
+
+《《转换整数》》
+【【tointeger(】】
+
+《《字符串转大写》》
+【【string.upper(字符串)】】
+
+《《字符串转小写》》
+【【string.lower(字符串)】】
+
+《《字符串替换》》
+【【string.gsub(字符串,被替换的字符,替换的字符,替换次数)】】
+
+《《按位置捕获字符串》》
+【【string.sub(字符串,子串起始位置,子串结束位置)】】
+
+《《清空适配器》》
+【【adp.clear()--清空适配器】】
+
+《《查找/判断关键字》》
+【【--如果含有关键字
+if 网页链接:find("com") then
+  print("含有关键字")
+end
+--如果不含关键字
+if 网页链接:find("com")==nil then
+  print("不含关键字")
+end】】
+
+《《判断复选框是否选中》》
+【【if 复选控件ID.isChecked() then--如果复选框被选中
+  print("执行事件")--被选中事件
+else
+  print("执行事件")--未选中事件
+end】】
+
+《《判断网页链接状态》》
+【【if code==200 then--如果链接状态等于200
+  print("执行事件")
+else
+  弹出消息("错误-200，网页链接失败！")--链接失败事件
+end--判断网页链接结束】】
+
+《《判断浏览器网页是否可以后退》》
+【【if 浏览器ID.canGoBack() then--如果网页可以后退
+  浏览器ID.goBack()--网页后退
+end】】
+
+《《判断WLAN状态是否开启》》
+【【import "android.content.Context"
+WLAN网络=activity.Context.getSystemService(Context.WIFI_SERVICE)
+WLAN状态=WLAN网络.isWifiEnabled()
+if WLAN状态==true then
+  print("已开启")
+else
+  print("未开启")
+end】】
+
+《《判断WLAN网络是否连接》》
+【【WLAN网络=activity.getSystemService(Context.CONNECTIVITY_SERVICE)
+WLAN状态=WLAN网络.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+if tostring(WLAN状态):find("none)") then
+  print("未链接")
+else
+  print("已链接")
+end】】
+
+《《判断数据网络是否连接》》
+【【数据网络=activity.getSystemService(Context.CONNECTIVITY_SERVICE)
+数据状态=数据网络.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState()
+if tostring(数据状态)=="CONNECTED" then
+  print("已链接")
+else
+  print("未链接")
+end】】
+
+《《判断控件是否隐藏》》
+【【--如果控件等于显示
+if 控件ID.getVisibility()==0 then--显示0--隐藏8
+  print("显示事件")
+else
+  print("隐藏事件")
+end】】
+
+《《判断抽屉是否展开》》
+【【--如果抽屉等于展开
+if 抽屉ID.isDrawerOpen(3) then--左抽屉3--右抽屉5
+  抽屉ID.closeDrawer(3)--关闭抽屉
+end】】
+
+《《判断是否联网》》
+【【local 联网状态=activity.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE).getActiveNetworkInfo()
+if 联网状态~=nil then
+  print("网络正常")
+else
+  print("网络链接失败！")
+end】】
+
+《《判断横屏竖屏/切换屏幕方面》》
+【【if activity.getRequestedOrientation()~=0 then--如果屏幕不等于横屏
+  activity.setRequestedOrientation(0)--设置横屏
+else
+  activity.setRequestedOrientation(1)--设置竖屏
+end】】
+
+《《检测/判断系统是否安装了某App》》
+【【if pcall(function() activity.getPackageManager().getPackageInfo("输入包名",0) end) then
+  print("已安装")
+else
+  print("没有安装")
+end】】
+
+《《判断系统SDK》》
+【【当前sdk = Build.VERSION.SDK
+if 当前sdk < "21" then--根据你自己的设备安卓版本sdk来写，比如安卓5.0.2对应的sdk为21，以此类推
+  print("注意：您的设备不兼容本程序！")
+end】】
+
+《《检测/判断系统是否安装了某抓包App》》
+【【function onResume()--返回程序事件
+  if pcall(function() activity.getPackageManager().getPackageInfo("com.minhui.networkcapture",0) end) then
+    activity.finish()--检测到抓包软件，执行的事件
+    print("请卸载手机上的抓包软件！")
+  elseif pcall(function() activity.getPackageManager().getPackageInfo("com.guoshi.httpcanary",0) end) then
+    activity.finish()--检测到抓包软件，执行的事件
+    print("请卸载手机上的抓包软件！")
+  elseif pcall(function() activity.getPackageManager().getPackageInfo("su.sniff.cepter",0) end) then
+    activity.finish()--检测到抓包软件，执行的事件
+    print("请卸载手机上的抓包软件！")
+  elseif pcall(function() activity.getPackageManager().getPackageInfo("com.lml.flywindow",0) end) then
+    activity.finish()
+    print("请卸载手机上的抓包软件！")
+  elseif pcall(function() activity.getPackageManager().getPackageInfo("app.greyshirts.sslcapture",0) end) then
+    activity.finish()
+    print("请卸载手机上的抓包软件！")
+  elseif pcall(function() activity.getPackageManager().getPackageInfo("com.evbadroid.wicap",0) end) then
+    activity.finish()
+    print("请卸载手机上的抓包软件！")
+  elseif pcall(function() activity.getPackageManager().getPackageInfo("blake.hamilton.bitshark",0) end) then
+    activity.finish()
+    print("请卸载手机上的抓包软件！")
+  elseif pcall(function() activity.getPackageManager().getPackageInfo("com.example.logcat",0) end) then
+    activity.finish()
+    print("请卸载手机上的抓包软件！")
+  end
+end】】
+
+《《防止盗用lua文件》》
+【【程序名称="填写程序名称"
+程序包名="填写程序包名"
+--如果当前程序名称或包名，与设置的程序名称和包名不一致
+if this.getPackageManager().getApplicationLabel(this.getPackageManager().getApplicationInfo(this.getPackageName(),0))~=程序名称 and activity.getPackageName()~=程序包名 then
+  activity.finish()--退出页面
+end】】
+
+《《网页截取/爬取/取值》》
+【【Http.get("网页链接",function(链接状态,网页源码)
+  if 链接状态==200 then--判断网络链接状态
+
+    获取内容=网页源码:match([[前字符(.-)后字符]])--取值
+
+    print(获取内容)
+
+  else
+    弹出消息("错误，网络链接失败！")--链接失败事件
+  end--判断网络链接结束
+end)--网页截取结束
+】】
+
+《《UA网页爬取/截取》》
+【【local 设置ua={["User-Agent"]="Mozilla/5.0 (Linux; Android 9; STF-AL00 Build/HUAWEISTF-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.99 Mobile Safari/537.36"}
+Http.get("网页链接",nil,"UTF-8",设置ua,function(code,content,cookie,header)
+  if code==200 then--判断网络链接状态
+
+    内容=content:match([[前字符(.-)后字符]])--取值
+
+    print(内容)
+
+  else
+    弹出消息("错误，网络链接失败！")--链接失败事件
+  end--判断网络链接结束
+end)--网页截取结束
+】】
+
+《《讯飞语记远程》》
+【【Http.get("讯飞语记分享链接",nil,nil,nil,function(code,content)
+  if code==200 then--判断网络链接状态
+    远端内容=content:match([[<meta name="description" itemprop="description" content="(.-)" />
+	<link rel="stylesheet" type="text/css" href="/iyuji/css/common/jAlert.css">]]):gsub("&lt;","<"):gsub("&gt;",">"):gsub([[&nbsp; ]],""):gsub("&nbsp;",""):gsub("amp;",""):gsub("</p><p>","\n"):gsub("<br/>",""):gsub("</p>","")
+
+    print(远端内容)
+
+  else
+    弹出消息("错误，网络链接失败！")--链接失败事件
+  end--判断网络链接结束
+end)--网页截取结束
+】】
+
+《《日记云远程》》
+【【--日记云远程连接
+Http.get("填写日记云链接",nil,nil,nil,function(code,content)
+  --过滤
+  过滤=content:gsub("<br>",""):gsub("</p>",""):gsub("</div>",""):gsub("&nbsp,",""):gsub('<div id(.-)#555555,">',""):gsub('<p dir(.-)#555555,">',"")
+  --截取
+  内容=过滤:match([[前字符(.-)后字符]])
+
+  print(内容)
+
+end)--日记云远程结束
+】】
+
+《《腾讯微云远程》》
+【【--设置ua
+local header={["User-Agent"]="Mozilla/5.0 (Linux; Android 9; STF-AL00 Build/HUAWEISTF-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.99 Mobile Safari/537.36"}
+--微云远程链接
+Http.get("填写微云分享链接",nil,"utf8",header,function(code,content)
+  --截取范围
+  截取范围=content:match([[<article(.-)</article>]])
+  --过滤
+  过滤=截取范围:gsub("&lt,","<"):gsub("&gt,",">"):gsub("&nbsp;"," "):gsub("amp,",""):gsub("</p><p>","\n"):gsub("<br/>",""):gsub("=function()","onClick=function")
+  --赋值
+  内容=过滤:match([[前字符(.-)后字符]])
+
+  print(内容)
+
+end)--微云远程结束
+】】
+
+《《加载对话框动画》》
+【【加载动画=ProgressDialog.show(this,"标题","正在加载中，请等待...",false,true).dismiss()
+加载动画.show()--显示
+--加载动画.dismiss()--关闭】】
+
+《《控件旋转度》》
+【【控件ID.setRotation(45)--控件旋转度】】
+
+《《列表视图控件滚动到顶部+特效》》
+【【列表视图控件ID.smoothScrollToPosition(0)--滚动到顶部+特效】】
+
+《《列表视图控件滚动到底部》》
+【【列表视图控件ID.setSelection(文件list.getCount()-1)--滚动到底部】】
+
+《《滑动控件到顶部》》
+【【--推荐
+滑动控件ID.fullScroll(View.FOCUS_UP)
+--或者
+滑动控件ID.scrollTo(0,0)
+--或者
+滑动控件ID.ScrollView.smoothScrollTo(0,0)】】
+
+《《滑动控件到底部》》
+【【task(1,function()--纵向滑动控件到底部
+  滑动控件ID.fullScroll(ScrollView.FOCUS_DOWN)
+end)】】
+
+《《禁用返回键》》
+【【赋值ID.setCancelable(false)--禁用返回键】】
+
+《《重置当前界面》》
+【【activity.recreate()--重置当前界面】】
+
+《《跳转页面视图》》
+【【页面视图ID.showPage(0)--跳转页面视图--第一页:0--第二页:1--第三页:2--以此类推】】
+
+《《监听页面视图控件》》
+【【页面视图控件ID.setOnPageChangeListener(PageView.OnPageChangeListener{
+  onPageScrolled=function(a,b,c)
+    if c==0 then
+      if a==0 then--第一页事件
+        print("第一页事件")
+
+      elseif a==1 then--第二页事件
+        print("第二页事件")
+
+      end
+      return true
+    end
+  end
+})】】
+
+《《下拉刷新控件配件》》
+【【import "android.support.v4.widget.*"
+local 屏幕宽度=this.width
+local 状态栏高度=this.getResources().getIdentifier("status_bar_height","dimen","android")
+if 状态栏高度 > 0 then
+  下拉高度=this.getResources().getDimensionPixelSize(状态栏高度)
+else
+  下拉高度=屏幕宽度*0.07
+end】】
+
+《《取当前网络名称》》
+【【当前网络=activity.Context.getSystemService(Context.WIFI_SERVICE)
+网络信息=当前网络.getConnectionInfo()
+网络名称=tostring(网络信息.getSSID()):gsub('"',"")
+print(网络名称)】】
+
+《《取设备标识码》》
+【【import "android.provider.Settings$Secure"
+设备标识码=Secure.getString(activity.getContentResolver(),Secure.ANDROID_ID)
+print(设备标识码)】】
+
+《《取系统时间》》
+【【os.date("%Y年%m月%d日 %H时%M分%S秒")】】
+
+《《解压程序内部压缩包》》
+【【压缩包=this.getFilesDir().toString().."/drawable/文件名称.zip"
+解压路径="/storage/emulated/0/"
+ZipUtil.unzip(压缩包,解压路径)】】
+
+《《加载mht/html/离线网页》》
+【【浏览器ID.loadUrl("file://"..activity.getLuaDir().."/文件名.mht")】】
+
+《《压缩文件》》
+【【--压缩成zip：要压缩的文件目录，压缩到文件目录
+ZipUtil.zip("/sdcard/文件夹/文件.lua","/storage/emulated/0/")】】
+
+《《解压文件》》
+【【--解压zip：要解压的文件目录，解压到文件目录
+ZipUtil.unzip("/sdcard/文件夹/压缩包.zip","/storage/emulated/0/")】】
+
+《《状态栏颜色》》
+【【activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).setStatusBarColor(0xff4285f4)】】
+
+《《状态栏沉浸透明》》
+【【--状态栏沉浸透明
+import "android.graphics.Color"
+local window=this.getWindow()
+window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+window.setStatusBarColor(Color.TRANSPARENT)】】
+
+《《状态栏时间颜色》》
+【【--状态栏深色
+this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)】】
+
+《《联系qq》》
+【【import "android.content.Intent"
+import "android.net.Uri"
+qq账号="782268899"
+activity.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..qq账号)))】】
+
+《《加qq群》》
+【【import "android.content.Intent"
+import "android.net.Uri"
+qq群号="540888852"
+activity.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("mqqapi://card/show_pslcard?src_type=internal&version=1&uin="..qq群号.."&card_type=group&source=qrcode")))】】
+
+《《查看qq资料》》
+【【import "android.content.Intent"
+import "android.net.Uri"
+qq账号="782268899"
+activity.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("mqqapi://card/show_pslcard?uin="..qq账号)))】】
+
+《《运行文本代码》》
+【【assert(loadstring(文本代码))()】】
+
+《《运行文本代码2》》
+【【status,error=pcall(loadstring(文本代码))】】
+
+《《运行lua/txt文件》》
+【【dofile(tostring("/storage/emulated/0/填写文件夹名称/填写文件名.lua"))】】
+
+《《复制文本》》
+【【import "android.content.*"
+import "android.content.Context"
+activity.getSystemService(Context.CLIPBOARD_SERVICE).setText("文本内容")】】
+
+《《分享文本》》
+【【function 分享文本(内容)
+  import "android.content.*"
+  local 分享内容=内容
+  local intent=Intent(Intent.ACTION_SEND)
+  intent.setType("text/plain")
+  intent.putExtra(Intent.EXTRA_SUBJECT,"分享")
+  intent.putExtra(Intent.EXTRA_TEXT,分享内容)
+  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+  activity.startActivity(Intent.createChooser(intent,"分享到:"))
+end
+分享文本("文本内容")】】
+
+《《分享文件》》
+【【function 分享文件(路径)
+  import "android.content.*"
+  import "android.content.Intent"
+  import "android.net.Uri"
+  intent=Intent(Intent.ACTION_SEND)--应用程序表
+  intent.setType("application/x-zip-compressed")--文件类型
+  intent.putExtra(Intent.EXTRA_STREAM,Uri.parse("file://"..路径))--分享路径
+  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)--调用系统分享功能
+  intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)--授予目录临时共享权限
+  activity.startActivity(Intent.createChooser(intent,"分享源码"))--弹窗标题
+end
+分享文件("文件路径")】】
+
+《《打开系统设置》》
+【【import "android.content.Intent"
+import "android.provider.Settings"
+activity.startActivity(Intent(Settings.ACTION_SETTINGS))】】
+
+《《适配显示图片》》
+【【赋值=loadbitmap(图片直链)
+adp.add{
+  控件ID=赋值,
+}】】
+
+《《随机数》》
+【【最小值,最大值=1,10
+随机数=math.random(最小值,最大值)
+print(随机数)】】
+
+《《Ticker定时器》》
+【【ti=Ticker()
+ti.Period=1000--时间间隔
+ti.onTick=function()
+  print("定时器事件")
+end
+--启动Ticker定时器
+ti.start()
+--停止Ticker定时器
+ti.stop()】】
+
+《《加载网页》》
+【【浏览器ID.loadUrl("网页链接")】】
+
+《《停止加载网页》》
+【【浏览器ID.stopLoading()】】
+
+《《刷新网页》》
+【【浏览器ID.reload()】】
+
+《《网页前进》》
+【【浏览器ID.goForward()】】
+
+《《网页后退》》
+【【浏览器ID.goBack()】】
+
+《《网页图标》》
+【【浏览器ID.getFavicon()】】
+
+《《网页加载进度》》
+【【浏览器ID.getProgress()】】
+
+《《浏览器是否支持缩放》》
+【【浏览器ID.getSettings().setSupportZoom(false)--支持true--不支持false】】
+
+《《设置浏览器UA》》
+【【浏览器ID.settings.setUserAgentString([[UA代码]])】】
+
+《《浏览器加载Js》》
+【【浏览器ID.getSettings().setJavaScriptEnabled(true)--支持true--不支持false
+浏览器ID.loadUrl([[javascript:dataBox('填写Js代码');]])】】
+
+《《浏览器字体大小》》
+【【浏览器ID.setTextZoom(100)】】
+
+《《浏览器自适应》》
+【【浏览器赋值=浏览器ID.getSettings()
+浏览器赋值.setUseWideViewPort(true)--比例缩放
+浏览器赋值.setLoadWithOverviewMode(true)
+浏览器ID.loadUrl("网页链接")】】
+
+《《浏览器嗅探事件》》
+【【浏览器ID.setWebViewClient{--浏览器控件，嗅探事件
+  onLoadResource=function(view,url)
+    if url:find("m3u8") or url:find("mp4") then--嗅探关键词，可自行添加
+      浏览器ID.stopLoading()--停止加载
+      activity.newActivity("bfq",{标题参数,url})--进入子页面
+      加载动画.dismiss()--关闭窗口
+    end
+  end
+}】】
+
+《《浏览器加载事件》》
+【【--浏览器加载事件
+浏览器ID.setWebViewClient{
+  shouldOverrideUrlLoading=function(view,url)
+    print("网页即将加载")
+  end,
+  onPageStarted=function(view,url,favicon)
+    print("收到新标题")
+  end,
+  onPageFinished=function(view,url)
+    print("网页加载完毕")
+  end
+}】】
+
+《《取浏览器网址信息/域名/标题》》
+【【网址信息=Uri.parse(浏览器ID.url)
+url_name=(浏览器ID.title)--网页标题
+url_main=网址信息.authority--网址域名
+url_scheme=网址信息.scheme--http,https,ftp或其他外部应用的scheme
+url_path=网址信息.path--路径
+url_query=网址信息.query--关键词
+url_frag=网址信息.fragment
+url_host=网址信息.host--主机
+print(url_name.."\n"..url_main)】】
+
+《《UA 知乎》》
+【【UCWEB/2.0 (MIDP-2.0; U; Adr 9.0.0) UCBrowser U2/1.0.0 Gecko/63.0 Firefox/63.0 iPhone/7.1 SearchCraft/2.8.2 baiduboxapp/3.2.5.10 BingWeb/9.1 ALiSearchApp/2.4】】
+
+《《UA 塞班》》
+【【Mozilla/5.0 (Symbian/3; Series60/5.2 NokiaN8-00/012.002; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/533.4 (KHTML, like Gecko) NokiaBrowser/7.3.0 Mobile Safari/533.4 3gpp-gba】】
+
+《《UA 百度》》
+【【Mozilla/5.0 (Linux; Android 7.0; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/48.0.2564.116 Mobile Safari/537.36 T7/10.3 SearchCraft/2.6.2 (Baidu; P1 7.0)】】
+
+《《UA QQ浏览器》》
+【【MQQBrowser/26 Mozilla/5.0 (Linux; U; Android 2.3.7; zh-cn; MB200 Build/GRJ22; CyanogenMod-7) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1】】
+
+《《UA 微信》》
+【【Mozilla/5.0 (Linux; Android 10; Redmi K20 Pro Build/QKQ1.190716.003; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/44940 Mobile Safari/537.36 MMWEBID/5602 MicroMessenger/7.0.7.1500(0x27000730) Process/tools NetType/WIFI Language/zh_CN】】
+
+《《UA IE10》》
+【【Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0)】】
+
+《《取屏幕宽度/高度》》
+【【宽度=this.Width
+高度=this.Height
+print(宽度)
+print(高度)】】
+
+《《隐藏控件》》
+【【控件ID.setVisibility(View.GONE)】】
+
+《《显示控件》》
+【【控件ID.setVisibility(View.VISIBLE)】】
+
+《《控件不可视》》
+【【控件ID.setVisibility(View.INVISIBLE)】】
+
+《《隐藏时间》》
+【【activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)】】
+
+《《显示时间》》
+【【activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)】】
+
+《《隐藏输入法》》
+【【activity.getSystemService(Context.INPUT_METHOD_SERVICE).hideSoftInputFromWindow(编辑框ID.getWindowToken(),0)】】
+
+《《显示输入法》》
+【【activity.getSystemService(Context.INPUT_METHOD_SERVICE).showSoftInput(编辑框ID,0)】】
+
+《《隐藏虚拟键》》
+【【activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)】】
+
+《《单次隐藏虚拟键》》
+【【activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)】】
+
+《《禁止系统息屏》》
+【【this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)】】
+
+《《禁用系统截图功能》》
+【【this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE)】】
+
+《《暗色主题》》
+【【this.setTheme(android.R.style.Theme_Material)】】
+
+《《亮色主题》》
+【【this.setTheme(android.R.style.Theme_Material_Light)】】
+
+《《输入法影响布局》》
+【【activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)】】
+
+《《输入法不影响布局》》
+【【activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)】】
+
+《《横屏方向锁定》》
+【【activity.setRequestedOrientation(0)--横屏0--竖屏1】】
+
+《《自动感应屏幕方向》》
+【【import "android.content.pm.ActivityInfo"
+activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)】】
+
+《《关闭抽屉栏》》
+【【抽屉ID.closeDrawer(3)--左边3--右边5】】
+
+《《打开抽屉栏》》
+【【抽屉ID.openDrawer(3)--左边3--右边5】】
+
+《《关闭抽屉栏阴影》》
+【【抽屉ID.setScrimColor(0)】】
+
+《《打开抽屉栏自动隐藏输入法》》
+【【抽屉ID.DrawerListener={
+  onDrawerSlide=function(v,i)
+    --if i==1 then--如果侧滑栏完全展开后,再关闭输入法
+    activity.getSystemService(Context.INPUT_METHOD_SERVICE).hideSoftInputFromWindow(编辑框ID.getWindowToken(),0)
+    --end
+  end
+}】】
+
+《《禁用编辑框》》
+【【编辑框ID.setFocusable(false)】】
+
+《《取QQ头像》》
+【【http://q1.qlogo.cn/g?b=qq&nk=填写QQ账号&s=640】】
+
+《《取程序文件路径》》
+【【程序路径=activity.getLuaDir()
+print(程序路径)】】
+
+《《取程序名称》》
+【【程序名称=this.getPackageManager().getApplicationLabel(this.getPackageManager().getApplicationInfo(this.getPackageName(),0))
+print(程序名称)】】
+
+《《取程序包名》》
+【【程序包名=activity.getPackageName()
+print(程序包名)】】
+
+《《取程序版本号》》
+【【程序版本=tostring(this.getPackageManager().getPackageInfo(this.getPackageName(),((782268899/2/2-8183)/10000-6-231)/9).versionName)
+print(程序版本)】】
+
+《《取程序内部版本号》》
+【【内部版本号=tostring(this.getPackageManager().getPackageInfo(this.getPackageName(),((782268899/2/2-8183)/10000-6-231)/9).versionCode)
+print(内部版本号)】】
+
+《《取安卓系统版本号信息》》
+【【安卓版本=Build.VERSION.RELEASE
+print(安卓版本)】】
+
+《《取系统设备型号信息》》
+【【设备型号=Build.MANUFACTURER.." "..Build.MODEL
+print(设备型号)】】
+
+《《取系统SDK版本号信息》》
+【【SDK版本=Build.VERSION.SDK
+print(SDK版本)】】
+
+《《取系统CPU架构信息》》
+【【CPU架构=Build.CPU_ABI
+print(CPU架构)】】
+
+《《取系统硬件类型信息》》
+【【硬件类型=Build.HARDWARE
+print(硬件类型)】】
+
+《《取手机电池/电量/电压/温度信息》》
+【【import "android.content.Intent"
+import "android.os.BatteryManager"
+import "android.content.IntentFilter"
+filter=IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+intent=this.getContext().registerReceiver(nil,filter)
+当前电量=intent.getIntExtra(BatteryManager.EXTRA_LEVEL,-1)
+充电状态=intent.getIntExtra(BatteryManager.EXTRA_STATUS,BatteryManager.BATTERY_STATUS_UNKNOWN)
+--状态值翻译：(1=未知状态)(2=充电中)(3=放电中)(4=未充电)(5=充满了)
+print(当前电量,充电状态)
+
+--另类取值
+信息赋值=activity.getApplicationContext().registerReceiver(null,IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+电量=信息赋值.getIntExtra("level",0)
+电压=信息赋值.getIntExtra("voltage",0)
+温度=信息赋值.getIntExtra("temperature",0)
+print(电量.." %")
+print(电压.." mV")
+print((温度*0.1).." ℃")】】
+
+《《取剪贴板内容》》
+【【import "android.content.*"
+import "android.content.Context"
+剪贴板内容=activity.getSystemService(Context.CLIPBOARD_SERVICE).getText()
+print(剪贴板内容)】】
+
+《《清除程序全部数据》》
+【【os.execute("rm -rf /data/data/"..this.packageName.."/cache/")
+os.execute("rm -rf /data/user/0/"..this.packageName.."/cache/")
+os.execute("rm -rf /data/data/"..this.packageName.."/files/data/")
+os.execute("rm -rf /data/user/0/"..this.packageName.."/files/data/")
+os.execute("rm -rf /storage/emulated/0/Android/data/"..this.packageName.."/files/VideoCache/main/")
+os.execute("rm -rf /storage/emulated/0/Android/data/"..this.packageName.."/files/VideoCache/main/")
+os.execute("rm -rf /storage/emulated/0/AndroLua/cache")
+os.execute("pm clear "..this.packageName)】】
+
+《《取设备内部存储路径》》
+【【路径=Environment.getExternalStorageDirectory().toString()
+print(路径)】】
+
+《《取运营商名称》》
+【【import "android.content.Context" 
+运营商=this.getSystemService(Context.TELEPHONY_SERVICE).getNetworkOperatorName()
+print(运营商)
+--权限添加:
+READ_PHONE_STATE】】
+
+《《系统音量调节》》
+【【import "android.media.AudioManager"
+音量调节=activity.getSystemService(Context.AUDIO_SERVICE)
+音量调节.setStreamVolume(AudioManager.STREAM_MUSIC,15,1)--15音量--音量调节窗口:隐藏0｜显示1】】
+
+《《设置系统桌面壁纸》》
+【【activity.setWallpaper(loadbitmap("链接或路径"))
+print("设置壁纸成功")
+--打开mt管理器，找到你的apk
+--再打开xml文件里面，第22行，加以下代码↓保存即可
+
+<!-- 设置壁纸 -->
+<uses-permission android:name="android.permission.SET_WALLPAPER" />】】
+
+《《创建文件》》
+【【import "java.io.File"
+File("文件路径").createNewFile()
+--io
+io.open("/sdcard/xxx.lua","w")】】
+
+《《创建文件夹》》
+【【import "java.io.File"
+File("文件夹路径").mkdir()】】
+
+《《创建多级文件夹》》
+【【import "java.io.File"
+File("文件夹路径").mkdirs()
+--os
+os.execute("mkdir"..文件夹路径)】】
+
+《《判断路径是否为文件夹/是否存在》》
+【【import "java.io.File"
+File("文件夹路径").isDirectory()】】
+
+《《判断路径是否为文件/是否存在》》
+【【import "java.io.File"
+File("文件路径").isFile()】】
+
+《《判断文件/文件夹是否存在》》
+【【import "java.io.File"
+File("文件/文件夹路径").exists()】】
+
+《《判断是否为系统隐藏文件》》
+【【import "java.io.File"
+File("文件路径").isHidden()】】
+
+《《追加更新文件》》
+【【io.open("文件路径","a+"):write("文本内容"):close()】】
+
+《《更新文件》》
+【【io.open("文件路径","w+"):write("文本内容"):close()】】
+
+《《写入文件》》
+【【io.open("文件路径","w"):write("文本内容"):close()】】
+
+《《写入文件2》》
+【【function 写入文件(路径,内容)
+  import "java.io.File"
+  File(tostring(File(tostring(路径)).getParentFile())).mkdirs()
+  io.open(tostring(路径),"w"):write(tostring(内容)):close()
+end】】
+
+《《复制文件》》
+【【LuaUtil.copyDir(from,to)】】
+
+《《重命名/移动文件》》
+【【import "java.io.File"
+File(旧).renameTo(File(新))
+--os
+os.execute("mv"..oldname..""..newname)
+--os
+os.rename (oldname,newname)】】
+
+《《删除文件/文件夹》》
+【【import "java.io.File"
+File("文件/文件夹路径").delete()
+--os删除文件夹
+os.execute("rm -rf /sdcard/文件夹")
+--os删除文件
+os.execute("rm -r /sdcard/文件夹/xxx.lua")
+--os删除文件
+os.remove("文件绝对路径")】】
+
+《《递归删除文件/文件夹》》
+【【LuaUtil.rmDir("文件/文件夹路径")
+--os
+os.execute("rm -r".."文件/文件夹路径")】】
+
+《《取文件内容》》
+【【io.open("文件路径"):read("*a")】】
+
+《《取文件列表》》
+【【import "java.io.File"
+luajava.astable(File("文件夹路径").listFiles())】】
+
+《《取文件名称》》
+【【import "java.io.File"
+File("文件路径").getName()】】
+
+《《取文件字节》》
+【【import "java.io.File"
+File("文件路径").length()】】
+
+《《取父文件夹路径》》
+【【import "java.io.File"
+File("文件路径").getParentFile()】】
+
+《《取文件或文件夹最后修改时间》》
+【【function GetFilelastTime(path)
+  f = File(path)
+  cal = Calendar.getInstance()
+  time = f.lastModified()
+  cal.setTimeInMillis(time)
+  return cal.getTime().toLocaleString()
+end】】
+
+《《取文件大小》》
+【【function GetFileSize(path)
+  import "java.io.File"
+  import "android.text.format.Formatter"
+  size=File(tostring(path)).length()
+  Sizes=Formatter.formatFileSize(activity,size)
+  return Sizes
+end】】
+
+《《取文件Mime类型》》
+【【function GetFileMime(name)
+  import "android.webkit.MimeTypeMap"
+  ExtensionName=tostring(name):match("%.(.+)")
+  Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+  return tostring(Mime)
+end
+print(GetFileMime("/sdcard/xxx.png"))】】
+
+《《按行取文件》》
+【【for c in io.lines("文件夹路径") do
+  print(c)
+end】】
+
+《《拷贝文件》》
+【【function 拷贝文件(source,destination)
+  sourcefile = io.open(source, "r")
+  destinationfile = io.open(destination, "w")
+  destinationfile:write(sourcefile:read("*all"))
+  sourcefile:close()
+  destinationfile:close()
+end
+--调用方法
+源文件路径="/storage/emulated/0/Fa助手/xxx.apk"
+拷贝到路径="/storage/emulated/0/Download/xxx.apk"
+拷贝文件(源文件路径,拷贝到路径)】】
+
+《《解压文件2》》
+【【import "java.io.FileOutputStream"
+import "java.util.zip.ZipFile"
+import "java.io.File"
+
+zipfile="/sdcard/压缩包.zip"--压缩文件路径和文件名
+sdpath="/sdcard/文件.lua"--解压后路径和文件名
+zipfilepath="内容.lua"--需要解压的文件名
+
+function unzip(zippath,outfilepath,filename)
+  local time=os.clock()
+  task(function(zippath,outfilepath,filename)
+    require "import"
+    import "java.util.zip.*"
+    import "java.io.*"
+    local file = File(zippath)
+    local outFile = File(outfilepath)
+    local zipFile = ZipFile(file)
+    local entry = zipFile.getEntry(filename)
+    local input = zipFile.getInputStream(entry)
+    local output = FileOutputStream(outFile)
+    local byte=byte[entry.getSize()]
+    local temp=input.read(byte)
+    while temp ~= -1 do
+      output.write(byte)
+      temp=input.read(byte)
+    end
+    input.close()
+    output.close()
+  end,zippath,outfilepath,filename,
+  function()
+    print("解压完成，耗时 "..os.clock()-time.." s")
+  end)
+end
+unzip(zipfile,sdpath,zipfilepath)】】
+
+《《取状态栏高度》》
+【【状态栏高度=this.getResources().getDimensionPixelSize(luajava.bindClass("com.android.internal.R$dimen")().status_bar_height)--取状态栏高度
+print(状态栏高度)】】
+
+《《取控件宽高》》
+【【import "android.content.Context"
+function 控件宽高(view)
+  view.measure(View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED),
+  View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED))
+  height=view.getMeasuredHeight()--高度
+  width=view.getMeasuredWidth()--宽度
+  return width,height
+end
+print(控件宽高(控件ID))】】
+
+《《设置控件宽度》》
+【【控件ID.setWidth(200)--设置控件宽度】】
+
+《《设置控件高度》》
+【【控件ID.setHeight(200)--设置控件高度】】
+
+《《设置控件大小/宽度高度》》
+【【--设置宽度
+linearParams=控件ID.getLayoutParams()
+linearParams.width=宽度
+控件ID.setLayoutParams(linearParams)
+--设置高度
+linearParams=控件ID.getLayoutParams()
+linearParams.height=高度
+控件ID.setLayoutParams(linearParams)】】
+
+《《设置单行输入》》
+【【编辑框ID.singleLine=true--设置单行输入】】
+
+《《设置只可输入数字》》
+【【import "android.text.InputType"
+import "android.text.method.DigitsKeyListener"
+编辑框ID.setInputType(InputType.TYPE_CLASS_NUMBER)--设置只可输入数字】】
+
+《《载入子页面动画》》
+【【activity.newActivity("lua文件名",android.R.anim.fade_in,android.R.anim.fade_out,{参数1,参数2})
+--或者
+activity.newActivity("lua文件名",android.R.anim.slide_in_left,android.R.anim.fade_out,{参数1,参数2})
+--动画代码选择:
+android.R.anim.accelerate_decelerate_interpolator
+android.R.anim.accelerate_interpolator
+android.R.anim.anticipate_interpolator
+android.R.anim.anticipate_overshoot_interpolator
+android.R.anim.bounce_interpolator
+android.R.anim.cycle_interpolator
+android.R.anim.decelerate_interpolatoandroid.R.anim.r
+android.R.anim.fade_in
+android.R.anim.fade_out
+android.R.anim.linear_interpolator
+android.R.anim.overshoot_interpolator
+android.R.anim.slide_in_left
+android.R.anim.slide_out_right】】
+
+《《进程延时》》
+【【Thread.sleep(1000)】】
+
+《《控件颜色修改》》
+【【
+import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+
+--修改按钮颜色
+button.getBackground().setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+
+--修改编辑框颜色
+edittext.getBackground().setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP));
+
+--修改Switch颜色
+switch.ThumbDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP));
+switch.TrackDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+
+--修改ProgressBar颜色
+progressbar.IndeterminateDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+
+--修改SeekBar滑条颜色
+seekbar.ProgressDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+--修改SeekBar滑块颜色
+seekbar.Thumb.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))】】
+
+《《隐藏标题栏》》
+【【activity.ActionBar.hide()】】
+
+《《设置标题栏标题》》
+【【--标题
+activity.setTitle("标题")
+--小标题
+activity.getActionBar().setSubtitle("小标题")】】
+
+《《URL编码解码》》
+【【--编码
+import "java.net.URLEncoder"
+URLEncoder.encode("内容")
+
+--解码
+import "java.net.URLDecoder"
+URLDecoder.decode(url)】】
+
+
+《《旋转形进度条颜色》》
+【【import "android.graphics.drawable.ColorDrawable"
+import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+控件ID.IndeterminateDrawable.setColorFilter(PorterDuffColorFilter(0xffff0000,PorterDuff.Mode.SRC_ATOP))--旋转形进度条颜色】】
+
+《《长条形进度条颜色》》
+【【控件ID.ProgressDrawable.setColorFilter(PorterDuffColorFilter(0xffce3d3e,PorterDuff.Mode.SRC_ATOP))--长条形进度条颜色】】
+
+《《长条形进度条增减值》》
+【【控件ID.incrementProgressBy(5)--长条形进度条增减值
+控件ID.incrementSecondaryProgressBy(5)--长条形进度条缓冲增减值】】
+
+《《编辑器基础操作》》
+【【--对齐
+edit.format()
+--撤销
+edit.undo()
+--重做
+edit.redo()
+--搜索
+edit.search()
+--跳转
+edit.gotoLine()】】
+
+《《设置编辑器文本颜色高亮》》
+【【edit.setDark(false)--是否使用黑色模式
+edit.setShowLineNumbers(true)--是否显示行号
+edit.setClickable(true)--可否被点击
+edit.setFocusable(true)--可否被赋予焦点
+edit.setWordWrap(false)--自动换行
+edit.setAutoIndent(false)--是否使用自动缩进
+edit.setAutoComplete(true)--是否启用lua语法补齐
+edit.setAutoIndentWidth(2)--缩进空格长度
+edit.setPanelBackgroundColor(0xffffffff)--补齐弹窗的背景颜色
+edit.setKeywordColor(0xFFDB56EC)--符合lua关键词的字体颜色
+edit.setBasewordColor(0xff0000ff)--已经识别为已有函数的字符串的字体颜色
+edit.setCommentColor(0xff549688)--lua注释的字符串字体颜色
+edit.setPanelTextColor(0xff666666)--补齐弹窗的字体和边框的颜色
+edit.setUserwordColor(0xff4b5cc4)--基本上是数字字符串的字体颜色
+edit.setStringColor(0xffff0097)--符合string语法处字体颜色
+edit.setTextHighlightColor(0xffff0000)--选中内容高亮字符串的字体颜色
+edit.setTextColor(0xff000000)--未识别类型的字符串的字体颜色
+edit.setBoldTypeface(Typeface.DEFAULT_BOLD)--字体类型】】
+
+《《监听编辑器复选》》
+【【编辑器ID.onSelectionChanged=function(v)
+  if v==true then
+    print("已复选")
+  else
+    print("没有复选")
+  end
+end】】
+
+《《监听编辑器复选2》》
+【【编辑器ID.OnSelectionChangedListener=function(v)
+  if v==true then
+    print("已复选")
+  else
+    print("没有复选")
+  end
+end】】
+
+《《取IMEI号》》
+【【import "android.content.*"
+imei=activity.getSystemService(Context.TELEPHONY_SERVICE).getDeviceId()
+print(imei)
+--权限添加:
+READ_PHONE_STATE】】
+
+《《编辑框光标颜色》》
+【【function 光标颜色(控件,颜色)
+  import "android.graphics.*"
+  local mEditorField=TextView.getDeclaredField("mEditor")
+  mEditorField.setAccessible(true)
+  local mEditor = mEditorField.get(控件)
+  local field = Editor.getDeclaredField("mCursorDrawable")
+  field.setAccessible(true)
+  local mCursorDrawable=field.get(mEditor)
+  local mccdf = TextView.getDeclaredField("mCursorDrawableRes")
+  mccdf.setAccessible(true)
+  local mccd = activity.getResources().getDrawable(mccdf.getInt(控件))
+  mccd.setColorFilter(PorterDuffColorFilter(颜色,PorterDuff.Mode.SRC_ATOP))
+  mCursorDrawable[0] = mccd
+  mCursorDrawable[1] = mccd
+end
+光标颜色(编辑框ID,0xffff0000)】】
+
+
+《《调用系统浏览器搜索文本》》
+【【function 浏览器搜索(文本)
+  import "android.content.Intent"
+  import "android.app.SearchManager"
+  intent = Intent()
+  intent.setAction(Intent.ACTION_WEB_SEARCH)
+  intent.putExtra(SearchManager.QUERY,文本)
+  activity.startActivity(intent)
+end
+浏览器搜索("马云是谁？")】】
+
+《《调用系统浏览器打开链接》》
+【【function 浏览器打开(链接)
+  import "android.content.Intent"
+  import "android.net.Uri"
+  viewIntent = Intent("android.intent.action.VIEW",Uri.parse(链接))
+  activity.startActivity(viewIntent)
+end
+浏览器打开("http://www.lanzou.com/")】】
+
+《《调用指定浏览器打开链接》》
+【【function 指定浏览器打开(包名,链接)
+  import"android.os.*"
+  import"android.widget.*"
+  import"android.view.*"
+  import"android.text.*"
+  import"android.content.*"
+  intent=Intent("android.intent.action.VIEW")
+  intent.setPackage(包名)
+  intent.setData(Uri.parse(链接))
+  this.startActivity(intent)
+end
+指定浏览器打开("浏览器包名","网页链接")】】
+
+《《调用系统音乐播放器》》
+【【function 播放音乐(路径)
+  import "android.content.Intent"
+  import "android.net.Uri"
+  intent =Intent(Intent.ACTION_VIEW)
+  uri = Uri.parse("file://"..路径)
+  intent.setDataAndType(uri,"audio/mp3")
+  this.startActivity(intent)
+end
+播放音乐("/sdcard/文件夹/歌曲名.mp3")】】
+
+《《调用系统视频播放器》》
+【【function 播放视频(直链)
+  import "android.content.Intent"
+  import "android.net.Uri"
+  intent = Intent(Intent.ACTION_VIEW)
+  uri = Uri.parse("file://"..路径)
+  intent.setDataAndType(uri,"video/mp4")
+  activity.startActivity(intent)
+end
+播放视频("/sdcard/文件夹/视频名.mp4")】】
+
+《《音乐播放器/背景音乐》》
+【【import "android.media.MediaPlayer"
+mediaPlayer=MediaPlayer()--赋值变量
+mediaPlayer.reset()--音乐初始化
+--设置音乐播放资源
+mediaPlayer.setDataSource("填写音乐直链或路径")
+mediaPlayer.prepare()--缓冲音乐资源
+--是否循环播放
+mediaPlayer.setLooping(true)--循环播放true--单次播放false
+--监听音乐缓冲完成事件
+mediaPlayer.setOnPreparedListener(MediaPlayer.OnPreparedListener{
+  onPrepared=function()
+    mediaPlayer.start()--播放
+  end
+})】】
+
+《《音乐控制｜音乐初始化》》
+【【赋值ID.reset()--音乐初始化】】
+
+《《音乐控制｜设置音乐播放资源》》
+【【赋值ID.setDataSource("输入音乐直链或路径")--设置音乐播放资源】】
+
+《《音乐控制｜缓冲资源》》
+【【赋值ID.prepare()--缓冲音乐资源】】
+
+《《音乐控制｜监听音乐缓冲完成事件》》
+【【--监听音乐缓冲完成事件
+赋值ID.setOnPreparedListener(MediaPlayer.OnPreparedListener{
+  onPrepared=function()
+    赋值ID.start()--播放
+  end
+})】】
+
+《《视频播放/播放视频》》
+【【--设置视频播放资源
+视频控件ID.setVideoPath("http://txmov2.a.yximgs.com/upic/2019/08/05/14/BMjAxOTA4MDUxNDU2MzdfMTgwOTk5MjEyXzE2MDMwNTM5MzU2XzFfMw==_bF_B8c3e7b72d3fe790c750648c00c56bce4.mp4?tag=1-1565935492-std-0-vec5ef7oez-2cb1e015319502b4&type=hot#www.svip8.vip")
+
+--监听视频缓冲完成事件
+视频控件ID.setOnPreparedListener(MediaPlayer.OnPreparedListener{
+  onPrepared=function()
+    视频控件ID.start()--播放
+  end
+})
+
+--监听视频播放完成事件
+import "android.media.MediaPlayer$OnCompletionListener"
+视频控件ID.setOnCompletionListener(MediaPlayer.OnCompletionListener{
+  onCompletion=function()
+    视频控件ID.start()--播放
+  end
+})】】
+
+《《视频控制｜设置视频播放资源》》
+【【视频控件ID.setVideoPath("输入视频直链或路径")--设置视频播放资源】】
+
+《《视频控制｜监听视频缓冲完成事件》》
+【【--监听视频缓冲完成事件
+视频控件ID.setOnPreparedListener(MediaPlayer.OnPreparedListener{
+  onPrepared=function()
+    视频控件ID.start()--播放
+  end
+})】】
+
+《《视频控制｜监听视频播放完成事件》》
+【【--监听视频播放完成事件
+import "android.media.MediaPlayer$OnCompletionListener"
+视频控件ID.setOnCompletionListener(MediaPlayer.OnCompletionListener{
+  onCompletion=function()
+    视频控件ID.start()--播放
+  end
+})】】
+
+《《媒体控制｜判断否正在播放》》
+【【if 赋值ID.isPlaying() then--如果正在播放
+  print("执行事件")
+end】】
+
+《《媒体控制｜播放》》
+【【赋值ID.start()--播放】】
+
+《《媒体控制｜暂停》》
+【【赋值ID.pause()--暂停】】
+
+《《媒体控制｜停止》》
+【【赋值ID.stop()--停止】】
+
+《《媒体控制｜播放节点》》
+【【赋值ID.seekTo(0)--从0开始播放】】
+
+《《媒体控制｜是否循环播放》》
+【【赋值ID.setLooping(true)--循环播放true--单次播放false】】
+《《DIY｜滚动公告文本（跑马灯）》》
+【【{
+  CardView,--卡片框控件
+  layout_width="fill",--布局宽度
+  layout_height="34dp",--布局高度
+  layout_margin="8dp",--布局边距
+  cardElevation="0dp",--卡片提升
+  cardBackgroundColor="#f0f0f0",--卡片背景色
+  radius="8dp",--圆角半径
+  {
+    LinearLayout,--线性布局
+    orientation="horizontal",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    gravity="center",--重力属性--顶:top--中:center--左:left--右:right--底:bottom
+    {
+      ImageView,--图片框控件
+      layout_width="40dp",--布局宽度
+      layout_height="40dp",--布局高度
+      padding="8dp",--布局填充
+      src="http://p.qpic.cn/pic_wework/1948211503/8482c29497776c7d26fe50e13981230384056c21f230e1bb/0",--视图路径
+      colorFilter="#666666",--图片颜色
+    },
+    {
+      TextView,--文本框控件
+      layout_marginLeft="-6dp",--布局左距
+      layout_weight="1",--权重分配
+      text="只有当文本内容长度，超过控件或屏幕的宽度，才会自动滚动起来。",--文本内容
+      textSize="15sp",--文本大小
+      textColor="#666666",--文本颜色
+      ellipsize="marquee",--显示方式：前面显示 start｜中间显示 middle｜尾部显示 end｜跑马灯 marquee
+      selected=true,--选中文本
+      singleLine=true,--禁止文本换行
+    },
+  },--线性布局结束
+},--卡片框控件结束】】
+
+《《DIY｜自动轮播图片（三件套）》》
+【【--函数加入以下内容：
+function 卡片框图片(控件,图片)
+  return {
+    LinearLayout,--线性布局
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    id=控件,--控件ID
+    {
+      CardView,--卡片框控件
+      layout_width="fill",--布局宽度
+      layout_height="200dp",--布局高度
+      layout_margin="10dp",--布局边距
+      cardElevation="2dp",--卡片提升
+      cardBackgroundColor="#ffffff",--卡片背景色
+      radius="10dp",--圆角半径
+      {
+        ImageView,--图片框控件
+        layout_width="fill",--布局宽度
+        layout_height="fill",--布局高度
+        src=图片,--视图路径
+        scaleType="fitXY",--图片显示类型--拉伸:fitXY--填充:centerCrop
+      },
+    },--卡片框控件结束
+  }--线性布局结束
+end
+
+--控件加入以下内容：
+{
+  PageView,--页面视图控件
+  layout_width="fill",--布局宽度
+  layout_height="220dp",--布局高度
+  id="huadong",--控件ID
+  pages={
+    卡片框图片(nil,"icon.png"),--分别为：控件ID，图片路径或直链
+    卡片框图片(nil,"icon.png"),
+    卡片框图片(nil,"icon.png"),
+    卡片框图片(nil,"icon.png"),
+  },--页面控件结束
+},--页面视图控件结束
+
+--事件加入以下内容：
+页数=0
+function 开始轮播()
+  页数=页数+1
+  task(1500,function()--1000毫秒=1秒
+    huadong.showPage(页数%4)--跳转页面视图，+1页数 % 总页数
+    开始轮播()
+  end)
+end
+开始轮播()】】
+
+《《单选按钮窗口框架》》
+【【水平分割线={
+  TextView,--水平分割线
+  layout_width="fill",--布局宽度
+  layout_height="1px",--布局高度
+  backgroundColor="#bebebe",--背景色
+}
+
+function 单选按钮细节(控件,文本)
+  return {
+    RadioButton,--单选按钮控件
+    layout_width="fill",--布局宽度
+    layout_height="56dp",--布局高度
+    gravity="left|center",--重力居左｜置中
+    text=文本,--文本内容
+    textSize="15sp",--文本大小
+    textColor="#222222",--文本颜色
+    id=控件,--控件ID
+  }
+end
+
+function 纽扣按钮细节(控件,文本)
+  return {
+    Button,--纽扣控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    layout_weight="1",--权重分配
+    padding="2dp",--布局填充
+    background="#00000000",--布局背景
+    text=文本,--文本内容
+    textSize="15sp",--文本大小
+    textColor="#222222",--文本颜色
+    singleLine=true,--文本禁止换行
+    id=控件,--控件ID
+  }
+end
+
+标题栏布局={
+  LinearLayout,--线性布局
+  orientation="horizontal",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="46dp",--布局高度
+  gravity="left|center",--重力居左｜置中
+  {
+    TextView,--文本框控件
+    layout_marginLeft="4%w",--布局左距
+    layout_weight="1",--权重分配
+    text="自定义标题",--文本内容
+    textSize="18sp",--文本大小
+    textColor="#222222",--文本颜色
+    typeface=Typeface.DEFAULT_BOLD,--文本显示类型
+    singleLine=true,--文本禁止换行
+  },
+  {
+    ImageView,--图片框控件
+    layout_width="56dp",--布局宽度
+    layout_height="56dp",--布局高度
+    padding="16dp",--布局填充
+    src="icon.png",--视图路径
+    onClick=function()--单击事件
+      xxx.dismiss()--关闭
+    end,--单击事件结束
+  },
+}--线性布局结束
+
+取消确定布件={
+  LinearLayout,--线性布局
+  orientation="horizontal",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="42dp",--布局高度
+  gravity="center",--重力属性--顶:top--中:center--左:left--右:right--底:bottom
+  纽扣按钮细节("quxiao","取消"),
+  {
+    TextView,--垂直分割线
+    layout_width="1px",--布局宽度
+    layout_height="fill",--布局高度
+    backgroundColor="#bebebe",--背景色
+  },
+  纽扣按钮细节("queding","确定"),
+}--线性布局结束
+
+layout=--布局命名
+{
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    CardView,--卡片框控件
+    layout_width="88%w",--布局宽度
+    layout_height="wrap",--布局高度
+    cardBackgroundColor="#ffffff",--卡片背景色
+    cardElevation="2dp",--卡片提升
+    radius="10dp",--圆角半径
+    {
+      LinearLayout,--线性布局
+      orientation="vertical",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="fill",--布局高度
+      --开始
+
+      标题栏布局,
+      水平分割线,
+
+      {
+        RadioGroup,--单选控件
+        orientation="vertical",--布局方向
+        layout_width="fill",--布局宽度
+        layout_height="wrap",--布局高度
+        layout_marginLeft="4%w",--布局左距
+        单选按钮细节("button1","DIY 抖音1"),
+        单选按钮细节("button2","DIY 中国开发者2"),
+        单选按钮细节("button3","DIY 爱奇艺3"),
+        单选按钮细节("button4","DIY 腾讯视频4"),
+      },--单选控件结束
+
+      水平分割线,
+      取消确定布件,
+
+    },--线性布局结束
+  },--卡片框控件结束
+}--线性布局结束
+xxx=AlertDialog.Builder(this)
+xxx.setView(loadlayout(layout))
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()
+--背景透明
+import "android.graphics.drawable.ColorDrawable"
+xxx.getWindow().setBackgroundDrawable(ColorDrawable(0x00000000))
+--xxx.show()--显示
+--xxx.dismiss()--关闭
+
+--默认选中
+button2.checked=true--选中:true--取消:false
+
+--取消
+quxiao.onClick=function()
+  xxx.dismiss()--关闭
+  return true
+end
+
+--确定
+queding.onClick=function()
+  if button1.isChecked() then--如果复选框被选中
+    print(button1.Text)--执行的事件
+
+  elseif button2.isChecked() then--如果复选框被选中
+    print(button2.Text)--执行的事件
+
+  elseif button3.isChecked() then--如果复选框被选中
+    print(button3.Text)--执行的事件
+
+  elseif button4.isChecked() then--如果复选框被选中
+    print(button4.Text)--执行的事件
+
+  end
+  xxx.dismiss()--关闭
+  return true
+end
+】】
+
+《《帧布局窗口框架》》
+【【import "android.graphics.drawable.GradientDrawable"
+function 控件圆角(InsideColor,radiu)
+  local drawable = GradientDrawable() 
+  drawable.setShape(GradientDrawable.RECTANGLE) 
+  drawable.setColor(InsideColor)
+  drawable.setCornerRadii({radiu,radiu,radiu,radiu,radiu,radiu,radiu,radiu})
+  return drawable
+end
+
+function 纽扣细节(文本,颜色,事件)
+  return {
+    Button,--纽扣控件
+    layout_margin="15dp",--布局边距
+    layout_width="28%w",--布局宽度
+    layout_height="38dp",--布局高度
+    padding="2dp",--布局填充
+    text=文本,--文本内容
+    textColor="#ffffff",--文本颜色
+    BackgroundDrawable=控件圆角(颜色,180),
+    onClick=事件,--单击事件
+  }
+end
+
+function 编辑框细节(控件,标题,引导)
+  return {
+    LinearLayout,--线性布局
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    {
+      TextView,--文本框控件
+      layout_marginLeft="4%w",--布局左距
+      layout_gravity="left",--顶：top｜中：center｜左：left｜右：right｜底：bottom
+      text=标题,--文本内容
+      textSize="15sp",--文本大小
+      textColor="#222222",--文本颜色
+    },
+    {
+      CardView,--卡片框控件
+      layout_width="fill",--布局宽度
+      layout_height="wrap",--布局高度
+      layout_margin="10dp",--布局边距
+      cardElevation="2dp",--卡片提升
+      BackgroundDrawable=控件圆角(0xfff0f0f0,180),
+      {
+        EditText,--编辑框控件
+        layout_marginLeft="8dp",--布局左距
+        layout_marginRight="8dp",--布局右距
+        layout_width="fill",--布局宽度
+        layout_height="36dp",--布局高度
+        gravity="left|center",--顶：top｜中：center｜左：left｜右：right｜底：bottom
+        padding="4dp",--布局填充
+        background="#00000000",--布局背景
+        hint=引导,--编辑框内容为空时提示
+        textSize="16sp",--文本大小
+        singleLine=true,--禁止文本换行
+        id=控件,--控件ID
+      },
+    },--卡片框控件结束
+  }--线性布局结束
+end
+
+layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    CardView,--卡片框控件
+    layout_width="90%w",--布局宽度
+    layout_height="wrap",--布局高度
+    cardBackgroundColor="#ffeeeeee",--卡片背景色
+    cardElevation="0dp",--卡片提升
+    radius="10dp",--圆角半径
+    {
+      LinearLayout,--线性布局
+      orientation="vertical",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="fill",--布局高度
+      {
+        FrameLayout,--帧布局
+        layout_width="fill",--布局宽度
+        layout_height="fill",--布局高度
+        {
+          LinearLayout,--线性布局
+          orientation="vertical",--布局方向
+          layout_width="fill",--布局宽度
+          layout_height="160dp",--布局高度
+          background="#222222",--布局背景
+          gravity="top|center",--顶：top｜中：center｜左：left｜右：right｜底：bottom
+          {
+            CircleImageView,--圆形图片控件
+            layout_marginTop="20dp",--布局顶距
+            layout_width="70dp",--布局宽度
+            layout_height="70dp",--布局高度
+            src="icon.png",--视图路径
+          },
+        },--线性布局结束
+        {
+          CardView,--卡片框控件
+          layout_marginTop="110dp",--布局顶距
+          layout_margin="15dp",--布局边距
+          layout_width="fill",--布局宽度
+          layout_height="wrap",--布局高度
+          layout_gravity="top|center",--顶：top｜中：center｜左：left｜右：right｜底：bottom
+          cardElevation="5dp",--卡片提升
+          cardBackgroundColor="#ffffff",--卡片背景色
+          radius="5dp",--圆角半径
+          {
+            LinearLayout,--线性布局
+            orientation="vertical",--布局方向
+            layout_width="fill",--布局宽度
+            layout_height="fill",--布局高度
+            gravity="top|center",--顶：top｜中：center｜左：left｜右：right｜底：bottom
+            {
+              TextView,--文本框控件
+              layout_margin="20dp",--布局边距
+              text="登录系统",--文本内容
+              textSize="18sp",--文本大小
+              textColor="#222222",--文本颜色
+              typeface=Typeface.DEFAULT_BOLD,--文本显示类型
+            },
+            编辑框细节("edit1","1、输入您的账号"," QQ账号/手机号/邮箱"),
+            编辑框细节("edit2","2、输入您的密码"," 输入密码验证身份"),
+            {
+              TextView,--文本框控件
+              layout_margin="10dp",--布局边距
+              text="如有疑问，可加客服QQ：782268899",--文本内容
+              textSize="14sp",--文本大小
+              textColor="#666666",--文本颜色
+            },
+          },--线性布局结束
+        },--卡片框控件结束
+      },--帧布局结束
+      {
+        LinearLayout,--线性布局
+        layout_marginTop="-10dp",--布局顶距
+        layout_marginBottom="10dp",--布局底距
+        orientation="horizontal",--布局方向
+        layout_width="fill",--布局宽度
+        layout_height="wrap",--布局高度
+        gravity="center",--顶：top｜中：center｜左：left｜右：right｜底：bottom
+        纽扣细节("退出",0xfff36838,
+        function()--单击事件
+          activity.finish()
+        end),
+        纽扣细节("登录",0xff177cb0,
+        function()--单击事件
+          dlck.dismiss()--关闭窗口
+        end),
+      },--线性布局结束
+    },--线性布局结束
+  },--卡片框控件结束
+}--线性布局结束
+dlck=AlertDialog.Builder(this)
+dlck.setView(loadlayout(layout))
+--dlck.setCancelable(false)--禁用返回键
+dlck=dlck.show()
+--背景透明
+import "android.graphics.drawable.ColorDrawable"
+dlck.getWindow().setBackgroundDrawable(ColorDrawable(0x00000000))
+
+--dlck.show()--显示窗口
+--dlck.dismiss()--关闭窗口】】
+
+《《顶栏选择页面视图框架》》
+【【--状态栏沉浸透明
+import "android.graphics.Color"
+local window=this.getWindow()
+window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+window.setStatusBarColor(Color.TRANSPARENT)
+
+状态栏高度=this.getResources().getDimensionPixelSize(luajava.bindClass("com.android.internal.R$dimen")().status_bar_height)--取状态栏高度
+
+--按钮波纹函数
+import "android.content.res.ColorStateList"
+function 波纹特效(颜色)
+  local attrsArray={android.R.attr.selectableItemBackgroundBorderless}
+  local typedArray=activity.obtainStyledAttributes(attrsArray)
+  local Pretend=activity.Resources.getDrawable(typedArray.getResourceId(0,0))
+  Pretend.setColor(ColorStateList(int[0].class{int{}},int{颜色}))
+  return Pretend.setColor(ColorStateList(int[0].class{int{}},int{颜色}))
+end
+
+--文本按钮布局函数
+function 文本按钮布局(控件,文本)
+  return {
+    TextView,--文本框控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    layout_weight="1",--权重分配
+    gravity="center",--重力居中
+    text=文本,--文本内容
+    textSize="15sp",--文本大小
+    textColor="#222222",--文本颜色
+    foreground=波纹特效(0x44000000),
+    id=控件,--控件ID
+  }
+end
+
+function 文本按钮颜色(颜色1,颜色2)
+  button1.setTextColor(颜色1)--设置文本颜色
+  button2.setTextColor(颜色2)--设置文本颜色
+end
+
+推荐布局={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局 1",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#ff0000",--文本颜色
+  },
+}--线性布局结束
+
+
+功能布局={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局 2",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#0000ff",--文本颜色
+  },
+}--线性布局结束
+
+-- --------------新手自定义布局↖以上内容即可
+layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    LinearLayout,--线性布局
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    background="#ff88ada6",--布局背景
+    elevation="4dp",--阴影层次
+    {
+      LinearLayout,--线性布局
+      orientation="horizontal",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="46dp",--布局高度
+      layout_marginTop=状态栏高度,--布局顶距
+      gravity="center",--重力居中
+      文本按钮布局("button1","推荐"),--分别为：按钮ID，按钮名称
+      文本按钮布局("button2","功能"),
+    },--线性布局结束
+    {
+      TextView,--文本框控件
+      layout_width="50%w",--布局宽度
+      layout_height="3dp",--布局高度
+      background="#ffffffff",--布局背景
+      id="huatiao",--控件ID
+    },
+  },--线性布局结束
+  {
+    PageView,--页面视图控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    layout_weight="1",--权重分配
+    id="yemian",--控件ID
+    pages={
+      推荐布局,
+      功能布局,
+    },
+  },
+}--线性布局结束
+activity.setContentView(loadlayout(layout))--全屏框架
+
+--监听页面视图滑动事件
+yemian.setOnPageChangeListener(PageView.OnPageChangeListener{
+  onPageScrolled=function(a,b,c)
+    huatiao.setX(activity.getWidth()/2*(b+a))--滑动条坐标
+    if c==0 then
+      if a==0 then--第一页事件
+        文本按钮颜色(0xffffffff,0xff333333)
+
+      elseif a==1 then--第二页事件
+        文本按钮颜色(0xff333333,0xffffffff)
+
+      end
+      return true--返回
+    end
+  end
+})
+
+--单击文本按钮事件
+button1.onClick=function()
+  yemian.showPage(0)--第一页0,第二页1,第三页2，以此类推
+  return true--返回
+end
+
+button2.onClick=function()
+  yemian.showPage(1)--第一页0,第二页1,第三页2，以此类推
+  return true--返回
+end
+】】
+
+《《底栏选择页面视图框架》》
+【【--状态栏沉浸透明
+import "android.graphics.Color"
+local window=this.getWindow()
+window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+window.setStatusBarColor(Color.TRANSPARENT)
+
+--取状态栏高度
+状态栏高度=this.getResources().getDimensionPixelSize(luajava.bindClass("com.android.internal.R$dimen")().status_bar_height)
+
+--波纹函数
+import "android.content.res.ColorStateList"
+function 波纹特效(颜色)
+  local attrsArray={android.R.attr.selectableItemBackgroundBorderless}
+  local typedArray=activity.obtainStyledAttributes(attrsArray)
+  local Pretend=activity.Resources.getDrawable(typedArray.getResourceId(0,0))
+  Pretend.setColor(ColorStateList(int[0].class{int{}},int{颜色}))
+  return Pretend.setColor(ColorStateList(int[0].class{int{}},int{颜色}))
+end
+
+--文本按钮布局函数
+function 文本按钮布局(控件,文本)
+  return {
+    TextView,--文本框控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    layout_weight="1",--权重分配
+    gravity="center",--重力居中
+    text=文本,--文本内容
+    textSize="15sp",--文本大小
+    textColor="#222222",--文本颜色
+    foreground=波纹特效(0x44000000),
+    id=控件,--控件ID
+    onClick=function()--单击事件
+      if 控件=="button1" then
+        yemian.showPage(0)--第一页0,第二页1,第三页2，以此类推
+
+      elseif 控件=="button2" then
+        yemian.showPage(1)--第一页0,第二页1,第三页2，以此类推
+
+      elseif 控件=="button3" then
+        yemian.showPage(2)--第一页0,第二页1,第三页2，以此类推
+
+      elseif 控件=="button4" then
+        yemian.showPage(3)--第一页0,第二页1,第三页2，以此类推
+
+      end
+    end,--单击事件结束
+  }
+end
+
+--设置文本颜色函数
+function 设置文本颜色(颜色1,颜色2,颜色3,颜色4)
+  button1.setTextColor(颜色1)--设置文本颜色
+  button2.setTextColor(颜色2)
+  button3.setTextColor(颜色3)
+  button4.setTextColor(颜色4)
+end
+
+页面名称1={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局 1",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#ff0000",--文本颜色
+  },
+}--线性布局结束
+
+
+页面名称2={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局 2",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#0000ff",--文本颜色
+  },
+}--线性布局结束
+
+
+页面名称3={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局 3",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#ff4777",--文本颜色
+  },
+}--线性布局结束
+
+
+页面名称4={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局 4",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#801dae",--文本颜色
+  },
+}--线性布局结束
+
+
+-- --------------新手自定义布局↖以上内容即可
+layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    LinearLayout,--线性布局
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    background="#ff88ada6",--布局背景
+    elevation="4dp",--阴影层次
+    {
+      LinearLayout,--线性布局
+      orientation="horizontal",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="56dp",--布局高度
+      layout_marginTop=状态栏高度,--布局顶距
+      gravity="left|center",--重力居左｜置中
+      {
+        TextView,--文本框控件
+        layout_marginLeft="4%w",--布局左距
+        layout_weight="1",--权重分配
+        text="自定义标题",--文本内容
+        textSize="18sp",--文本大小
+        textColor="#ffffff",--文本颜色
+        singleLine=true,--禁止文本换行
+      },
+      {
+        ImageView,--图片框控件
+        layout_width="56dp",--布局宽度
+        layout_height="56dp",--布局高度
+        padding="16dp",--布局填充
+        src="icon.png",--视图路径
+        --colorFilter="",--图片颜色
+      },
+    },--线性布局结束
+  },--线性布局结束
+
+  {
+    PageView,--页面视图控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    layout_weight="1",--权重分配
+    id="yemian",--控件ID
+    pages={
+      页面名称1,
+      页面名称2,
+      页面名称3,
+      页面名称4,
+    },
+  },
+
+  {
+    LinearLayout,--线性布局
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    background="#ff88ada6",--布局背景
+    {
+      TextView,--文本框控件
+      layout_width="25%w",--布局宽度
+      layout_height="3dp",--布局高度
+      background="#ffff4777",--布局背景
+      id="huatiao",--控件ID
+    },
+    {
+      LinearLayout,--线性布局
+      orientation="horizontal",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="40dp",--布局高度
+      gravity="center",--重力居中
+      文本按钮布局("button1","第一页"),--分别为：按钮ID，按钮名称
+      文本按钮布局("button2","第二页"),
+      文本按钮布局("button3","第三页"),
+      文本按钮布局("button4","第四页"),
+    },--线性布局结束
+    {
+      TextView,--水平分割线
+      layout_width="fill",--布局宽度
+      layout_height="1px",--布局高度
+      backgroundColor="#bebebe",--背景色
+    },
+  },--线性布局结束
+}--线性布局结束
+activity.setContentView(loadlayout(layout))--全屏框架
+
+--监听页面视图滑动事件
+yemian.setOnPageChangeListener(PageView.OnPageChangeListener{
+  onPageScrolled=function(a,b,c)
+    huatiao.setX(activity.getWidth()/4*(b+a))--滑动条坐标
+    if c==0 then
+      if a==0 then--第一页事件
+        设置文本颜色(0xffffffff,0xff333333,0xff333333,0xff333333)--设置文本颜色
+
+      elseif a==1 then--第二页事件
+        设置文本颜色(0xff333333,0xffffffff,0xff333333,0xff333333)--设置文本颜色
+
+      elseif a==2 then--第三页事件
+        设置文本颜色(0xff333333,0xff333333,0xffffffff,0xff333333)--设置文本颜色
+
+      elseif a==3 then--第四页事件
+        设置文本颜色(0xff333333,0xff333333,0xff333333,0xffffffff)--设置文本颜色
+
+      end
+      return true
+    end
+  end
+})
+】】
+
+《《自绘底部圆弧框架》》
+【【页面名称1={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局1",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#0000ff",--文本颜色
+  },
+}--线性布局结束
+
+
+页面名称2={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  {
+    TextView,--文本框控件
+    text="自定义布局2",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#ff0000",--文本颜色
+  },
+}--线性布局结束
+
+function 转换分辨率(sdp)
+  import "android.util.TypedValue"
+  dm=this.getResources().getDisplayMetrics()
+  types={px=0,dp=1,sp=2,pt=3,["in"]=4,mm=5}
+  n,ty=sdp:match("^(%-?[%.%d]+)(%a%a)$")
+  return TypedValue.applyDimension(types[ty],tonumber(n),dm)
+end
+
+function 水珠动画(view,time)
+  import "android.animation.ObjectAnimator"
+  ObjectAnimator().ofFloat(view,"scaleX",{1.2,.8,1.1,.9,1}).setDuration(time).start()
+  ObjectAnimator().ofFloat(view,"scaleY",{1.2,.8,1.1,.9,1}).setDuration(time).start()
+end
+
+--自绘底部圆弧函数
+自绘底部圆弧=LuaDrawable(function(mCanvas,mPaint,mDrawable)
+  import "android.graphics.*"
+  import "com.androlua.LuaDrawable"
+  mPaint.setColor(0xFFFfffff)
+  mPaint.setAntiAlias(true)
+  mPaint.setStrokeWidth(1)
+  mPaint.setStyle(Paint.Style.FILL)
+  --获取控件宽和高
+  local w=activity.width
+  local h=转换分辨率("56dp")
+  --路径
+  path=Path()
+  --起点
+  path.moveTo(0,0)
+  path.cubicTo(0,0,0,0,w/2-180,0)
+  --曲线
+  path.cubicTo(w/2-65,0,w/2-105,h/1.36,w/2,h/1.32)
+  path.cubicTo(w/2+105,h/1.32,w/2+65,0,w/2+180,0)
+  --剩余直线
+  path.cubicTo(w/2+180,0,w/2+180,0,w,0)
+  path.cubicTo(w,0,w,0,w,h)
+  path.cubicTo(w,h,w,h,0,h)
+  path.cubicTo(0,h,0,h,0,0)
+  --画布背景透明
+  mCanvas.drawColor(0x00000000)
+  mCanvas.drawPath(path,mPaint)
+end)
+
+function 底部按钮(控件,文本)
+  return {
+    LinearLayout,--线性布局
+    layout_weight="1",--重力分配
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    gravity="center",--重力居中
+    id=控件,--控件ID
+    {
+      ImageView,--图片框控件
+      layout_width="56dp",--布局宽度
+      layout_height="25dp",--布局高度
+      src="icon.png",--视图路径
+      --colorFilter="#222222",--图片颜色
+    },
+    {
+      TextView,--文本框控件
+      text=文本,--文本内容
+      --textSize="15sp",--文本大小
+      --textColor="#ffffff",--文本颜色
+    },
+  }--线性布局结束
+end
+
+layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  background="#ffeeeeee",--布局背景
+  {
+    LinearLayout,--线性布局
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    background="#ff88ada6",--布局背景
+    elevation="4dp",--阴影层次
+    {
+      LinearLayout,--线性布局
+      layout_marginTop="4%h",--布局顶距
+      orientation="horizontal",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="56dp",--布局高度
+      gravity="left|center",--重力居左｜置中
+      {
+        TextView,--文本框控件
+        layout_marginLeft="4%w",--布局左距
+        layout_weight="1",--重力分配
+        text="自定义标题",--文本内容
+        textSize="18sp",--文本大小
+        textColor="#ffffff",--文本颜色
+        singleLine=true,--禁止文本换行
+      },
+      {
+        ImageView,--图片框控件
+        layout_width="56dp",--布局宽度
+        layout_height="56dp",--布局高度
+        padding="16dp",--布局填充
+        src="icon.png",--视图路径
+        --colorFilter="",--图片颜色
+      },
+    },--线性布局结束
+  },--线性布局结束
+  --开始
+
+  {
+    FrameLayout,--帧布局
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    {
+      LinearLayout,--线性布局
+      orientation="vertical",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="fill",--布局高度
+      {
+        PageView,--页面视图控件
+        layout_weight="1",--重力分配
+        layout_width="fill",--布局宽度
+        layout_height="fill",--布局高度
+        id="huadong",--控件ID
+        pages={
+          页面名称1,
+          页面名称2,
+        },--页面控件结束
+      },--页面视图控件结束
+    },--线性布局结束
+
+    {
+      LinearLayout,--线性布局
+      orientation="horizontal",--水平方向
+      layout_width="fill",--布局宽度
+      layout_height="56dp",--布局高度
+      layout_gravity="bottom|center",--重力居底｜置中
+      gravity="center",--重力居中
+      id="dilan",--控件ID
+      底部按钮("anniu1","网络"),
+      {
+        TextView,--文本框控件
+        layout_weight="1",--重力分配
+      },
+      底部按钮("anniu2","幽灵"),
+    },--线性布局结束
+    {
+      CircleImageView,--圆形图片控件
+      layout_margin="25dp",--布局边距
+      layout_gravity="bottom|center",--重力居底｜置中
+      layout_width="50dp",--布局宽度
+      layout_height="50dp",--布局高度
+      src="icon.png",--视图路径
+      id="xuanfu",--控件ID
+    },
+  },--帧布局结束
+}--线性布局结束
+activity.setContentView(loadlayout(layout))--全屏框架
+
+--自绘底部圆弧
+dilan.background=自绘底部圆弧
+
+--单击事件
+xuanfu.onClick=function()
+  水珠动画(xuanfu,300)
+  print("执行的事件")
+end
+
+anniu1.onClick=function()
+  水珠动画(anniu1,300)
+  huadong.showPage(0)
+end
+
+anniu2.onClick=function()
+  水珠动画(anniu2,300)
+  huadong.showPage(1)
+end
+】】
+
+《《视频播放器媒体框架》》
+【【--屏幕方向
+activity.setRequestedOrientation(0)--横屏0--竖屏1
+--隐藏时间
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+--禁止系统息屏
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+播放器布局={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="wrap",--布局高度
+  background="#ff000000",--布局背景
+  {
+    VideoView,--视频控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    id="video",--控件ID
+  },
+}--线性布局结束
+activity.setContentView(loadlayout(播放器布局))
+--如果视频直链失效，请修改后测试
+视频直链="https://v.maya6d.com/hls/a25f32da4f1549a292bb158930176556/index.m3u8"
+--设置播放资源
+video.setVideoPath(视频直链)
+--开始播放
+video.start()
+--多媒体控制
+video.setMediaController(MediaController(this))
+
+--单击返回键事件
+function onKeyDown(a,b)
+  if a==4 then
+    activity.finish()--退出页面
+    return true
+  end
+end】】
+
+《《适配器｜列表视图框架》》
+【【layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    ListView,--列表视图控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    dividerHeight="1",--分割线高度
+    verticalScrollBarEnabled=false,--隐藏滑条
+    id="liebiao",--控件ID
+  },
+}--线性布局结束
+webView.addView(loadlayout(layout))--常规框架
+
+itme={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="wrap",--布局高度
+  gravity="left|center",--重力居左｜置中
+  padding="10dp",--布局填充
+  {
+    TextView,--文本框控件
+    text="标题",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#222222",--文本颜色
+    id="wenben1",--控件ID
+  },
+  {
+    TextView,--文本框控件
+    text="简介",--文本内容
+    textSize="12sp",--文本大小
+    id="wenben2",--控件ID
+  },
+}--线性布局结束
+构建adp=LuaAdapter(activity,itme)
+liebiao.setAdapter(构建adp)
+
+总列表=[[
+《中国开发者》
+【qq782268899】
+
+《欢迎使用Fa助手》
+【huanyingshiyong】
+
+《腾讯》
+【tencent】
+]]
+
+读取列表=总列表:gmatch("《(.-)》\n【(.-)】")--截取格式
+for a,b in 读取列表 do--循环取值
+  构建adp.add{--构建视图控件
+    wenben1=a,--标题
+    wenben2=b,--简介
+  }
+end
+
+--单击适配项目
+liebiao.onItemClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+
+--长按适配项目
+liebiao.onItemLongClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+】】
+
+《《适配器｜列表视图窗口搜索框架》》
+【【顶部布局={
+  LinearLayout,--线性布局
+  orientation="horizontal",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="46dp",--布局高度
+  gravity="left|center",--重力居左｜置中
+  {
+    TextView,--文本框控件
+    layout_marginLeft="4%w",--布局左距
+    layout_weight="1",--权重分配
+    text="爱奇艺",--文本内容
+    textSize="18sp",--文本大小
+    textColor="#222222",--文本颜色
+    singleLine=true,--禁止文本换行
+  },
+  {
+    ImageView,--图片框控件
+    layout_width="56dp",--布局宽度
+    layout_height="25dp",--布局高度
+    src="icon.png",--视图路径
+    onClick=function()--单击事件
+      xxx.dismiss()--关闭窗口
+    end,--单击事件结束
+  },
+}--线性布局结束
+
+搜索布局={
+  CardView,--卡片框控件
+  layout_margin="10dp",--布局边距
+  layout_width="fill",--布局宽度
+  layout_height="38dp",--布局高度
+  cardElevation="0dp",--卡片提升
+  cardBackgroundColor="#fff0f0f0",--卡片背景色
+  radius="4dp",--圆角半径
+  {
+    EditText,--编辑框控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    gravity="left|center",--重力居左｜置中
+    padding="2dp",--布局填充
+    background="#00000000",--布局背景
+    hint=" 输入关键字搜索...",--编辑框内容为空时提示
+    textSize="16sp",--文本大小
+    singleLine=true,--禁止文本换行
+    id="edit",--控件ID
+  },
+}--卡片框控件结束
+
+layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  gravity="center",--重力居中
+  focusableInTouchMode=true,--禁止弹出输入法
+  {
+    CardView,--卡片框控件
+    layout_width="88%w",--布局宽度
+    layout_height="wrap",--布局高度
+    cardBackgroundColor="#ffffff",--卡片背景色
+    cardElevation="0dp",--卡片提升
+    radius="8dp",--圆角半径
+    {
+      LinearLayout,--线性布局
+      orientation="vertical",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="fill",--布局高度
+      顶部布局,
+      {
+        TextView,--水平分割线
+        layout_width="fill",--布局宽度
+        layout_height="1px",--布局高度
+        backgroundColor="#bebebe",--背景色
+      },
+      搜索布局,
+      {
+        ListView,--列表视图控件
+        layout_width="fill",--布局宽度
+        layout_height="fill",--布局高度
+        dividerHeight="1",--分割线高度
+        id="liebiao",--控件ID
+      },
+    },--线性布局结束
+  },--卡片框控件结束
+}--线性布局结束
+
+xxx=AlertDialog.Builder(this)
+xxx.setView(loadlayout(layout))
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()
+--背景透明
+import "android.graphics.drawable.ColorDrawable"
+xxx.getWindow().setBackgroundDrawable(ColorDrawable(0x00000000))
+
+--自定义列表内容
+列表内容=[[
+《爱爱爱》
+【qq782268899】
+
+《腾讯视频》
+【tengxunshiping】
+
+《优酷》
+【youku】
+
+《爱奇艺》
+【aiqiyi】
+]]
+
+--构建适配函数
+function 更新数据(更新源)
+  adp=ArrayAdapter(activity,android.R.layout.simple_list_item_1,String(更新源))
+  liebiao.setAdapter(adp)
+end
+
+--创建空表
+标题源={}
+内容源={}
+
+--循环截取
+local 截取内容=列表内容:gmatch("《(.-)》\n【(.-)】")
+for a,b in 截取内容 do
+  标题源[#标题源+1]=a
+  内容源[a]=b 
+end
+--启用构建函数
+更新数据(标题源)
+
+--监听编辑框内容事件
+edit.addTextChangedListener{
+  onTextChanged=function(v)
+    local 储存表={}--创建空表
+    for a,b in pairs(标题源) do--遍历标题源
+      if string.lower(tostring(b)):find(string.lower(tostring(v)),1,true) then--判断关键字并转化字符
+        储存表[#储存表+1]=b
+      end
+    end 
+    更新数据(储存表)--启用构建函数
+  end,
+}
+
+--单击适配项目
+liebiao.onItemClick=function(a,b)
+  print(b.Text)--标题
+  print(内容源[b.Text])--内容
+  return true--返回
+end
+
+--长按适配项目
+liebiao.onItemLongClick=function(a,b)
+  print(b.Text)--标题
+  print(内容源[b.Text])--内容
+  return true--返回
+end
+】】
+
+《《适配器｜网格控件框架》》
+【【layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    GridView,--网格控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    gravity="center",--重力居中
+    numColumns="3",--设置列数
+    overScrollMode="2",--去除滑动圆弧形
+    verticalScrollBarEnabled=false,--隐藏滑条
+    id="liebiao",--控件ID
+  },
+}--线性布局结束
+webView.addView(loadlayout(layout))--常规框架
+
+itme={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="wrap",--布局高度
+  gravity="center",--顶：top｜中：center｜左：left｜右：right｜底：bottom
+  padding="10dp",--布局填充
+  {
+    ImageView,--图片框控件
+    layout_width="56dp",--布局宽度
+    layout_height="40dp",--布局高度
+    src="icon.png",--视图路径
+    id="tupian",--控件ID
+  },
+  {
+    TextView,--文本框控件
+    text="标题",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#222222",--文本颜色
+    id="wenben1",--控件ID
+  },
+  {
+    TextView,--文本框控件
+    text="简介",--文本内容
+    textSize="12sp",--文本大小
+    id="wenben2",--控件ID
+  },
+}--线性布局结束
+构建adp=LuaAdapter(activity,itme)
+liebiao.setAdapter(构建adp)
+
+总列表=[[
+〖icon.png〗
+《中国开发者》
+【qq782268899】
+
+〖icon.png〗
+《Fa助手》
+【huanyingshiyong】
+
+〖drawable/shuaxin.png〗
+《腾讯视频》
+【tencent】
+
+〖drawable/shouye.png〗
+《优酷视频》
+【youku】
+
+〖drawable/suoxiao.png〗
+《爱奇艺》
+【aiqiyi】
+
+〖drawable/fangda.png〗
+《抖音》
+【douyin】
+]]
+
+读取列表=总列表:gmatch("〖(.-)〗\n《(.-)》\n【(.-)】")--截取格式
+for a,b,c in 读取列表 do--循环取值
+  构建adp.add{--构建视图控件
+    tupian=a,--图标
+    wenben1=b,--标题
+    wenben2=c,--简介
+  }
+end
+
+--单击适配项目
+liebiao.onItemClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+
+--长按适配项目
+liebiao.onItemLongClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+】】
+
+《《适配器｜网格控件分类框架》》
+【【--状态栏沉浸透明
+import "android.graphics.Color"
+local window=this.getWindow()
+window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+window.setStatusBarColor(Color.TRANSPARENT)
+
+--取状态栏高度
+状态栏高度=this.getResources().getDimensionPixelSize(luajava.bindClass("com.android.internal.R$dimen")().status_bar_height)
+
+function 分类按钮文本(控件,文本)
+  return {
+    LinearLayout,--线性布局
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    id=控件,--控件ID
+    {
+      TextView,--文本框控件
+      layout_width="fill",--布局宽度
+      layout_height="50dp",--布局高度
+      gravity="center",--重力属性--顶:top--中:center--左:left--右:right--底:bottom
+      text=文本,--文本内容
+      textSize="14sp",--文本大小
+      textColor="#222222",--文本颜色
+      singleLine=true,--禁止文本换行
+    },
+    {
+      TextView,--水平分割线
+      layout_width="fill",--布局宽度
+      layout_height="1px",--布局高度
+      backgroundColor="#bebebe",--背景色
+    },
+  }--线性布局结束
+end
+
+function 分类按钮换色(v)
+  button1.setBackgroundColor(Color.parseColor("#eeeeee"))
+  button2.setBackgroundColor(Color.parseColor("#eeeeee"))
+  button3.setBackgroundColor(Color.parseColor("#eeeeee"))
+  button4.setBackgroundColor(Color.parseColor("#eeeeee"))
+  v.setBackgroundColor(Color.parseColor("#ffffff"))
+end
+
+layout=--布局命名
+{
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+
+  {
+    LinearLayout,--线性布局
+    orientation="vertical",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    background="#ff88ada6",--布局背景
+    elevation="4dp",--阴影层次
+    {
+      LinearLayout,--线性布局
+      orientation="horizontal",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="56dp",--布局高度
+      layout_marginTop=状态栏高度,--布局顶距
+      gravity="left|center",--重力居左｜置中
+      {
+        TextView,--文本框控件
+        layout_marginLeft="4%w",--布局左距
+        layout_weight="1",--权重分配
+        text="自定义标题",--文本内容
+        textSize="18sp",--文本大小
+        textColor="#ffffff",--文本颜色
+        singleLine=true,--禁止文本换行
+      },
+      {
+        ImageView,--图片框控件
+        layout_width="56dp",--布局宽度
+        layout_height="56dp",--布局高度
+        padding="16dp",--布局填充
+        src="icon.png",--视图路径
+        --colorFilter="",--图片颜色
+      },
+    },--线性布局结束
+  },--线性布局结束
+
+  {
+    LinearLayout,--线性布局
+    orientation="horizontal",--布局方向
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    background="#eeeeee",--布局背景
+
+    {
+      ScrollView,--纵向滑动控件
+      layout_width="22%w",--布局宽度
+      layout_height="fill",--布局高度
+      overScrollMode=View.OVER_SCROLL_NEVER,--隐藏圆弧阴影
+      verticalScrollBarEnabled=false,--隐藏纵向滑条
+      {
+        LinearLayout,--线性布局
+        orientation="vertical",--布局方向
+        layout_width="fill",--布局宽度
+        layout_height="fill",--布局高度
+        分类按钮文本("button1","全部分类"),
+        分类按钮文本("button2","工具箱"),
+        分类按钮文本("button3","美女"),
+        分类按钮文本("button4","中国开发者"),
+      },--线性布局结束
+    },--纵向滑动控件结束
+
+    {
+      LinearLayout,--线性布局
+      orientation="vertical",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="fill",--布局高度
+      layout_weight="1",--权重分配
+      background="#ffffffff",--布局背景
+      {
+        GridView,--网格控件
+        layout_width="fill",--布局宽度
+        layout_height="fill",--布局高度
+        gravity="center",--重力居中
+        numColumns="2",--设置列数
+        overScrollMode="2",--去除滑动圆弧形
+        verticalScrollBarEnabled=false,--隐藏滑条
+        id="liebiao",--控件ID
+      },
+    },--线性布局结束
+
+  },--线性布局结束
+}--线性布局结束
+activity.setContentView(loadlayout(layout))--全屏框架
+
+itme={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    CardView,--卡片框控件
+    layout_width="fill",--布局宽度
+    layout_height="48dp",--布局高度
+    layout_margin="8dp",--布局边距
+    cardElevation="2dp",--卡片提升
+    cardBackgroundColor="#ffffff",--卡片背景色
+    radius="4dp",--圆角半径
+    {
+      LinearLayout,--线性布局
+      orientation="horizontal",--布局方向
+      layout_width="fill",--布局宽度
+      layout_height="fill",--布局高度
+      gravity="left|center",--重力居左｜置中
+      {
+        ImageView,--图片框控件
+        layout_width="48dp",--布局宽度
+        layout_height="40dp",--布局高度
+        padding="4dp",--布局填充
+        src="icon.png",--视图路径
+        id="tupian",--控件ID
+      },
+      {
+        TextView,--文本框控件
+        text="标题",--文本内容
+        textSize="14sp",--文本大小
+        textColor="#222222",--文本颜色
+        id="wenben1",--控件ID
+      },
+      {
+        TextView,--文本框控件
+        visibility=8,--控件能见度--不可视:4--隐藏:8--显示:0
+        id="wenben2",--控件ID
+      },
+    },--线性布局结束
+  },--卡片框控件结束
+}--线性布局结束
+
+构建adp=LuaAdapter(activity,itme)
+liebiao.setAdapter(构建adp)
+
+工具箱=[[
+〖icon.png〗
+《抖音解析》
+【douyin】
+
+〖icon.png〗
+《腾讯视频》
+【txsp】
+
+〖icon.png〗
+《短网址》
+【duanwnagzhi】
+]]
+
+美女=[[
+〖icon.png〗
+《苍井空》
+【cjk】
+
+〖icon.png〗
+《波多野结衣》
+【bdyjyi】
+
+〖icon.png〗
+《呃呃呃呃》
+【eeee】
+
+〖icon.png〗
+《幽灵》
+【youling】
+]]
+
+中国开发者=[[
+〖icon.png〗
+《中国开发者》
+【qq782268899】
+
+〖icon.png〗
+《Fa助手》
+【huanyingshiyong】
+]]
+--再将以上分类，结合为一个
+全部分类=(工具箱..美女..中国开发者)
+
+--循环取值函数
+function 更新列表(分类)
+  构建adp.clear()--清空适配器
+  local 分类=分类:gmatch("〖(.-)〗\n《(.-)》\n【(.-)】")--截取格式
+  for a,b,c in 分类 do--循环取值
+    构建adp.add{--构建视图控件
+      tupian=a,--图标
+      wenben1=b,--标题
+      wenben2=c,--简介
+    }
+  end
+end
+
+--加载分类
+更新列表(全部分类)
+
+--设置全部分类按钮颜色
+import "android.graphics.drawable.ColorDrawable"
+button1.setBackgroundColor(Color.parseColor("#ffffff"))
+
+--按钮单击事件
+button1.onClick=function(v)
+  分类按钮换色(v)
+  更新列表(全部分类)
+  return true
+end
+
+button2.onClick=function(v)
+  分类按钮换色(v)
+  更新列表(工具箱)
+  return true
+end
+
+button3.onClick=function(v)
+  分类按钮换色(v)
+  更新列表(美女)
+  return true
+end
+
+button4.onClick=function(v)
+  分类按钮换色(v)
+  更新列表(中国开发者)
+  return true
+end
+
+--单击适配项目
+liebiao.onItemClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+
+--长按适配项目
+liebiao.onItemLongClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+】】
+
+《《适配器｜多级列表框架（安卓9禁用）》》
+【【layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    ExpandableListView,--多级列表控件
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    dividerHeight="0",--分割线1，无分割线0
+    overScrollMode="2",--去除滑动圆弧形
+    verticalScrollBarEnabled=false,--隐藏滑条
+    id="list",--控件ID
+  },
+}--线性布局结束
+webView.addView(loadlayout(layout))--常规框架
+--list.setGroupIndicator(null)--是否隐藏箭头
+
+--构建适配器
+适配器=ArrayExpandableListAdapter(activity)
+list.setAdapter(适配器)
+
+父项数据={"功能","影音","图文","其他"}--父项数据标题
+
+子项数据={--子项数据标题
+  {"功能选项1","功能选项2","功能选项3","功能选项4"},
+  {"影音选项1","影音选项2","影音选项3","影音选项4"},
+  {"图文选项1","图文选项2","图文选项3","图文选项4"},
+  {"其他选项1","其他选项2","其他选项3","其他选项4"},
+}
+
+for k,v in ipairs(父项数据) do--循环取值
+  适配器.add(v,子项数据[k])--数据构建
+end
+
+--单击项目事件
+list.onChildClick=function(a,b)
+  print(b.Text)--打印标题
+  return true
+end
+】】
+
+《《适配器｜列表对话框》》
+【【标签文本=TextView(this)--创建标签
+列表list=ListView(this).setFastScrollEnabled(true)--创建ListView作为列表
+对话框布件=LinearLayout(this).setOrientation(1).addView(标签文本).addView(列表list)
+标签文本.setText("＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿")--更改标签内容
+标签文本.singleLine=true--禁止文本换行
+
+xxx=AlertDialog.Builder(this)--创建对话框
+xxx.setTitle("操作")--对话框标题
+xxx.setView(对话框布件)--构建布局
+xxx=xxx.show()--显示
+
+列表adp=ArrayAdapter(this,android.R.layout.simple_list_item_1)
+列表list.setAdapter(列表adp)
+
+操作菜单={
+  "删除文件",
+  "重命名",
+  "剪切移动",
+  "压缩解压",
+  "打开方式",
+  "复制绝对路径",
+  "复制名称格式",
+  "加密文件",
+  "分享文件",
+}
+
+for a,b in ipairs(操作菜单) do--循环取值
+  列表adp.add(b)--构建列表
+end
+
+列表list.onItemClick=function(a,b)
+  print(b.Text)
+  xxx.dismiss()--关闭
+  return true
+end
+】】
+
+《《普通对话框》》
+【【xxx=AlertDialog.Builder(this)
+xxx.setTitle("标题")--标题
+xxx.setMessage("文本内容")--消息
+xxx.setPositiveButton("确定",function()--积极按钮
+  --执行的事件
+end)
+xxx.setNegativeButton("取消",nil)--消极按钮
+xxx.setNeutralButton("其他",nil)--中立按钮
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()--显示
+--xxx.show()--显示窗口
+--xxx.dismiss()--关闭窗口
+】】
+
+《《普通输入对话框》》
+【【layout={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+  {
+    EditText,--编辑框控件
+    layout_marginTop="15dp",--布局顶距
+    layout_width="fill",--布局宽度
+    layout_height="wrap",--布局高度
+    hint="输入内容",--编辑框内容为空时提示
+    textSize="15sp",--文本大小
+    singleLine=true,--禁止文本换行
+    id="edit",--控件ID
+  },
+}--线性布局结束
+xxx=AlertDialog.Builder(this)
+xxx.setTitle("标题")--标题
+xxx.setView(loadlayout(layout))--框架
+xxx.setPositiveButton("确定",function()--积极按钮
+  --执行的事件
+end)
+xxx.setNegativeButton("取消",nil)--消极按钮
+xxx.setNeutralButton("其他",nil)--中立按钮
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()--显示
+--xxx.show()--显示窗口
+--xxx.dismiss()--关闭窗口
+】】
+
+《《普通多选列表对话框》》
+【【items={}
+for i=1,5 do
+  table.insert(items,"自定义项目名称"..tostring(i))
+end
+xxx=AlertDialog.Builder(this)
+xxx.setTitle("多选框")
+xxx.setMultiChoiceItems(items,nil,{onClick=function(v,p)
+    print(items[p+1])
+  end})
+xxx.show()
+】】
+
+《《普通单选列表对话框（安卓9禁用）》》
+【【单选列表={}
+for i=1,5 do
+  table.insert(单选列表,"自定义项目名称"..tostring(i))
+end
+xxx=AlertDialog.Builder(this)
+xxx.setTitle("列表对话框")
+xxx.setSingleChoiceItems(单选列表,-1,{onClick=function(v,p)
+    print(单选列表[p+1])
+  end})
+xxx.show()
+】】
+
+《《普通迭代器列表》》
+【【列表内容=[[
+《中国开发者》
+【QQ782268899】
+
+《虎牙直播》
+【huyazhibo】
+
+《腾讯视频》
+【tencent】
+
+《爱奇艺视频》
+【iqiyi】
+]]
+
+标题迭代器=列表内容:gmatch("《(.-)》")
+内容迭代器=列表内容:gmatch("【(.-)】")
+
+标题表={}
+内容表={}
+
+for i in 标题迭代器 do
+  table.insert(标题表,i)
+end
+
+for i in 内容迭代器 do
+  table.insert(内容表,i)
+end
+
+xxx=AlertDialog.Builder(this)
+xxx.setTitle("自定义标题")
+xxx.setItems(标题表,{
+  onClick=function(v,l)
+    print(标题表[l+1])
+    print(内容表[l+1])
+  end})
+xxx.setPositiveButton("确定",function()--积极按钮
+  --执行的事件
+end)
+xxx.setNegativeButton("取消",nil)--消极按钮
+xxx.setNeutralButton("其他",nil)--中立按钮
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()
+--xxx.show()--显示窗口
+--xxx.dismiss()--关闭窗口
+】】
+
+《《普通迭代器单选列表》》
+【【列表内容=[[
+《中国开发者》
+【QQ782268899】
+
+《虎牙直播》
+【huyazhibo】
+
+《腾讯视频》
+【tencent】
+
+《爱奇艺视频》
+【iqiyi】
+]]
+
+标题迭代器=列表内容:gmatch("《(.-)》")
+内容迭代器=列表内容:gmatch("【(.-)】")
+标题表={}
+内容表={}
+
+for i in 标题迭代器 do
+  table.insert(标题表,i)
+end
+for i in 内容迭代器 do
+  table.insert(内容表,i)
+end 
+
+xxx=LuaDialog(activity)
+xxx.setTitle("自定义标题")
+xxx.setSingleChoiceItems(标题表,-1)
+xxx.setOnItemClickListener(AdapterView.OnItemClickListener{
+  onItemClick=function(a,b,c,d)
+    aaa=(标题表[d])
+    bbb=(内容表[d])
+  end})
+xxx.setButton("确定",function()--积极按钮
+  print(aaa)
+  print(bbb)
+end)
+xxx.setNegativeButton("取消",nil)--消极按钮
+xxx.setNeutralButton("其他",nil)--中立按钮
+--xxx.setCancelable(false)--禁用返回键
+xxx=xxx.show()
+--xxx.show()--显示窗口
+--xxx.dismiss()--关闭窗口】】
+
+《《对话框颜色》》
+【【
+dialog=AlertDialog.Builder(this)
+--对话框()
+.setTitle("标题")
+.setMessage("消息")
+.setPositiveButton("积极",{onClick=function(v) print"点击了积极按钮"end})
+.setNeutralButton("中立",nil)
+.setNegativeButton("否认",nil)
+.show()
+dialog.create()
+
+--更改消息颜色
+message=dialog.findViewById(android.R.id.message)
+message.setTextColor(0xff5268e8)
+
+--更改Button颜色
+import "android.graphics.Color"
+dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(0xff5268e8)
+dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(0xff5268e8)
+dialog.getButton(dialog.BUTTON_NEUTRAL).setTextColor(0xff5268e8)
+
+--更改Title颜色
+import "android.text.SpannableString"
+import "android.text.style.ForegroundColorSpan"
+import "android.text.Spannable"
+sp = SpannableString("标题")
+sp.setSpan(ForegroundColorSpan(0xff5268e8),0,#sp,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+dialog.setTitle(sp)】】
+
+
+《《webview上传》》
+【【
+全屏框架=
+{
+LinearLayout,--线性布局
+orientation='vertical',--方向
+layout_width='fill',--宽度
+layout_height='wrap',--高度
+background='#00FFFFFF',--背景颜色或图片路径
+
+{
+LuaWebView;--浏览器控件
+layout_width='fill';--宽度
+layout_height='fill';--高度
+id="浏览器"
+};
+
+};
+activity.setContentView(loadlayout(全屏框架))
+
+function webview上传(ID)
+  require "import"
+  import "com.lua.*"
+  import "android.net.Uri"
+  import "android.content.Intent"
+  import "android.app.Activity"
+  import "android.webkit.WebChromeClient"
+  uploadMessageAboveL=0
+  ID.setWebChromeClient(luajava.override(WebChromeClient,{
+    onShowFileChooser=function(s,v,fic)
+      uploadMessageAboveL=fic
+      local intet = Intent(Intent.ACTION_GET_CONTENT);
+      intet.addCategory(Intent.CATEGORY_OPENABLE);
+      intet.setType("*/*");
+      activity.startActivityForResult(Intent.createChooser(intet, "File Chooser"), 1);
+      return true;
+    end
+  }))
+  onActivityResult=function(req,res,intent)
+    if (res == Activity.RESULT_CANCELED) then
+      if(uploadMessageAboveL~=nil )then
+        uploadMessageAboveL.onReceiveValue(nil);
+      end
+    end
+    local results
+    if (res == Activity.RESULT_OK)then
+      if(uploadMessageAboveL==nil or type(uploadMessageAboveL)=="number")then
+        return;
+      end
+      if (intent ~= nil) then
+        local dataString = intent.getDataString();
+        local clipData = intent.getClipData();
+        if (clipData ~= nil) then
+          results = Uri[clipData.getItemCount()];
+          for i = 0,clipData.getItemCount()-1 do
+            local item = clipData.getItemAt(i);
+            results[i] = item.getUri();
+          end
+        end
+        if (dataString ~= nil) then
+          results = Uri[1];
+          results[0]=Uri.parse(dataString)
+        end
+      end
+    end
+    if(results~=nil)then
+      uploadMessageAboveL.onReceiveValue(results);
+      uploadMessageAboveL = nil;
+    end
+  end
+end--已封装好函数
+
+
+webview上传(浏览器.loadUrl("https://www.hualigs.cn/"))--加载网页)
+--ID指的是web控件的id
+】】
+
+《《X5浏览器控件》》
+【【
+--布局表控件 WebView;
+--布局表之前导入X5WebView控件
+import "com.tencent.smtt.sdk.WebView"
+--x5内核导入包↓
+import "x5init"
+import "com.tencent.smtt.export.external.*"
+import "com.tencent.smtt.export.external.extension.interfaces.*"
+import "com.tencent.tbs.video.interfaces.*"
+import "com.tencent.smtt.export.external.proxy.*"
+import "com.tencent.smtt.export.external.extension.proxy.*"
+import "com.tencent.smtt.export.external.interfaces.ConsoleMessage"
+import "com.tencent.smtt.sdk.*"
+import "com.x5.WebView.*"
+import "java.util.HashMap"
+import "android.webkit.WebView"
+import "android.webkit.WebViewFragment"
+import "android.webkit.WebChromeClient"
+import "com.androlua.LuaWebView"
+import "android.graphics.PixelFormat"
+import"com.tencent.smtt.sdk.WebViewClient"
+--x5内核导入包↑
+--说明
+--下载X5必须文件↓↓复制放到浏览器下载完。解压后复制到目录文件里！
+
+--https://pan.cccyun.cc/down.php/7c8703672b89cf075c012ac4e1e886fd.zip
+
+全屏框架=
+{
+  LinearLayout,--线性布局
+  orientation='vertical',--方向
+  layout_width='fill',--宽度
+  layout_height='wrap',--高度
+  background='#00FFFFFF',--背景颜色或图片路径
+  {
+    X5WebView;--x5浏览器内核控件
+    layout_width="fill",
+    layout_height="fill",
+    id="webView"
+  };
+};
+activity.setContentView(loadlayout(全屏框架))
+
+--设置显示的view
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+--x5内核初始化源码↓
+初始化=function()
+  require"import"
+  import"com.tencent.smtt.sdk.QbSdk"
+  QbSdk.initX5Environment(activity,nil)
+end
+task(初始化,function(a) end)
+浏览器设置(webView)
+webView.loadUrl("http://debugtbs.qq.com")--加载网页)
+】】
+
+《《跑马灯ellipsize属性》》
+【【
+--关于ellipsize属性使用的一些细节
+--ellipsize主要是处理当文字长度超过TextView可显示的长度的时候，系统的处理方式，ellipsize主要有以下几种值：
+--EidtText和textview中内容过长的话自动换行，
+--使用ellipsize与singleine可以解决，使只有一行。
+--EditText不支持marquee
+--用法如下：
+
+--ellipsize="end",　　  --省略号在结尾
+--ellipsize="start", 　　--省略号在开头
+--ellipsize="middle",     --省略号在中间
+--ellipsize="marquee",  --跑马灯,以横向滚动方式显示(需获得当前焦点时)
+--singleLine=true,--换行内显示
+--selected=true,--中选显示
+--ellipsize="none"--不做任何处理(会将要显示的文字截断
+--根据TextView的这个属性，我们可以在TextView上实现跑马灯效果
+
+--[[
+TextView 里面有两个属性 singLine 和maxLines 。 从字面意思来理解，这两个都是限制Text的行数。那么singleLine="true" 和maxLine="1" 都是限制为一行，有什么区别呢？
+  可以看出，maxLines 是在限制高度， singleLine 是强制不让换行。具体效果有什么区别呢？ 从高度来讲是一样的，两者肯定都显示一行，但从换行的位置来讲就有区别了，maxLines并不会改变其换行的位置，而singleLine则会。从这个角度讲，singleLine的显示会好一些，因为如果超过一行singleLine会在一行内显示，后面加上"...",而maxlines="1" 则不会，它依然会在原来换行的位置换行，所以有时候一行不满，但是却不显示剩下的部分。]]
+
+
+全屏框架=
+{
+  LinearLayout,--线性布局
+  orientation='vertical',--方向
+  layout_width='fill',--宽度
+  layout_height='wrap',--高度
+  background='#00FFFFFF',--背景颜色或图片路径
+  {
+    LinearLayout,--线性布局
+    layout_gravity='center';--卡片重力
+    --左:left 右:right 中:center 顶:top 底:bottom
+    orientation='horizontal',--方向
+    layout_width='180dp',--宽度
+    layout_height='fill',--高度
+    background='#00FFFFFF',--背景颜色或图片路径
+
+
+    {
+      TextView;--文本控件
+      gravity='center';--重力
+      --左:left 右:right 中:center 顶:top 底:bottom
+      layout_width='fill';--宽度
+      layout_height='fill';--高度
+      textColor='#b8002800';--文字颜色
+      ellipsize="marquee", --跑马灯,以横向滚动方式显示(需获得当前焦点时)
+      singleLine=true,--结束
+      selected=true,--中选
+      text='我我弄呀你是谁的不会写完工客服电话☎';--显示文字
+
+    };
+  };
+};
+activity.setContentView(loadlayout(全屏框架))
+】】
+《《EditText输入法右下角事件》》
+【【全屏框架=
+{
+  LinearLayout,--线性布局
+  orientation='vertical',--方向
+  layout_width='fill',--宽度
+  layout_height='wrap',--高度
+  background='#00FFFFFF',--背景颜色或图片路径
+  {
+    EditText,--输入框控件
+    layout_width="fill",--布局宽度
+    layout_height="35%w",--布局高度
+    hint="输入内容",--编辑框内容为空时提示
+    hintTextColor='#90000000';--提示文字颜色
+    textColor='#d1000000';--输入文字的颜色
+    textSize="15sp",--文本大小  
+    singleLine=true,--禁止换行输入
+    imeOptions="actionSearch",--搜索
+    id="edit",--控件ID
+  };
+};
+activity.setContentView(loadlayout(全屏框架))
+
+
+--[[
+--EditText输入法右下角事件
+--必须先设置SingleLine属性为true。
+--SingleLine=true,
+--输入法右下角按钮文字默认为 完成
+--可通过imeOptions属性设置
+--imeOptions="actionDone",
+--actionNone  无
+--actionGo  前往
+--actionSend  发送
+--actionDone  完成
+--actionSearch  搜索
+--actionNext  下一个
+--actionPrevious  上一个
+]]
+
+--键盘搜索按钮监听事件
+edit.setOnEditorActionListener{
+  onEditorAction=function(a,b)
+    if b==3 then
+      if a.Text=="" then
+        print("你没有输入任何东西")
+       else
+        print(a.Text)
+      end
+    end
+  end}
+】】
+《《键盘搜索按钮监听事件》》
+【【全屏框架=
+{
+  LinearLayout,--线性布局
+  orientation='vertical',--方向
+  layout_width='fill',--宽度
+  layout_height='wrap',--高度
+  background='#00FFFFFF',--背景颜色或图片路径
+  {
+    EditText,--输入框控件
+    layout_width="fill",--布局宽度
+    layout_height="35%w",--布局高度
+    hint="输入内容",--编辑框内容为空时提示
+    hintTextColor='#90000000';--提示文字颜色
+    textColor='#d1000000';--输入文字的颜色
+    textSize="15sp",--文本大小  
+    singleLine=true,--禁止换行输入
+    imeOptions="actionSearch",--搜索
+    id="edit",--控件ID
+  };
+};
+activity.setContentView(loadlayout(全屏框架))
+
+
+--[[
+--EditText输入法右下角事件
+--必须先设置SingleLine属性为true。
+--SingleLine=true,
+--输入法右下角按钮文字默认为 完成
+--可通过imeOptions属性设置
+--imeOptions="actionDone",
+--actionNone  无
+--actionGo  前往
+--actionSend  发送
+--actionDone  完成
+--actionSearch  搜索
+--actionNext  下一个
+--actionPrevious  上一个
+]]
+
+--键盘搜索按钮监听事件
+edit.setOnEditorActionListener{
+  onEditorAction=function(a,b)
+    if b==3 then
+      if a.Text=="" then
+        print("你没有输入任何东西")
+       else
+        print(a.Text)
+      end
+    end
+  end}
+】】
+
+
+《《主题配色,储存路径,应用配置》》
+【【
+--导入包
+
+local Environment = luajava.bindClass("android.os.Environment")
+local Typeface = luajava.bindClass("android.graphics.Typeface")
+
+
+--主题配色
+
+FONT_BOLD = Typeface.defaultFromStyle(Typeface.BOLD) --字体粗体，代码：Typeface=FONT_BOLD;
+SHADOW_SIZE = activity.getSharedData("SHADOW_SIZE") or 6 --控件阴影大小
+DARK_COLOR = activity.getSharedData("DARK_COLOR") or "#ffe9f1f6" --深色调，布局颜色
+TEXT_COLOR = activity.getSharedData("TEXT_COLOR") or "#4DB6AC" --浅色调，文本颜色
+BUTTON_COLOR = activity.getSharedData("BUTTON_COLOR") or "#4DB6AC" --浅色调，按钮颜色
+TITLEBAR_COLOR = activity.getSharedData("TITLEBAR_COLOR") or "#009688" --主色调，标题栏颜色
+STATUSBAR_COLOR = activity.getSharedData("STATUSBAR_COLOR") or "#00796B" --深色调，状态栏颜色
+
+
+
+--储存路径
+
+--说明：APP前缀的都为私有目录，也就是应用本身拥有的目录，会随着应用卸载而被系统删除，而APP_ROOT这个前缀的只能自己或者拥有ROOT权限的其他应用访问。
+ROOT_DIR = Environment.getRootDirectory().toString() --手机根目录，这个就不用说了，需要ROOT权限才能访问
+APP_PACKAGE_PATH = activity.getPackageResourcePath() --应用自身安装包目录
+APP_ROOT_CACHE_DIR = activity.getCacheDir().toString() --应用缓存根目录，缓存一些不想给用户或其他应用访问的文件，拥有ROOT权限的应用可以访问
+APP_ROOT_FILES_DIR = activity.getFilesDir().toString() --应用文件根目录，储存一些不想给用户或其他应用访问的文件，拥有ROOT权限的应用可以访问
+APP_CACHE_DIR = activity.getExternalCacheDir().toString() --应用缓存目录，--应用图片或视频等资源的缓存目录，用户或其他应用可以访问
+APP_FILES_DIR = activity.getExternalFilesDir("").toString() --应用文件目录，应用保存或下载的一些文件的储存目录，用户或其他应用可以访问
+SDCARD_DIR = Environment.getExternalStorageDirectory().toString() --手机储存目录，Sdcard目录嘛，这个也不用说了
+ROOT_CACHE_DIR = Environment.getDownloadCacheDirectory().toString() --系统下载缓存目录，貌似刷机时包解压后的缓存目录，没使用过可能说的不对，见谅
+
+
+--应用配置
+
+APP_PACKAGE_NAME = activity.getPackageName() --应用包名
+APP_PACKAGE_MANAGER =activity.getPackageManager() --包管理器
+APP_PROJECT_DIR = tostring(SDCARD_DIR.."/MagiskHelper/") --工程目录，一些提供下载或保存或创建文件但又不想下载到Download目录时就可以使用这个目录
+APP_DESCRIPTION = "提供面具官方各种版本的下载渠道以及一些常用的模块生成工具！" --应用介绍，关于界面的介绍或者分享应用时引用这个常量
+APP_VERSION_CODE = activity.getPackageManager().getPackageInfo(APP_PACKAGE_NAME, 0).versionCode --应用版本代码，一般用于检测更新
+APP_VERSION_NAME = activity.getPackageManager().getPackageInfo(APP_PACKAGE_NAME, 0).versionName --应用版本名称，一般是给用户看的
+APP_NAME = APP_PACKAGE_MANAGER.getApplicationLabel(APP_PACKAGE_MANAGER.getApplicationInfo(APP_PACKAGE_NAME,0)) --应用名称，关于界面或分享应用时引用
+
+】】
+
+《《下拉刷新上拉加载》》
+【【
+--下拉刷新
+电影页数=1
+刷新.onRefresh=function(v)--下解摸发
+  v.refreshFinish(0)--刷新成功
+end
+
+--上拉加载
+电影页数=1
+影视爬虫(电影页数)
+刷新.onLoadMore=function(v)--上解摸发
+  电影页数=电影页数+1
+  影视爬虫(电影页数)
+  task(1000,function()--延时2秒
+    v.loadmoreFinish(0)--刷新成功
+  end)
+--adp.notifyDataSetChanged()--更新数据
+end
+】】
+
