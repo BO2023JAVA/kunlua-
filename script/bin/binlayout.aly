@@ -1,0 +1,33 @@
+{
+  LinearLayout;
+  orientation="vertical";
+  background="#66000000";
+  paddingTop="30dp";
+  gravity="center";
+  id="bin_body";
+  paddingBottom="30dp";
+  layout_height="-1";
+  layout_width="-1";
+   --[=[   {
+    ImageView;
+    layout_width="160dp";
+    layout_height="160dp";
+    id="bin_gif";
+  };  ]=]  
+  {
+    TextView;
+    textSize="20sp";
+    textColor="#FFEB9662";
+    text="项目构建中(APK)";
+    layout_marginTop="20dp";
+    id="bin_title";
+  };
+  {
+    TextView;
+    textSize="14sp";
+    textColor="#FFEB9662";
+    text="正在打包";
+    layout_marginTop="10dp";
+    id="bin_text";
+  };
+};
